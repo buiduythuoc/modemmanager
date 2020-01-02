@@ -1,0 +1,31 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "@assets": [
+                "src/assets/*"
+            ],
+            "@components": [
+                "src/components/*"
+            ],
+            "@toms": [
+                "src/components/atoms/*"
+            ],
+            "@navigation": [
+                "src/navigation/*"
+            ],
+            "@scenes": [
+                "src/scenes/*"
+            ],
+            "@services": [
+                "src/services/*"
+            ],
+            "@themes": [
+                "src/themes/*"
+            ],
+            "@helper": [
+                "src/helpers/*"
+            ]
+        }
+    }
+}

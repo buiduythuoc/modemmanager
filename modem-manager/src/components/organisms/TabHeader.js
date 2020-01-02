@@ -14,7 +14,7 @@ const TabHeader = props => {
       style={{...styles.container, height: height}}>
       <NavHeader
         title={title}
-        renderLeftIcon={() => <View style={styles.leftNavHeader} />}
+        renderLeft={() => <View style={styles.leftNavHeader} />}
       />
     </ImageBackground>
   );

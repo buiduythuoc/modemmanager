@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {TouchableOpacity, Text, StyleSheet} from 'react-native';
-import {colors} from '../../themes';
+import Icon from './Icon';
+import {colors} from '@themes';
+import {scaleSize} from '../../themes/mixins';
 
 const Button = props => {
   const {
@@ -12,6 +14,7 @@ const Button = props => {
     textColor,
     onClick,
     style,
+    icon,
   } = props;
 
   const containerStyle = {
@@ -29,7 +32,16 @@ const Button = props => {
   return (
     <TouchableOpacity
       style={[containerStyle, style]}
+      activeOpacity={0.8}
       onPress={() => (onClick ? onClick() : {})}>
+      {icon ? (
+        <Icon
+          source={icon}
+          width={scaleSize(40)}
+          height={scaleSize(40)}
+          style={styles.icon}
+        />
+      ) : null}
       <Text style={titleStyle}>{title}</Text>
     </TouchableOpacity>
   );
@@ -38,15 +50,17 @@ const Button = props => {
 export default Button;
 
 Button.propTypes = {
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
   height: PropTypes.number,
   borderColor: PropTypes.string,
   backgroundColor: PropTypes.string,
   textColor: PropTypes.string,
   onClick: PropTypes.func,
+  icon: PropTypes.number,
 };
 
 Button.defaultProps = {
+  title: '',
   borderColor: colors.white,
   backgroundColor: colors.primary,
   textColor: colors.white,
@@ -59,6 +73,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
+    flexDirection: 'row',
   },
   text: {},
+  icon: {
+    marginRight: scaleSize(13),
+  },
 });

@@ -50,11 +50,11 @@ const renderRightIcon = props => {
 };
 
 const NavHeader = props => {
-  const {style, renderLeftIcon} = props;
+  const {style, renderLeft} = props;
 
   return (
     <View style={[styles.container, style]}>
-      {renderLeftIcon ? renderLeftIcon(props) : null}
+      {renderLeft ? renderLeft() : renderLeftIcon(props)}
       {renderTitle(props)}
       {renderRightIcon(props)}
     </View>
@@ -66,12 +66,12 @@ export default NavHeader;
 NavHeader.propTypes = {
   title: PropTypes.string,
   titleColor: PropTypes.string,
-  renderRightIcon: PropTypes.func,
+  renderRight: PropTypes.func,
   rightIcon: PropTypes.number,
   rightIconWidth: PropTypes.number,
   rightIconHeight: PropTypes.number,
   onRightClick: PropTypes.func,
-  renderLeftIcon: PropTypes.func,
+  renderLeft: PropTypes.func,
   leftIcon: PropTypes.number,
   onLeftClick: PropTypes.func,
 };
@@ -79,11 +79,11 @@ NavHeader.propTypes = {
 NavHeader.defaultProps = {
   title: '',
   titleColor: colors.white,
-  renderRightIcon: null,
+  renderRight: null,
   rightIcon: null,
   rightIconWidth: scaleSize(24),
   rightIconHeight: scaleSize(24),
-  renderLeftIcon: null,
+  renderLeft: null,
   leftIcon: images.icBackBlack,
   onLeftClick: null,
   onRightClick: null,

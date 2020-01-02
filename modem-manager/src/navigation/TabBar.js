@@ -2,6 +2,7 @@ import {createBottomTabNavigator, createStackNavigator} from 'react-navigation';
 import React from 'react';
 import TimelineScreen from '../scenes/timeline';
 import ListModemScreen from '../scenes/modem';
+import NotificationScreen from '../scenes/notification';
 import {images, colors} from '../themes';
 import Icon from '../components/atoms/Icon';
 import styles from './styles';
@@ -17,7 +18,7 @@ const baseNavigationOptions = {
 
 const ListDevicesNav = createStackNavigator(
   {
-    TimelineScreen: {screen: TimelineScreen},
+    ListDevicesScreen: {screen: TimelineScreen},
   },
   {
     navigationOptions: {
@@ -26,14 +27,15 @@ const ListDevicesNav = createStackNavigator(
     },
   },
 );
+
 const ListModemNav = createStackNavigator(
   {
-    ListModem: {screen: ListModemScreen},
+    ListModemScreen: {screen: ListModemScreen},
   },
   {
     navigationOptions: {
       ...baseNavigationOptions,
-      title: 'Timeline',
+      title: 'List modem',
     },
   },
 );
@@ -52,19 +54,19 @@ const TimelineNav = createStackNavigator(
 
 const NotificationNav = createStackNavigator(
   {
-    TimelineScreen: {screen: TimelineScreen},
+    NotificationScreen: {screen: NotificationScreen},
   },
   {
     navigationOptions: {
       ...baseNavigationOptions,
-      title: 'Timeline',
+      title: 'Notification',
     },
   },
 );
 
-const MypageNav = createStackNavigator(
+const MyPageNav = createStackNavigator(
   {
-    TimelineScreen: {screen: TimelineScreen},
+    MyPageScreen: {screen: TimelineScreen},
   },
   {
     navigationOptions: {
@@ -91,7 +93,7 @@ const TabBar = createBottomTabNavigator(
       },
     },
     TimelineTab: {
-      screen: ListModemNav,
+      screen: TimelineNav,
       path: '/timeline',
       navigationOptions: {
         tabBarLabel: 'Timeline',
@@ -109,7 +111,7 @@ const TabBar = createBottomTabNavigator(
       },
     },
     NotificationTab: {
-      screen: ListModemNav,
+      screen: NotificationNav,
       path: '/notification',
       navigationOptions: {
         tabBarLabel: 'Notification',

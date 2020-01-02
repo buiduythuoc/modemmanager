@@ -14,7 +14,7 @@
 					"@scenes":"./src/scenes",
 					"@services":"./src/services",
 					"@themes":"./src/themes",
-					"@utils":"./src/utils"
+					"@helpers":"./src/helpers"
 				}
 			}
 		]

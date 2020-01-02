@@ -7,18 +7,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.listBackground,
   },
-  addButton: {
-    marginTop: scaleSize(-30),
-    backgroundColor: colors.addButton,
-    borderColor: colors.addButton,
-  },
   flatList: {
     flex: 1,
-    marginTop: scaleSize(36),
-    paddingHorizontal: scaleSize(19),
-  },
-  flatListSeparator: {
-    height: scaleSize(10),
+    marginTop: scaleSize(-65),
+    paddingHorizontal: scaleSize(27),
   },
 });
 
