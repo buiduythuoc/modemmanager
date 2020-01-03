@@ -35,7 +35,7 @@ const renderRightIcon = props => {
   } = props;
   if (rightIcon) {
     return (
-      <View
+      <TouchableOpacity
         style={[styles.rightIconContainer, style]}
         onPress={() => (onRightClick ? onRightClick() : {})}>
         <Icon
@@ -43,7 +43,7 @@ const renderRightIcon = props => {
           width={rightIconWidth}
           height={rightIconHeight}
         />
-      </View>
+      </TouchableOpacity>
     );
   }
   return null;

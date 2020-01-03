@@ -30,14 +30,14 @@ export default class LoginScreen extends React.Component {
           <Text style={styles.managementText}>Management</Text>
           <LabelInput
             style={styles.userNameInput}
-            iconSrc={images.icUserName}
+            iconSrc={images.icUserWhite}
             iconWidth={scaleSize(10)}
             iconHeight={scaleSize(13)}
             label="Username"
           />
           <LabelInput
             style={styles.passwordInput}
-            iconSrc={images.icPassword}
+            iconSrc={images.icLockWhite}
             iconWidth={scaleSize(10)}
             iconHeight={scaleSize(11)}
             label="Password"

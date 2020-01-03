@@ -7,7 +7,7 @@ import Icon from '../atoms/Icon';
 import Button from '../atoms/Button';
 
 const ModemItem = props => {
-  const {data, index} = props;
+  const {data, index, onClickDetail, onClickEdit} = props;
   const {modemName, domainName, port, description} = data;
   const marginRight = index % 2 ? 0 : scaleSize(10);
 
@@ -19,7 +19,9 @@ const ModemItem = props => {
       <Text style={styles.port}>{port}</Text>
       <Text style={styles.description}>{description}</Text>
       <View style={styles.actionContainer}>
-        <TouchableOpacity style={styles.editButtonContainer}>
+        <TouchableOpacity
+          style={styles.editButtonContainer}
+          onPress={onClickEdit}>
           <Icon
             source={images.icEdit}
             width={scaleSize(20)}
@@ -30,6 +32,7 @@ const ModemItem = props => {
           style={styles.detailButton}
           height={scaleSize(23)}
           title="Detail"
+          onClick={onClickDetail}
         />
       </View>
     </View>
@@ -41,9 +44,14 @@ export default ModemItem;
 ModemItem.propTypes = {
   data: PropTypes.oneOfType([PropTypes.object]).isRequired,
   index: PropTypes.number.isRequired,
+  onClickDetail: PropTypes.func,
+  onClickEdit: PropTypes.func,
 };
 
-ModemItem.defaultProps = {};
+ModemItem.defaultProps = {
+  onClickDetail: null,
+  onClickEdit: null,
+};
 
 const styles = StyleSheet.create({
   container: {

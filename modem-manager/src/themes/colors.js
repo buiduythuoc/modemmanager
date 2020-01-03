@@ -10,6 +10,11 @@ const colors = {
   tabBarActive: '#3B5998',
   addButton: '#6A94EC',
   listBackground: '#E5E5E5',
+  lightGreen: '#6FCF97',
+  lightRed: '#EB5757',
+  lightGreenOpacity01: 'rgba(111, 207, 151, 0.1)',
+  lightRedOpacity01: 'rgba(235, 87, 87, 0.1)',
+  timeText: '#8E8E8E',
 };
 
 export default colors;

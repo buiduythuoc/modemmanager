@@ -1,8 +1,15 @@
 import {createBottomTabNavigator, createStackNavigator} from 'react-navigation';
 import React from 'react';
 import TimelineScreen from '../scenes/timeline';
+// modem
 import ListModemScreen from '../scenes/modem';
+import DeviceListScreen from '../scenes/modem/deviceList';
+import BlockListScreen from '../scenes/modem/blockList';
+import CreateModemScreen from '../scenes/modem/create';
+import EditModemScreen from '../scenes/modem/edit';
+// notification
 import NotificationScreen from '../scenes/notification';
+import MyPageScreen from '../scenes/myPage';
 import {images, colors} from '../themes';
 import Icon from '../components/atoms/Icon';
 import styles from './styles';
@@ -31,6 +38,10 @@ const ListDevicesNav = createStackNavigator(
 const ListModemNav = createStackNavigator(
   {
     ListModemScreen: {screen: ListModemScreen},
+    DeviceListScreen: {screen: DeviceListScreen},
+    BlockListScreen: {screen: BlockListScreen},
+    CreateModemScreen: {screen: CreateModemScreen},
+    EditModemScreen: {screen: EditModemScreen},
   },
   {
     navigationOptions: {
@@ -39,6 +50,17 @@ const ListModemNav = createStackNavigator(
     },
   },
 );
+
+ListModemNav.navigationOptions = ({navigation}) => {
+  const {routeName} = navigation.state.routes[navigation.state.index];
+  let tabBarVisible = true;
+  if (routeName === 'CreateModemScreen' || routeName === 'EditModemScreen') {
+    tabBarVisible = false;
+  }
+  return {
+    tabBarVisible,
+  };
+};
 
 const TimelineNav = createStackNavigator(
   {
@@ -66,7 +88,7 @@ const NotificationNav = createStackNavigator(
 
 const MyPageNav = createStackNavigator(
   {
-    MyPageScreen: {screen: TimelineScreen},
+    MyPageScreen: {screen: MyPageScreen},
   },
   {
     navigationOptions: {
@@ -129,7 +151,7 @@ const TabBar = createBottomTabNavigator(
       },
     },
     MyPageTab: {
-      screen: ListModemNav,
+      screen: MyPageNav,
       path: '/myPage',
       navigationOptions: {
         tabBarLabel: 'Account Detail',

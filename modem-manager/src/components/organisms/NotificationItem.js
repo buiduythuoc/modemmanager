@@ -53,8 +53,10 @@ const styles = StyleSheet.create({
     height: scaleSize(79),
   },
   content: {
-    height: scaleSize(57),
+    height: scaleSize(79),
+    flex: 1,
     marginLeft: scaleSize(10),
+    justifyContent: 'space-between',
   },
   title: {
     fontSize: scaleFont(14),
@@ -62,7 +64,6 @@ const styles = StyleSheet.create({
     lineHeight: scaleSize(19),
   },
   timeContainer: {
-    marginTop: scaleSize(14),
     flexDirection: 'row',
     alignItems: 'center',
   },

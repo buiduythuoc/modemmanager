@@ -53,6 +53,21 @@ export default class ListModem extends React.Component {
     header: null,
   };
 
+  handleOnClickItem = () => {
+    const {navigation} = this.props;
+    navigation.navigate('DeviceListScreen');
+  };
+
+  handleOnClickAdd = () => {
+    const {navigation} = this.props;
+    navigation.navigate('CreateModemScreen');
+  };
+
+  handleOnClickEdit = () => {
+    const {navigation} = this.props;
+    navigation.navigate('EditModemScreen');
+  };
+
   render() {
     const {listModems} = this.state;
     return (
@@ -67,15 +82,21 @@ export default class ListModem extends React.Component {
           height={scaleSize(60)}
           title="Add New Modem"
           icon={images.icAdd}
+          onClick={this.handleOnClickAdd}
         />
         <FlatList
           style={styles.flatList}
           data={listModems}
           numColumns={2}
           renderItem={({item, index}) => (
-            <ModemItem data={item} index={index} />
+            <ModemItem
+              data={item}
+              index={index}
+              onClickDetail={this.handleOnClickItem}
+              onClickEdit={this.handleOnClickEdit}
+            />
           )}
-          keyExtractor={item => item.id}
+          keyExtractor={item => item.id + ''}
         />
       </View>
     );

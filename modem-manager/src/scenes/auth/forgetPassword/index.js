@@ -8,7 +8,7 @@ import LabelInput from '../../../components/molecules/LabelInput';
 import {scaleSize} from '../../../themes/mixins';
 
 export default class ForgotPassword extends React.Component {
-  handleClickBack = () => {
+  handleOnClickBack = () => {
     const {navigation} = this.props;
     navigation.goBack();
   };
@@ -17,11 +17,10 @@ export default class ForgotPassword extends React.Component {
     return (
       <View style={styles.container}>
         <NavHeader
-          style={styles.navHeader}
           title="Forgot password"
           titleColor={colors.gray01}
           leftIcon={images.icBackBlack}
-          onLeftClick={this.handleClickBack}
+          onLeftClick={this.handleOnClickBack}
         />
         <View style={styles.content}>
           <Text style={styles.descriptionText}>
