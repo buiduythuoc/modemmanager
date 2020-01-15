@@ -1,11 +1,11 @@
 import React from 'react';
 import {View, FlatList} from 'react-native';
-import {images} from '../../themes';
+import {images} from '../../../themes';
 import styles from './styles';
-import TabHeader from '../../components/organisms/TabHeader';
-import Button from '../../components/atoms/Button';
-import ModemItem from '../../components/organisms/ModemItem';
-import {scaleSize} from '../../themes/mixins';
+import TabHeader from '../../../components/organisms/TabHeader';
+import Button from '../../../components/atoms/Button';
+import ModemItem from '../../../components/organisms/ModemItem';
+import {scaleSize} from '../../../themes/mixins';
 
 export default class ListModem extends React.Component {
   constructor(props) {
@@ -81,7 +81,7 @@ export default class ListModem extends React.Component {
           style={styles.addButton}
           height={scaleSize(60)}
           title="Add New Modem"
-          icon={images.icAdd}
+          icon={images.icRoundedAdd}
           onClick={this.handleOnClickAdd}
         />
         <FlatList

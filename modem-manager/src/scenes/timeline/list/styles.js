@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
-import {colors} from '../../themes';
-import {scaleSize} from '../../themes/mixins';
+import {colors} from '../../../themes';
+import {scaleSize} from '../../../themes/mixins';
 
 const styles = StyleSheet.create({
   container: {

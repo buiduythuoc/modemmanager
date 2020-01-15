@@ -1,19 +1,40 @@
 import React from 'react';
-import {Text} from 'react-native';
-import styled from 'styled-components';
+import {View} from 'react-native';
+import * as Animatable from 'react-native-animatable';
+import Icon from '../../components/atoms/Icon';
+import styles from './styles';
+import {scaleSize} from '../../themes/mixins';
+import {images} from '../../themes';
 
-const Wrapper = styled.View`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-`;
+const fadeIn = {
+  from: {
+    opacity: 0,
+  },
+  to: {
+    opacity: 1,
+  },
+};
 
 export default class SplashScreen extends React.Component {
+  componentDidMount() {
+    const {navigation} = this.props;
+    setTimeout(() => {
+      navigation.navigate('LoginScreen');
+    }, 2000);
+  }
+
   render() {
     return (
-      <Wrapper>
-        <Text>LOGO</Text>
-      </Wrapper>
+      <View style={styles.container}>
+        <Animatable.View animation={fadeIn} duration={2000}>
+          <Icon
+            width={scaleSize(100)}
+            height={scaleSize(100)}
+            source={images.icApp}
+            style={styles.appIcon}
+          />
+        </Animatable.View>
+      </View>
     );
   }
 }

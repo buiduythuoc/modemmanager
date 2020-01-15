@@ -24,6 +24,10 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     color: colors.white,
   },
+  formContainer: {
+    flex: 1,
+    width: '100%',
+  },
   userNameInput: {
     marginTop: scaleSize(38),
     width: '100%',
@@ -41,11 +45,11 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
   },
   loginButton: {
-    marginTop: scaleSize(48),
+    marginBottom: scaleSize(9),
     width: '100%',
   },
   signupLink: {
-    marginTop: scaleSize(9),
+    marginBottom: scaleSize(46),
     fontSize: scaleFont(12),
     width: '100%',
     color: colors.white,
@@ -53,7 +57,7 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
   },
   copyrightText: {
-    marginTop: scaleSize(42),
+    marginBottom: scaleSize(24),
     fontSize: scaleFont(12),
     width: '100%',
     color: colors.white,

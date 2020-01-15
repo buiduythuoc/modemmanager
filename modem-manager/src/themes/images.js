@@ -1,3 +1,4 @@
+import icApp from '../assets/images/ic_app.png';
 import icLockWhite from '../assets/images/ic_lock_white.png';
 import icLockBlack from '../assets/images/ic_lock_black.png';
 import icUserWhite from '../assets/images/ic_user_white.png';
@@ -9,6 +10,7 @@ import icBackBlack from '../assets/images/ic_back_black.png';
 import icEdit from '../assets/images/ic_edit.png';
 import icEditBlue from '../assets/images/ic_edit_blue.png';
 import icAdd from '../assets/images/ic_add.png';
+import icRoundedAdd from '../assets/images/ic_rounded_add.png';
 import icTimeWhite from '../assets/images/ic_time_white.png';
 import icTimeGray from '../assets/images/ic_time_gray.png';
 import icCamera from '../assets/images/ic_camera.png';
@@ -16,7 +18,8 @@ import icExpiredBlack from '../assets/images/ic_expired_black.png';
 import icBlockList from '../assets/images/ic_block_list.png';
 import icDomainBlack from '../assets/images/ic_domain_black.png';
 import icPortBlack from '../assets/images/ic_port_black.png';
-import icWifiBlack from '../assets/images/ic_wifi_black.png'
+import icWifiBlack from '../assets/images/ic_wifi_black.png';
+import icDelete from '../assets/images/ic_delete.png';
 
 // tab bar
 import icTabListActive from '../assets/images/ic_tab_list_active.png';
@@ -37,6 +40,7 @@ import imgNotificationAvatarDefault from '../assets/images/img_notification_avat
 import imgAvatarDefault from '../assets/images/img_avatar_default.png';
 
 const images = {
+  icApp,
   icLockWhite,
   icLockBlack,
   icLockOpen,
@@ -48,6 +52,7 @@ const images = {
   icEdit,
   icEditBlue,
   icAdd,
+  icRoundedAdd,
   icTimeWhite,
   icTimeGray,
   icCamera,
@@ -56,6 +61,7 @@ const images = {
   icDomainBlack,
   icPortBlack,
   icWifiBlack,
+  icDelete,
   // tab bar
   icTabListActive,
   icTabListInactive,

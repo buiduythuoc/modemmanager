@@ -1,10 +1,10 @@
 import React from 'react';
 import {View, FlatList} from 'react-native';
-import {images} from '../../themes';
+import {images} from '../../../themes';
 import styles from './styles';
-import TabHeader from '../../components/organisms/TabHeader';
-import NotificationItem from '../../components/organisms/NotificationItem';
-import {scaleSize} from '../../themes/mixins';
+import TabHeader from '../../../components/organisms/TabHeader';
+import NotificationItem from '../../../components/organisms/NotificationItem';
+import {scaleSize} from '../../../themes/mixins';
 
 export default class Notification extends React.Component {
   constructor(props) {
@@ -55,6 +55,11 @@ export default class Notification extends React.Component {
     header: null,
   };
 
+  handleOnClickItem = () => {
+    const {navigation} = this.props;
+    navigation.navigate('NotificationDetailScreen');
+  };
+
   render() {
     const {listNotifications} = this.state;
     return (
@@ -67,7 +72,9 @@ export default class Notification extends React.Component {
         <FlatList
           style={styles.flatList}
           data={listNotifications}
-          renderItem={({item}) => <NotificationItem data={item} />}
+          renderItem={({item}) => (
+            <NotificationItem data={item} onClick={this.handleOnClickItem} />
+          )}
           keyExtractor={item => item.id}
         />
       </View>

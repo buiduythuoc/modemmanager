@@ -1,16 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {View, Text, StyleSheet} from 'react-native';
+import {TouchableOpacity, View, Text, StyleSheet} from 'react-native';
 import {scaleSize, scaleFont} from '../../themes/mixins';
 import {colors, images} from '../../themes';
 import Icon from '../atoms/Icon';
 
 const NotificationItem = props => {
-  const {data} = props;
+  const {data, onClick} = props;
   const {avatar, title, time} = data;
 
   return (
-    <View style={styles.container}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() => (onClick ? onClick() : {})}>
       <Icon style={styles.avatar} source={avatar} />
       <View style={styles.content}>
         <Text style={styles.title} numberOfLines={3} ellipsizeMode="tail">
@@ -26,7 +28,7 @@ const NotificationItem = props => {
           <Text style={styles.time}>{time}</Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -34,9 +36,12 @@ export default NotificationItem;
 
 NotificationItem.propTypes = {
   data: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  onClick: PropTypes.func,
 };
 
-NotificationItem.defaultProps = {};
+NotificationItem.defaultProps = {
+  onClick: null,
+};
 
 const styles = StyleSheet.create({
   container: {

@@ -1,5 +1,5 @@
 import {put, call} from 'redux-saga/effects';
-import AuthActions from '../redux/authRedux';
+import AuthActions from '../stores/authRedux';
 
 export function* login(api, action) {
   const {username, password} = action;

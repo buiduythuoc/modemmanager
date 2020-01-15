@@ -15,7 +15,7 @@ const Primary = createStackNavigator(
   },
   {
     // Default config for all screens
-    initialRouteName: 'LoginScreen',
+    initialRouteName: 'SplashScreen',
     headerMode: 'none',
   },
 );

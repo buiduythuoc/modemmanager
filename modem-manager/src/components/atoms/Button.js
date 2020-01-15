@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {TouchableOpacity, Text, StyleSheet} from 'react-native';
 import Icon from './Icon';
-import {colors} from '@themes';
+import {colors} from '../../themes';
 import {scaleSize} from '../../themes/mixins';
 
 const Button = props => {

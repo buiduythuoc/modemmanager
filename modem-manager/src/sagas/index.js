@@ -3,7 +3,7 @@ import api from '../services';
 
 /* ------------- Types ------------- */
 
-import {AuthTypes} from '../redux/authRedux';
+import {AuthTypes} from '../stores/authRedux';
 
 /* ------------- Sagas ------------- */
 

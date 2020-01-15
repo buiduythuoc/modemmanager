@@ -1,14 +1,16 @@
 import {createBottomTabNavigator, createStackNavigator} from 'react-navigation';
 import React from 'react';
-import TimelineScreen from '../scenes/timeline';
+import TimelineScreen from '../scenes/timeline/list';
+import CreateTimelineScreen from '../scenes/timeline/create';
 // modem
-import ListModemScreen from '../scenes/modem';
+import ListModemScreen from '../scenes/modem/list';
 import DeviceListScreen from '../scenes/modem/deviceList';
 import BlockListScreen from '../scenes/modem/blockList';
 import CreateModemScreen from '../scenes/modem/create';
 import EditModemScreen from '../scenes/modem/edit';
 // notification
-import NotificationScreen from '../scenes/notification';
+import NotificationScreen from '../scenes/notification/list';
+import NotificationDetailScreen from '../scenes/notification/detail';
 import MyPageScreen from '../scenes/myPage';
 import {images, colors} from '../themes';
 import Icon from '../components/atoms/Icon';
@@ -65,6 +67,7 @@ ListModemNav.navigationOptions = ({navigation}) => {
 const TimelineNav = createStackNavigator(
   {
     TimelineScreen: {screen: TimelineScreen},
+    CreateTimelineScreen: {screen: CreateTimelineScreen},
   },
   {
     navigationOptions: {
@@ -74,9 +77,21 @@ const TimelineNav = createStackNavigator(
   },
 );
 
+TimelineNav.navigationOptions = ({navigation}) => {
+  const {routeName} = navigation.state.routes[navigation.state.index];
+  let tabBarVisible = true;
+  if (routeName === 'CreateTimelineScreen') {
+    tabBarVisible = false;
+  }
+  return {
+    tabBarVisible,
+  };
+};
+
 const NotificationNav = createStackNavigator(
   {
     NotificationScreen: {screen: NotificationScreen},
+    NotificationDetailScreen: {screen: NotificationDetailScreen},
   },
   {
     navigationOptions: {
@@ -85,6 +100,17 @@ const NotificationNav = createStackNavigator(
     },
   },
 );
+
+NotificationNav.navigationOptions = ({navigation}) => {
+  const {routeName} = navigation.state.routes[navigation.state.index];
+  let tabBarVisible = true;
+  if (routeName === 'NotificationDetailScreen') {
+    tabBarVisible = false;
+  }
+  return {
+    tabBarVisible,
+  };
+};
 
 const MyPageNav = createStackNavigator(
   {

@@ -42,6 +42,8 @@ const LabelInput = props => {
     placeholderTextColor,
   } = props;
 
+  console.log(inputStyle);
+
   return (
     <View style={{...styles.container, ...style}}>
       <View style={styles.labelContainer}>

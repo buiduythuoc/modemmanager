@@ -28,25 +28,27 @@ export default class LoginScreen extends React.Component {
         <Image source={images.imgMap} resizeMode="cover" />
         <View style={styles.content}>
           <Text style={styles.managementText}>Management</Text>
-          <LabelInput
-            style={styles.userNameInput}
-            iconSrc={images.icUserWhite}
-            iconWidth={scaleSize(10)}
-            iconHeight={scaleSize(13)}
-            label="Username"
-          />
-          <LabelInput
-            style={styles.passwordInput}
-            iconSrc={images.icLockWhite}
-            iconWidth={scaleSize(10)}
-            iconHeight={scaleSize(11)}
-            label="Password"
-          />
-          <Text
-            style={styles.forgotPasswordLink}
-            onPress={this.handleClickForgotPassword}>
-            Forgot password
-          </Text>
+          <View style={styles.formContainer}>
+            <LabelInput
+              style={styles.userNameInput}
+              iconSrc={images.icUserWhite}
+              iconWidth={scaleSize(10)}
+              iconHeight={scaleSize(13)}
+              label="Username"
+            />
+            <LabelInput
+              style={styles.passwordInput}
+              iconSrc={images.icLockWhite}
+              iconWidth={scaleSize(10)}
+              iconHeight={scaleSize(11)}
+              label="Password"
+            />
+            <Text
+              style={styles.forgotPasswordLink}
+              onPress={this.handleClickForgotPassword}>
+              Forgot password
+            </Text>
+          </View>
           <Button
             style={styles.loginButton}
             height={scaleSize(45)}

@@ -1,5 +1,6 @@
 import React from 'react';
 import {View} from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {images, colors} from '../../../themes';
 import styles from './styles';
 import Button from '../../../components/atoms/Button';
@@ -26,7 +27,7 @@ export default class CreateModem extends React.Component {
           leftIcon={images.icBackBlack}
           onLeftClick={this.handleOnClickBack}
         />
-        <View style={styles.content}>
+        <KeyboardAwareScrollView style={styles.content}>
           <LabelInput
             style={styles.modemNameInput}
             label="Modem Name"
@@ -87,7 +88,7 @@ export default class CreateModem extends React.Component {
             height={scaleSize(45)}
             title="SAVE"
           />
-        </View>
+        </KeyboardAwareScrollView>
       </View>
     );
   }

@@ -5,12 +5,12 @@ import {scaleSize} from '../../themes/mixins';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.listBackground,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: colors.white,
   },
-  flatList: {
-    flex: 1,
-    marginTop: scaleSize(-65),
-    paddingHorizontal: scaleSize(18),
+  appIcon: {
+    borderRadius: scaleSize(16),
   },
 });
 

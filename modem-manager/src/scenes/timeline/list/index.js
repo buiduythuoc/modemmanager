@@ -1,10 +1,10 @@
 import React from 'react';
 import {View, FlatList} from 'react-native';
-import {images} from '../../themes';
+import {images} from '../../../themes';
 import styles from './styles';
-import TabHeader from '../../components/organisms/TabHeader';
-import TimelineItem from '../../components/organisms/TimelineItem';
-import {scaleSize} from '../../themes/mixins';
+import TabHeader from '../../../components/organisms/TabHeader';
+import TimelineItem from '../../../components/organisms/TimelineItem';
+import {scaleSize} from '../../../themes/mixins';
 
 export default class Timeline extends React.Component {
   constructor(props) {
@@ -41,6 +41,11 @@ export default class Timeline extends React.Component {
     header: null,
   };
 
+  handleOnClickAdd = () => {
+    const {navigation} = this.props;
+    navigation.navigate('CreateTimelineScreen');
+  };
+
   render() {
     const {listTimeline} = this.state;
     return (
@@ -49,6 +54,10 @@ export default class Timeline extends React.Component {
           source={images.imgMapTimeline}
           title={'Timeline'}
           height={scaleSize(167)}
+          rightIcon={images.icAdd}
+          rightIconWidth={scaleSize(20)}
+          rightIconHeight={scaleSize(20)}
+          onRightClick={this.handleOnClickAdd}
         />
         <FlatList
           style={styles.flatList}
