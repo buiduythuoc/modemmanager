@@ -1,5 +1,7 @@
 import {createBottomTabNavigator, createStackNavigator} from 'react-navigation';
 import React from 'react';
+import {connect} from 'react-redux';
+
 import TimelineScreen from '../scenes/timeline/list';
 import CreateTimelineScreen from '../scenes/timeline/create';
 // modem
@@ -124,7 +126,24 @@ const MyPageNav = createStackNavigator(
   },
 );
 
-const TabBar = createBottomTabNavigator(
+const tabBarConfig = {
+  tabBarOptions: {
+    activeTintColor: colors.tabBarActive,
+    activeBackgroundColor: colors.white,
+    inactiveTintColor: colors.gray04,
+    inactiveBackgroundColor: colors.white,
+    showLabel: true,
+    style: styles.tabBar,
+    labelStyle: styles.label,
+  },
+  navigationOptions: {
+    headerStyle: null,
+  },
+  animationEnabled: true,
+  swipeEnabled: false,
+};
+
+const AdminTabBar = createBottomTabNavigator(
   {
     ListModemTab: {
       screen: ListModemNav,
@@ -194,20 +213,136 @@ const TabBar = createBottomTabNavigator(
     },
   },
   {
-    tabBarOptions: {
-      activeTintColor: colors.tabBarActive,
-      activeBackgroundColor: colors.white,
-      inactiveTintColor: colors.gray04,
-      inactiveBackgroundColor: colors.white,
-      showLabel: true,
-      style: styles.tabBar,
-      labelStyle: styles.label,
-    },
-    navigationOptions: {
-      headerStyle: null,
-    },
-    animationEnabled: true,
-    swipeEnabled: false,
+    ...tabBarConfig,
   },
 );
-export default TabBar;
+
+const UserTabBar = createBottomTabNavigator(
+  {
+    TimelineTab: {
+      screen: TimelineNav,
+      path: '/timeline',
+      navigationOptions: {
+        tabBarLabel: 'Timeline',
+        tabBarIcon: ({focused}) => (
+          <Icon
+            source={
+              focused
+                ? images.icTabTimelineActive
+                : images.icTabTimelineInactive
+            }
+            width={17}
+            height={17}
+          />
+        ),
+      },
+    },
+    NotificationTab: {
+      screen: NotificationNav,
+      path: '/notification',
+      navigationOptions: {
+        tabBarLabel: 'Notification',
+        tabBarIcon: ({focused}) => (
+          <Icon
+            source={
+              focused
+                ? images.icTabNotificationActive
+                : images.icTabNotificationInactive
+            }
+            width={15}
+            height={17}
+          />
+        ),
+      },
+    },
+    MyPageTab: {
+      screen: MyPageNav,
+      path: '/myPage',
+      navigationOptions: {
+        tabBarLabel: 'Account Detail',
+        tabBarIcon: ({focused}) => (
+          <Icon
+            source={
+              focused ? images.icTabMyPageActive : images.icTabMyPageInactive
+            }
+            width={14}
+            height={17}
+          />
+        ),
+      },
+    },
+  },
+  {
+    ...tabBarConfig,
+  },
+);
+
+const RootTabBar = createBottomTabNavigator(
+  {
+    ListDevicesNav: {
+      screen: ListDevicesNav,
+      path: '/devices',
+      navigationOptions: {
+        tabBarLabel: 'List Devices',
+        tabBarIcon: ({focused}) => (
+          <Icon
+            source={
+              focused
+                ? images.icTabTimelineActive
+                : images.icTabTimelineInactive
+            }
+            width={17}
+            height={17}
+          />
+        ),
+      },
+    },
+    TimelineTab: {
+      screen: TimelineNav,
+      path: '/timeline',
+      navigationOptions: {
+        tabBarLabel: 'Timeline',
+        tabBarIcon: ({focused}) => (
+          <Icon
+            source={
+              focused
+                ? images.icTabTimelineActive
+                : images.icTabTimelineInactive
+            }
+            width={17}
+            height={17}
+          />
+        ),
+      },
+    },
+  },
+  {
+    ...tabBarConfig,
+  },
+);
+
+// export default AdminTabBar;
+
+class TabBar extends React.Component {
+  render() {
+    const {role} = this.props;
+    console.log("TabBar", role);
+    // const role = '';
+    if (role === 'root') {
+      return <RootTabBar />;
+    }
+    if (role === 'admin') {
+      return <AdminTabBar />;
+    }
+    return <UserTabBar />;
+  }
+}
+
+const mapStateToProps = state => ({
+  role: state.login.role,
+});
+
+export default connect(
+  mapStateToProps,
+  null,
+)(TabBar);

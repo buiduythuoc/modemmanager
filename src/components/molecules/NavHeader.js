@@ -46,7 +46,7 @@ const renderRightIcon = props => {
       </TouchableOpacity>
     );
   }
-  return null;
+  return <View style={styles.rightIconContainer} />;
 };
 
 const NavHeader = props => {

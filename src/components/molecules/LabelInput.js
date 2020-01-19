@@ -40,9 +40,8 @@ const LabelInput = props => {
     inputStyle,
     placeholder,
     placeholderTextColor,
+    secureTextEntry,
   } = props;
-
-  console.log(inputStyle);
 
   return (
     <View style={{...styles.container, ...style}}>
@@ -51,13 +50,14 @@ const LabelInput = props => {
         {renderLabel(props)}
       </View>
       <Input
-        style={{...styles.input, ...inputStyle}}
+        style={{...styles.input, color: borderColor, ...inputStyle}}
         rounded={rounded}
         borderColor={borderColor}
         borderRadius={borderRadius}
         onChangeText={onChangeText}
         placeholder={placeholder}
         placeholderTextColor={placeholderTextColor}
+        secureTextEntry={secureTextEntry}
       />
     </View>
   );
@@ -79,6 +79,7 @@ LabelInput.propTypes = {
   placeholder: PropTypes.string,
   placeholderTextColor: PropTypes.string,
   onChangeText: PropTypes.func,
+  secureTextEntry: PropTypes.bool,
 };
 
 LabelInput.defaultProps = {
@@ -94,12 +95,12 @@ LabelInput.defaultProps = {
   placeholder: '',
   placeholderTextColor: colors.white,
   onChangeText: null,
+  secureTextEntry: false,
 };
 
 const styles = StyleSheet.create({
   container: {},
   labelContainer: {
-    display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
   },

@@ -16,6 +16,7 @@ const colors = {
   lightGreenOpacity01: 'rgba(111, 207, 151, 0.1)',
   lightRedOpacity01: 'rgba(235, 87, 87, 0.1)',
   timeText: '#8E8E8E',
+  windowTint: 'rgba(0, 0, 0, 0.4)',
 };
 
 export default colors;
