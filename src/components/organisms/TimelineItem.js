@@ -7,10 +7,13 @@ import Icon from '../atoms/Icon';
 
 const TimelineItem = props => {
   const {data} = props;
-  const {backgroundImage, title, time} = data;
+  const {title} = data;
+  const time = data.created_date;
 
   return (
-    <ImageBackground style={styles.container} source={backgroundImage}>
+    <ImageBackground
+      style={styles.container}
+      source={images.imgTimelineDefault}>
       <Text style={styles.title}>{title}</Text>
       <View style={styles.line} />
       <View style={styles.timeContainer}>

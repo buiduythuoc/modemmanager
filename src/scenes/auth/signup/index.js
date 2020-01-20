@@ -9,7 +9,7 @@ import LabelInput from '../../../components/molecules/LabelInput';
 import NavHeader from '../../../components/molecules/NavHeader';
 import Dropdown from '../../../components/molecules/Dropdown';
 import {scaleSize} from '../../../themes/mixins';
-import SignupActions from '../../../stores/auth/signupRedux';
+import AuthActions from '../../../stores/authRedux';
 import Loading from '../../../components/organisms/Loading';
 
 class SignupScreen extends React.Component {
@@ -22,6 +22,7 @@ class SignupScreen extends React.Component {
       password: '',
       role: 'guest',
       isDisableSignupButton: true,
+      isFetching: false,
     };
   }
 
@@ -47,15 +48,23 @@ class SignupScreen extends React.Component {
   };
 
   handleClickSignup = () => {
-    const {signupRequest} = this.props;
+    const {register, navigation} = this.props;
     const {username, password, role} = this.state;
-    console.log('handleClickSignup', username, password, role);
-    signupRequest(username, password, role);
+    this.setState({isFetching: true});
+    register(
+      {username, password, role},
+      () => {
+        this.setState({isFetching: false});
+        navigation.navigate('TabBar');
+      },
+      () => {
+        this.setState({isFetching: false});
+      },
+    );
   };
 
   render() {
-    const {fetching} = this.props;
-    const {isDisableSignupButton} = this.state;
+    const {isDisableSignupButton, isFetching} = this.state;
     const signupButtonStyle = !isDisableSignupButton
       ? {backgroundColor: colors.white}
       : {};
@@ -119,20 +128,18 @@ class SignupScreen extends React.Component {
           leftIcon={images.icBackWhite}
           onLeftClick={this.handleClickBack}
         />
-        <Loading show={fetching} />
+        <Loading show={isFetching} />
       </KeyboardAwareScrollView>
     );
   }
 }
 
-const mapStateToProps = state => ({
-  fetching: state.signup.fetching,
-  error: state.signup.error,
-});
-
 const mapDispatchToProps = dispatch => ({
-  signupRequest: (userName, password, role) =>
-    dispatch(SignupActions.signupRequest(userName, password, role)),
+  register: (params, onSuccess, onError) =>
+    dispatch(AuthActions.authRegister(params, onSuccess, onError)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(SignupScreen);
+export default connect(
+  null,
+  mapDispatchToProps,
+)(SignupScreen);

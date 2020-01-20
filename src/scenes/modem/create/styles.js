@@ -40,6 +40,9 @@ const styles = StyleSheet.create({
     marginTop: scaleSize(20),
     width: '100%',
   },
+  input: {
+    color: colors.black,
+  },
   saveButton: {
     marginTop: scaleSize(29),
     width: '100%',

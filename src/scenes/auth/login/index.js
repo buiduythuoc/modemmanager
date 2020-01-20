@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, View, Text, KeyboardAvoidingView} from 'react-native';
+import {Image, View, Text} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {connect} from 'react-redux';
 import {images, colors} from '../../../themes';
@@ -7,7 +7,7 @@ import styles from './styles';
 import Button from '../../../components/atoms/Button';
 import LabelInput from '../../../components/molecules/LabelInput';
 import {scaleSize} from '../../../themes/mixins';
-import LoginActions from '../../../stores/auth/loginRedux';
+import AuthActions from '../../../stores/authRedux';
 import Loading from '../../../components/organisms/Loading';
 
 class LoginScreen extends React.Component {
@@ -18,6 +18,7 @@ class LoginScreen extends React.Component {
       username: '',
       password: '',
       isDisableLoginButton: true,
+      isFetching: false,
     };
   }
 
@@ -44,14 +45,23 @@ class LoginScreen extends React.Component {
   };
 
   handleClickLogin = () => {
-    const {loginRequest} = this.props;
+    const {login, navigation} = this.props;
     const {username, password} = this.state;
-    loginRequest(username, password);
+    this.setState({isFetching: true});
+    login(
+      {username, password},
+      () => {
+        this.setState({isFetching: false});
+        setTimeout(() => navigation.navigate('TabBar'), 2000);
+      },
+      () => {
+        this.setState({isFetching: false});
+      },
+    );
   };
 
   render() {
-    const {fetching} = this.props;
-    const {isDisableLoginButton} = this.state;
+    const {isDisableLoginButton, isFetching} = this.state;
     const loginButtonStyle = !isDisableLoginButton
       ? {backgroundColor: colors.white}
       : {};
@@ -104,20 +114,18 @@ class LoginScreen extends React.Component {
           </Text>
           <Text style={styles.copyrightText}>Copyright ABC@ </Text>
         </View>
-        <Loading show={fetching} />
+        <Loading show={isFetching} />
       </KeyboardAwareScrollView>
     );
   }
 }
 
-const mapStateToProps = state => ({
-  fetching: state.login.fetching,
-  error: state.login.error,
-});
-
 const mapDispatchToProps = dispatch => ({
-  loginRequest: (userName, password) =>
-    dispatch(LoginActions.loginRequest(userName, password)),
+  login: (params, onSuccess, onError) =>
+    dispatch(AuthActions.authLogin(params, onSuccess, onError)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);
+export default connect(
+  null,
+  mapDispatchToProps,
+)(LoginScreen);

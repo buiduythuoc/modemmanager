@@ -50,7 +50,7 @@ const LabelInput = props => {
         {renderLabel(props)}
       </View>
       <Input
-        style={{...styles.input, color: borderColor, ...inputStyle}}
+        style={{...styles.input, ...inputStyle}}
         rounded={rounded}
         borderColor={borderColor}
         borderRadius={borderRadius}
@@ -113,5 +113,6 @@ const styles = StyleSheet.create({
   },
   input: {
     height: scaleSize(40),
+    color: colors.white,
   },
 });

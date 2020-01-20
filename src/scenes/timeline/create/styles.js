@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
   titleInput: {
     height: scaleSize(47),
     borderRadius: scaleSize(5),
+    color: colors.black,
   },
   summaryInput: {
     height: scaleSize(80),

@@ -2,13 +2,15 @@ import {takeLatest, all} from 'redux-saga/effects';
 
 /* ------------- Types ------------- */
 
-import {LoginTypes} from '../stores/auth/loginRedux';
-import {SignupTypes} from '../stores/auth/signupRedux';
+import {ModemTypes} from '../stores/modemRedux';
+import {AuthTypes} from '../stores/authRedux';
+import {TimelineTypes} from '../stores/timelineRedux';
 
 /* ------------- Sagas ------------- */
 
-import {login} from './auth/loginSaga';
-import {signup} from './auth/signupSaga';
+import {addModem, fetchModems} from './modemSaga';
+import {login, signup} from './authSaga';
+import {addTimeline, fetchTimelines} from './timelineSaga';
 
 /* ------------- API ------------- */
 
@@ -22,7 +24,11 @@ export default function* root() {
     // some sagas only receive an action
 
     // some sagas receive extra parameters in addition to an action
-    takeLatest(LoginTypes.LOGIN_REQUEST, login),
-    takeLatest(SignupTypes.SIGNUP_REQUEST, signup),
+    takeLatest(AuthTypes.AUTH_LOGIN, login),
+    takeLatest(AuthTypes.AUTH_REGISTER, signup),
+    takeLatest(ModemTypes.MODEM_FETCH, fetchModems),
+    takeLatest(ModemTypes.MODEM_ADD, addModem),
+    takeLatest(TimelineTypes.TIMELINE_FETCH, fetchTimelines),
+    takeLatest(TimelineTypes.TIMELINE_ADD, addTimeline),
   ]);
 }

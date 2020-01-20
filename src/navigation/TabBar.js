@@ -325,7 +325,8 @@ const RootTabBar = createBottomTabNavigator(
 
 class TabBar extends React.Component {
   render() {
-    const {role} = this.props;
+    const {user} = this.props;
+    const role = user.type;
     console.log("TabBar", role);
     // const role = '';
     if (role === 'root') {
@@ -339,7 +340,7 @@ class TabBar extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  role: state.login.role,
+  user: state.auth.user,
 });
 
 export default connect(

@@ -46,9 +46,58 @@ const create = () => {
       },
     });
 
+  const getListModems = userId =>
+    api.post('getlistmodem.php', qs.stringify({user_id: userId}), {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    });
+
+  const addModem = (domain, port, loginName, loginPass, userId, modemName) => {
+    const data = {
+      domain,
+      port,
+      login_name: loginName,
+      login_pass: loginPass,
+      user_id: userId,
+      modem_name: modemName,
+    };
+    return api.post('addmodem.php', qs.stringify({data}), {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    });
+  };
+
+  const getListTimelines = userId =>
+    api.post('getlistpost.php', qs.stringify({user_id: userId}), {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    });
+
+  const addTimeline = (title, subTitle, userId, modemId, content) => {
+    const data = {
+      title,
+      sub_title: subTitle,
+      user_id: userId,
+      modem_id: modemId,
+      content,
+    };
+    return api.post('createpost.php', qs.stringify({data}), {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    });
+  };
+
   return {
     login,
     signup,
+    getListModems,
+    addModem,
+    getListTimelines,
+    addTimeline,
   };
 };
 
