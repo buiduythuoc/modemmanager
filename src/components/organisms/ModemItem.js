@@ -8,16 +8,25 @@ import Button from '../atoms/Button';
 
 const ModemItem = props => {
   const {data, index, onClickDetail, onClickEdit} = props;
-  const {modemName, domainName, port, description} = data;
+  const {domain, port, description} = data;
+  const modemName = data.modem_name;
   const marginRight = index % 2 ? 0 : scaleSize(10);
 
   return (
     <View style={{...styles.container, marginRight}}>
-      <Text style={styles.modemName}>{modemName}</Text>
+      <Text style={styles.modemName} numberOfLines={1} ellipsizeMode="tail">
+        {modemName}
+      </Text>
       <View style={styles.line} />
-      <Text style={styles.domainName}>{domainName}</Text>
-      <Text style={styles.port}>{port}</Text>
-      <Text style={styles.description}>{description}</Text>
+      <Text style={styles.domainName} numberOfLines={1} ellipsizeMode="tail">
+        {domain}
+      </Text>
+      <Text style={styles.port} numberOfLines={1} ellipsizeMode="tail">
+        {port ? port : 'Port'}
+      </Text>
+      {/* <Text style={styles.description}>
+        {description ? description : 'Description'}
+      </Text> */}
       <View style={styles.actionContainer}>
         <TouchableOpacity
           style={styles.editButtonContainer}
@@ -56,6 +65,7 @@ ModemItem.defaultProps = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    maxWidth: '50%',
     backgroundColor: colors.white,
     borderRadius: scaleSize(6),
     padding: scaleSize(10),

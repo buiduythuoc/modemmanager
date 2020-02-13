@@ -1,28 +1,39 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {ImageBackground, View, Text, StyleSheet} from 'react-native';
+import {
+  ImageBackground,
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
 import {scaleSize, scaleFont} from '../../themes/mixins';
 import {colors, images} from '../../themes';
 import Icon from '../atoms/Icon';
 
 const TimelineItem = props => {
-  const {data} = props;
-  const {backgroundImage, title, time} = data;
+  const {data, onClick} = props;
+  const {title} = data;
+  const time = data.created_date;
 
   return (
-    <ImageBackground style={styles.container} source={backgroundImage}>
-      <Text style={styles.title}>{title}</Text>
-      <View style={styles.line} />
-      <View style={styles.timeContainer}>
-        <Icon
-          style={styles.timeIcon}
-          source={images.icTimeWhite}
-          width={scaleSize(10)}
-          height={scaleSize(10)}
-        />
-        <Text style={styles.time}>{time}</Text>
-      </View>
-    </ImageBackground>
+    <TouchableOpacity onPress={() => (onClick ? onClick() : {})}>
+      <ImageBackground
+        style={styles.container}
+        source={images.imgTimelineDefault}>
+        <Text style={styles.title}>{title}</Text>
+        <View style={styles.line} />
+        <View style={styles.timeContainer}>
+          <Icon
+            style={styles.timeIcon}
+            source={images.icTimeWhite}
+            width={scaleSize(10)}
+            height={scaleSize(10)}
+          />
+          <Text style={styles.time}>{time}</Text>
+        </View>
+      </ImageBackground>
+    </TouchableOpacity>
   );
 };
 
@@ -30,9 +41,12 @@ export default TimelineItem;
 
 TimelineItem.propTypes = {
   data: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  onClick: PropTypes.func,
 };
 
-TimelineItem.defaultProps = {};
+TimelineItem.defaultProps = {
+  onClick: null,
+};
 
 const styles = StyleSheet.create({
   container: {

@@ -20,6 +20,7 @@ import icDomainBlack from '../assets/images/ic_domain_black.png';
 import icPortBlack from '../assets/images/ic_port_black.png';
 import icWifiBlack from '../assets/images/ic_wifi_black.png';
 import icDelete from '../assets/images/ic_delete.png';
+import icDropdown from '../assets/images/ic_dropdown.png';
 
 // tab bar
 import icTabListActive from '../assets/images/ic_tab_list_active.png';
@@ -62,6 +63,7 @@ const images = {
   icPortBlack,
   icWifiBlack,
   icDelete,
+  icDropdown,
   // tab bar
   icTabListActive,
   icTabListInactive,

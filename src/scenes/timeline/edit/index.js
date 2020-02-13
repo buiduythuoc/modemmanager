@@ -14,20 +14,17 @@ import TimelineActions from '../../../stores/timelineRedux';
 import ModemActions from '../../../stores/modemRedux';
 import Loading from '../../../components/organisms/Loading';
 
-class CreateTimeline extends React.Component {
+class EditTimeline extends React.Component {
   static navigationOptions = {
     header: null,
   };
 
   constructor(props) {
     super(props);
-
+    const {navigation} = props;
     this.state = {
-      title: '',
-      subTitle: '',
-      modemId: '',
-      content: '',
       modemItems: [],
+      timelineData: navigation.getParam('timelineData', null),
       isLoading: false,
     };
   }
@@ -67,28 +64,27 @@ class CreateTimeline extends React.Component {
     navigation.goBack();
   };
 
-  handleOnClickPost = () => {
-    const {addTimeline, fetchTimelines, navigation, user} = this.props;
-    const {modemId, title, subTitle, content} = this.state;
+  handleOnClickUpdate = () => {
+    const {editTimeline, fetchTimelines, navigation, user} = this.props;
+    const {timelineData} = this.state;
     const params = {
-      modemId,
-      title,
-      subTitle,
-      content,
+      timelineId: timelineData.id,
+      modemId: 1,
+      title: timelineData.title,
+      subTitle: timelineData.sub_title,
+      content: timelineData.content,
       userId: user.user_id,
     };
-    if (!modemId || !title || !subTitle || !content) {
-      return;
-    }
+
     this.setState({isLoading: true});
-    addTimeline(
+    editTimeline(
       params,
       () => {
         this.setState({isLoading: false});
         fetchTimelines(user.user_id);
         Alert.alert(
           'Success',
-          'Post created',
+          'Post updated',
           [{text: 'OK', onPress: () => navigation.goBack()}],
           {cancelable: false},
         );
@@ -101,11 +97,11 @@ class CreateTimeline extends React.Component {
   };
 
   render() {
-    const {title, subTitle, content, modemItems, isLoading} = this.state;
+    const {modemItems, timelineData, isLoading} = this.state;
     return (
       <View style={styles.container}>
         <NavHeader
-          title="New Post"
+          title="Edit Post"
           titleColor={colors.gray01}
           leftIcon={images.icBackBlack}
           onLeftClick={this.handleOnClickBack}
@@ -136,8 +132,10 @@ class CreateTimeline extends React.Component {
               rounded={true}
               placeholder="Write your own ......."
               placeholderTextColor={colors.gray05}
-              value={title}
-              onChangeText={text => this.setState({title: text})}
+              value={timelineData.title}
+              onChangeText={text =>
+                this.setState({timelineData: {...timelineData, title: text}})
+              }
             />
             <LabelInput
               style={styles.inputContainer}
@@ -148,8 +146,12 @@ class CreateTimeline extends React.Component {
               rounded={true}
               placeholder="Write your own ......."
               placeholderTextColor={colors.gray05}
-              value={subTitle}
-              onChangeText={text => this.setState({subTitle: text})}
+              value={timelineData.sub_title}
+              onChangeText={text =>
+                this.setState({
+                  timelineData: {...timelineData, sub_title: text},
+                })
+              }
             />
             <LabelInput
               style={styles.inputContainer}
@@ -160,14 +162,16 @@ class CreateTimeline extends React.Component {
               rounded={true}
               placeholder="Write your own ......."
               placeholderTextColor={colors.gray05}
-              value={content}
-              onChangeText={text => this.setState({content: text})}
+              value={timelineData.content}
+              onChangeText={text =>
+                this.setState({timelineData: {...timelineData, content: text}})
+              }
             />
             <Button
               style={styles.postButton}
               height={scaleSize(45)}
-              title="POST"
-              onClick={this.handleOnClickPost}
+              title="UPDATE"
+              onClick={this.handleOnClickUpdate}
             />
           </KeyboardAwareScrollView>
         </View>
@@ -183,8 +187,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  addTimeline: (params, onSuccess, onError) =>
-    dispatch(TimelineActions.timelineAdd(params, onSuccess, onError)),
+  editTimeline: (params, onSuccess, onError) =>
+    dispatch(TimelineActions.timelineEdit(params, onSuccess, onError)),
   fetchModems: (userId, onSuccess, onError) =>
     dispatch(ModemActions.modemFetch({userId}, onSuccess, onError)),
   fetchTimelines: (userId, onSuccess, onError) =>
@@ -194,4 +198,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(CreateTimeline);
+)(EditTimeline);

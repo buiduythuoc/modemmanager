@@ -29,7 +29,7 @@ const Input = props => {
   return (
     <TextInput
       style={inputStyle}
-      onChangeText={() => onChangeText()}
+      onChangeText={text => (onChangeText ? onChangeText(text) : {})}
       {...attributes}
     />
   );

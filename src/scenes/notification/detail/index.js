@@ -4,7 +4,7 @@ import styles from './styles';
 import NavHeader from '../../../components/molecules/NavHeader';
 import {colors, images} from '../../../themes';
 
-export default class BlockList extends React.Component {
+export default class NotificationDetail extends React.Component {
   constructor(props) {
     super(props);
   }

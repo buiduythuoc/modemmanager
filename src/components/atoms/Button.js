@@ -15,6 +15,7 @@ const Button = props => {
     onClick,
     style,
     icon,
+    disable,
   } = props;
 
   const containerStyle = {
@@ -24,16 +25,19 @@ const Button = props => {
     height: height,
     borderRadius: height / 2,
   };
+
   const titleStyle = {
     ...styles.title,
     color: textColor,
   };
 
+  const activeOpacity = disable ? 1 : 0.8;
+
   return (
     <TouchableOpacity
       style={[containerStyle, style]}
-      activeOpacity={0.8}
-      onPress={() => (onClick ? onClick() : {})}>
+      activeOpacity={activeOpacity}
+      onPress={() => (onClick && !disable ? onClick() : {})}>
       {icon ? (
         <Icon
           source={icon}
@@ -57,6 +61,7 @@ Button.propTypes = {
   textColor: PropTypes.string,
   onClick: PropTypes.func,
   icon: PropTypes.number,
+  disable: PropTypes.bool,
 };
 
 Button.defaultProps = {
@@ -65,6 +70,7 @@ Button.defaultProps = {
   backgroundColor: colors.primary,
   textColor: colors.white,
   height: 40,
+  disable: false,
 };
 
 const styles = StyleSheet.create({

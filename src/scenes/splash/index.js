@@ -1,5 +1,6 @@
 import React from 'react';
 import {View} from 'react-native';
+import {connect} from 'react-redux';
 import * as Animatable from 'react-native-animatable';
 import Icon from '../../components/atoms/Icon';
 import styles from './styles';
@@ -15,11 +16,16 @@ const fadeIn = {
   },
 };
 
-export default class SplashScreen extends React.Component {
+class SplashScreen extends React.Component {
   componentDidMount() {
-    const {navigation} = this.props;
+    const {navigation, user} = this.props;
+    console.log('user', user);
+    let screenName = 'LoginScreen';
+    if (user) {
+      screenName = 'TabBar';
+    }
     setTimeout(() => {
-      navigation.navigate('LoginScreen');
+      navigation.navigate(screenName);
     }, 2000);
   }
 
@@ -38,3 +44,9 @@ export default class SplashScreen extends React.Component {
     );
   }
 }
+
+const mapStateToProps = state => ({
+  user: state.auth.user,
+});
+
+export default connect(mapStateToProps, null)(SplashScreen);

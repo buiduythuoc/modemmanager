@@ -4,9 +4,10 @@ import Immutable from 'seamless-immutable';
 /* ------------- Types and Action Creators ------------- */
 
 const {Types, Creators} = createActions({
-  loginRequest: ['username', 'password'],
-  loginSuccess: null,
-  loginFailure: null,
+  authSet: ['data'],
+  authSetUser: ['data'],
+  authLogin: ['params', 'onSuccess', 'onError'],
+  authRegister: ['params', 'onSuccess', 'onError'],
 });
 
 export const AuthTypes = Types;
@@ -15,8 +16,7 @@ export default Creators;
 /* ------------- Initial State ------------- */
 
 export const INITIAL_STATE = Immutable({
-  fetching: null,
-  error: null,
+  user: null,
 });
 
 /* ------------- Selectors ------------- */
@@ -25,25 +25,25 @@ export const AuthSelectors = {};
 
 /* ------------- Reducers ------------- */
 
-// request the auth
-export const loginRequest = (state, action) => {
-  state.merge({fetching: true});
+export const login = (state, action) => {
+  return state;
 };
 
-// successful to login
-export const loginSuccess = (state, action) => {
-  return state.merge({fetching: false, error: null});
+export const register = (state, action) => {
+  return state;
 };
 
-// failed to login
-export const loginFailure = state => {
-  state.merge({fetching: false, error: true});
+export const setAuth = (state, action) => {
+  const {data} = action;
+  console.log('setAuth', action);
+  return {...state, user: data};
 };
 
 /* ------------- Hookup Reducers To Types ------------- */
 
 export const reducer = createReducer(INITIAL_STATE, {
-  [Types.LOGIN_REQUEST]: loginRequest,
-  [Types.LOGIN_SUCCESS]: loginSuccess,
-  [Types.LOGIN_FAILURE]: loginFailure,
+  [Types.AUTH_LOGIN]: login,
+  [Types.AUTH_REGISTER]: register,
+  [Types.AUTH_SET]: setAuth,
+  [Types.AUTH_SET_USER]: setAuth,
 });

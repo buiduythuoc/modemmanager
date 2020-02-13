@@ -1,57 +1,41 @@
 import React from 'react';
-import {View, FlatList} from 'react-native';
+import {View, FlatList, BackHandler, Text, RefreshControl} from 'react-native';
+import {connect} from 'react-redux';
 import {images} from '../../../themes';
 import styles from './styles';
 import TabHeader from '../../../components/organisms/TabHeader';
 import Button from '../../../components/atoms/Button';
 import ModemItem from '../../../components/organisms/ModemItem';
 import {scaleSize} from '../../../themes/mixins';
+import ModemActions from '../../../stores/modemRedux';
+import Loading from '../../../components/organisms/Loading';
 
-export default class ListModem extends React.Component {
+class ListModem extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      listModems: [
-        {
-          id: 1,
-          modemName: 'Modem Name',
-          domainName: 'Domain Name',
-          port: 'Port',
-          description:
-            'Detailed descriptions are provided in the project report.',
-        },
-        {
-          id: 2,
-          modemName: 'Modem Name',
-          domainName: 'Domain Name',
-          port: 'Port',
-          description:
-            'Detailed descriptions are provided in the project report.',
-        },
-        {
-          id: 3,
-          modemName: 'Modem Name',
-          domainName: 'Domain Name',
-          port: 'Port',
-          description:
-            'Detailed descriptions are provided in the project report.',
-        },
-        {
-          id: 4,
-          modemName: 'Modem Name',
-          domainName: 'Domain Name',
-          port: 'Port',
-          description:
-            'Detailed descriptions are provided in the project report.',
-        },
-      ],
+      isFetching: true,
+      isRefreshing: false,
     };
   }
 
   static navigationOptions = {
     header: null,
   };
+
+  componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+    this.fetchModems();
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+  }
+
+  handleBackButton() {
+    return true;
+  }
 
   handleOnClickItem = () => {
     const {navigation} = this.props;
@@ -63,13 +47,34 @@ export default class ListModem extends React.Component {
     navigation.navigate('CreateModemScreen');
   };
 
-  handleOnClickEdit = () => {
+  handleOnClickEdit = modemData => {
     const {navigation} = this.props;
-    navigation.navigate('EditModemScreen');
+    navigation.navigate('EditModemScreen', {modemData});
+  };
+
+  handleOnRefresh = () => {
+    this.setState({isRefreshing: true});
+    this.fetchModems();
+  };
+
+  fetchModems = () => {
+    const {user} = this.props;
+    const userId = user.user_id;
+    this.props.fetchModems(
+      userId,
+      () => {
+        this.setState({isFetching: false, isRefreshing: false});
+      },
+      () => {
+        this.setState({isFetching: false, isRefreshing: false});
+      },
+    );
   };
 
   render() {
-    const {listModems} = this.state;
+    const {isFetching, isRefreshing} = this.state;
+    const {listModems} = this.props;
+
     return (
       <View style={styles.container}>
         <TabHeader
@@ -84,6 +89,7 @@ export default class ListModem extends React.Component {
           icon={images.icRoundedAdd}
           onClick={this.handleOnClickAdd}
         />
+        <Text style={styles.modemCount}>{listModems.length + ' modems'}</Text>
         <FlatList
           style={styles.flatList}
           data={listModems}
@@ -93,12 +99,34 @@ export default class ListModem extends React.Component {
               data={item}
               index={index}
               onClickDetail={this.handleOnClickItem}
-              onClickEdit={this.handleOnClickEdit}
+              onClickEdit={() => this.handleOnClickEdit(item)}
             />
           )}
           keyExtractor={item => item.id + ''}
+          refreshControl={
+            <RefreshControl
+              refreshing={isRefreshing}
+              onRefresh={this.handleOnRefresh}
+            />
+          }
         />
+        <Loading show={isFetching} />
       </View>
     );
   }
 }
+
+const mapStateToProps = state => ({
+  listModems: state.modem.list,
+  user: state.auth.user,
+});
+
+const mapDispatchToProps = dispatch => ({
+  fetchModems: (userId, onSuccess, onError) =>
+    dispatch(ModemActions.modemFetch({userId}, onSuccess, onError)),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ListModem);

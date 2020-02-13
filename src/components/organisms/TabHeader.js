@@ -17,7 +17,7 @@ const TabHeader = props => {
   } = props;
   return (
     <ImageBackground
-      resizeMode="cover"
+      resizeMode="contain"
       source={source}
       style={{...styles.container, height: height}}>
       <NavHeader

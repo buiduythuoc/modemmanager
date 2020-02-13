@@ -75,7 +75,7 @@ export default class Notification extends React.Component {
           renderItem={({item}) => (
             <NotificationItem data={item} onClick={this.handleOnClickItem} />
           )}
-          keyExtractor={item => item.id}
+          keyExtractor={item => item.id + ''}
         />
       </View>
     );

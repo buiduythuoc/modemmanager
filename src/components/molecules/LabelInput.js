@@ -40,10 +40,9 @@ const LabelInput = props => {
     inputStyle,
     placeholder,
     placeholderTextColor,
+    secureTextEntry,
+    value,
   } = props;
-
-  console.log(inputStyle);
-
   return (
     <View style={{...styles.container, ...style}}>
       <View style={styles.labelContainer}>
@@ -58,6 +57,8 @@ const LabelInput = props => {
         onChangeText={onChangeText}
         placeholder={placeholder}
         placeholderTextColor={placeholderTextColor}
+        secureTextEntry={secureTextEntry}
+        value={value}
       />
     </View>
   );
@@ -79,6 +80,8 @@ LabelInput.propTypes = {
   placeholder: PropTypes.string,
   placeholderTextColor: PropTypes.string,
   onChangeText: PropTypes.func,
+  secureTextEntry: PropTypes.bool,
+  value: PropTypes.string,
 };
 
 LabelInput.defaultProps = {
@@ -94,12 +97,13 @@ LabelInput.defaultProps = {
   placeholder: '',
   placeholderTextColor: colors.white,
   onChangeText: null,
+  secureTextEntry: false,
+  value: '',
 };
 
 const styles = StyleSheet.create({
   container: {},
   labelContainer: {
-    display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -112,5 +116,6 @@ const styles = StyleSheet.create({
   },
   input: {
     height: scaleSize(40),
+    color: colors.white,
   },
 });

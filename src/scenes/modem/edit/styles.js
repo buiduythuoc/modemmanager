@@ -16,6 +16,9 @@ const styles = StyleSheet.create({
     borderTopRightRadius: scaleSize(25),
     backgroundColor: colors.white,
   },
+  input: {
+    color: colors.black,
+  },
   labelStyle: {
     fontSize: scaleFont(14),
     color: colors.gray01,

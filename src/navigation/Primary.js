@@ -1,4 +1,4 @@
-import {createAppContainer, createStackNavigator} from 'react-navigation';
+import {createStackNavigator} from 'react-navigation';
 import TabBar from './TabBar';
 import SplashScreen from '../scenes/splash';
 import LoginScreen from '../scenes/auth/login';
@@ -19,4 +19,4 @@ const Primary = createStackNavigator(
     headerMode: 'none',
   },
 );
-export default createAppContainer(Primary);
+export default Primary;
