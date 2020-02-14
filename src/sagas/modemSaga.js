@@ -89,3 +89,31 @@ export function* fetchModems(action) {
     }
   }
 }
+
+export function* fetchDevices(action) {
+  const {params, onSuccess, onError} = action;
+  const {userId, modemId, domain, port, username, password} = params;
+  // make the call to the api
+  const response = yield call(
+    api.create().getListDevices,
+    userId,
+    modemId,
+    domain,
+    port,
+    username,
+    password,
+  );
+  console.log(action, response);
+
+  if (response.status === 200 && response.data.status === 1) {
+    if (onSuccess) {
+      const listDevices = response.data.data ? response.data.data : [];
+      yield put(ModemActions.deviceSet(listDevices));
+      onSuccess();
+    }
+  } else {
+    if (onError) {
+      onError();
+    }
+  }
+}

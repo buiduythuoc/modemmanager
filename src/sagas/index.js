@@ -8,9 +8,14 @@ import {TimelineTypes} from '../stores/timelineRedux';
 
 /* ------------- Sagas ------------- */
 
-import {addModem, fetchModems, editModem} from './modemSaga';
+import {addModem, fetchModems, editModem, fetchDevices} from './modemSaga';
 import {login, signup} from './authSaga';
-import {addTimeline, fetchTimelines, fetchTimelineDetail, editTimeline} from './timelineSaga';
+import {
+  addTimeline,
+  fetchTimelines,
+  fetchTimelineDetail,
+  editTimeline,
+} from './timelineSaga';
 
 /* ------------- API ------------- */
 
@@ -27,6 +32,7 @@ export default function* root() {
     takeLatest(AuthTypes.AUTH_LOGIN, login),
     takeLatest(AuthTypes.AUTH_REGISTER, signup),
     takeLatest(ModemTypes.MODEM_FETCH, fetchModems),
+    takeLatest(ModemTypes.DEVICE_FETCH, fetchDevices),
     takeLatest(ModemTypes.MODEM_ADD, addModem),
     takeLatest(ModemTypes.MODEM_EDIT, editModem),
     takeLatest(TimelineTypes.TIMELINE_FETCH, fetchTimelines),

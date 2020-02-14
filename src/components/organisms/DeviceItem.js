@@ -7,7 +7,9 @@ import Icon from '../atoms/Icon';
 
 const DeviceItem = props => {
   const {data, isLocked} = props;
-  const {deviceName, description, time} = data;
+  const deviceName = data.name;
+  const macAddress = data.mac_address;
+  const status = data.online_status;
   const icon = isLocked ? images.icLockOpen : images.icLockWhite;
   const actionContentBackgroundColor = isLocked
     ? colors.lightGreen
@@ -19,8 +21,8 @@ const DeviceItem = props => {
   return (
     <View style={styles.container}>
       <Text style={styles.deviceName}>{deviceName}</Text>
-      <Text style={styles.description}>{description}</Text>
-      <Text style={styles.description}>{time}</Text>
+      <Text style={styles.description}>{macAddress}</Text>
+      <Text style={styles.description}>{status}</Text>
       <TouchableOpacity
         style={{
           ...styles.actionContainer,

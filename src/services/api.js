@@ -8,7 +8,7 @@ import NavigationService from '../services/navigationService';
 const create = () => {
   const api = axios.create({
     baseURL: BASE_API_URL,
-    timeout: 6000,
+    timeout: 60000,
     headers: {
       'X-Requested-With': 'XMLHttpRequest',
     },
@@ -52,6 +52,29 @@ const create = () => {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
     });
+
+  const getListDevices = (
+    userId,
+    modemId,
+    domain,
+    port,
+    username,
+    password,
+  ) => {
+    const data = {
+      user_id: userId,
+      modem_id: modemId,
+      domain,
+      port,
+      username,
+      password,
+    };
+    return api.post('getlistdevice.php', qs.stringify(data), {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    });
+  };
 
   const addModem = (domain, port, loginName, loginPass, userId, modemName) => {
     const data = {
@@ -154,6 +177,7 @@ const create = () => {
     login,
     signup,
     getListModems,
+    getListDevices,
     addModem,
     editModem,
     getListTimelines,

@@ -1,52 +1,32 @@
 import React from 'react';
-import {View, FlatList, Text} from 'react-native';
+import {View, FlatList, Text, RefreshControl} from 'react-native';
+import {connect} from 'react-redux';
 import styles from './styles';
 import NavHeader from '../../../components/molecules/NavHeader';
 import DeviceItem from '../../../components/organisms/DeviceItem';
 import {colors, images} from '../../../themes';
 import {scaleSize} from '../../../themes/mixins';
+import ModemActions from '../../../stores/modemRedux';
+import Loading from '../../../components/organisms/Loading';
 
-export default class DeviceList extends React.Component {
+class DeviceList extends React.Component {
   constructor(props) {
     super(props);
-
+    const {navigation} = props;
     this.state = {
-      listDevices: [
-        {
-          id: 1,
-          deviceName: 'Modem Device Name 1',
-          description:
-            'Detailed descriptions are provided in the project report.',
-          time: '10:20AM 12/12/2019',
-        },
-        {
-          id: 2,
-          deviceName: 'Modem Device Name 1',
-          description:
-            'Detailed descriptions are provided in the project report.',
-          time: '10:20AM 12/12/2019',
-        },
-        {
-          id: 3,
-          deviceName: 'Modem Device Name 1',
-          description:
-            'Detailed descriptions are provided in the project report.',
-          time: '10:20AM 12/12/2019',
-        },
-        {
-          id: 4,
-          deviceName: 'Modem Device Name 1',
-          description:
-            'Detailed descriptions are provided in the project report.',
-          time: '10:20AM 12/12/2019',
-        },
-      ],
+      isFetching: true,
+      isRefreshing: false,
+      modemData: navigation.getParam('modemData', null),
     };
   }
 
   static navigationOptions = {
     header: null,
   };
+
+  componentDidMount() {
+    this.fetchDevices();
+  }
 
   handleOnClickBack = () => {
     const {navigation} = this.props;
@@ -58,8 +38,36 @@ export default class DeviceList extends React.Component {
     navigation.navigate('BlockListScreen');
   };
 
+  handleOnRefresh = () => {
+    this.setState({isRefreshing: true});
+    this.fetchDevices();
+  };
+
+  fetchDevices = () => {
+    const {user} = this.props;
+    const {modemData} = this.state;
+    const params = {
+      userId: user.user_id,
+      modemId: modemData.id,
+      domain: modemData.domain,
+      port: modemData.port,
+      username: modemData.login_name,
+      password: modemData.login_pass,
+    };
+    this.props.fetchDevices(
+      params,
+      () => {
+        this.setState({isFetching: false, isRefreshing: false});
+      },
+      () => {
+        this.setState({isFetching: false, isRefreshing: false});
+      },
+    );
+  };
+
   render() {
-    const {listDevices} = this.state;
+    const {isFetching, isRefreshing} = this.state;
+    const {listDevices} = this.props;
     return (
       <View style={styles.container}>
         <NavHeader
@@ -79,9 +87,33 @@ export default class DeviceList extends React.Component {
           style={styles.flatList}
           data={listDevices}
           renderItem={({item}) => <DeviceItem data={item} />}
-          keyExtractor={item => item.id + ''}
+          keyExtractor={(item, index) => {
+            return index + '';
+          }}
+          refreshControl={
+            <RefreshControl
+              refreshing={isRefreshing}
+              onRefresh={this.handleOnRefresh}
+            />
+          }
         />
+        <Loading show={isFetching} />
       </View>
     );
   }
 }
+
+const mapStateToProps = state => ({
+  listDevices: state.modem.deviceList,
+  user: state.auth.user,
+});
+
+const mapDispatchToProps = dispatch => ({
+  fetchDevices: (params, onSuccess, onError) =>
+    dispatch(ModemActions.deviceFetch(params, onSuccess, onError)),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(DeviceList);
