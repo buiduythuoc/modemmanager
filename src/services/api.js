@@ -2,8 +2,6 @@ import axios from 'axios';
 import _ from 'lodash';
 import qs from 'querystring';
 import {BASE_API_URL} from '../configs';
-import StorageHelpers from '../helpers/StorageHelper';
-import NavigationService from '../services/navigationService';
 
 const create = () => {
   const api = axios.create({
@@ -11,47 +9,28 @@ const create = () => {
     timeout: 60000,
     headers: {
       'X-Requested-With': 'XMLHttpRequest',
+      'Content-Type': 'application/x-www-form-urlencoded',
     },
   });
 
-  api.interceptors.request.use(config => {
-    config.headers.common.Authorization = `Bearer ${StorageHelpers.getToken()}`;
-    config.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
-    return config;
+  api.interceptors.request.use(request => {
+    console.log('Starting Request', request);
+    return request;
   });
 
-  api.interceptors.response.use(
-    function(response) {
-      return response;
-    },
-    function(error) {
-      const isLoggedIn = !!StorageHelpers.getToken();
-      if (_.get(error, 'response.status') === 401 && isLoggedIn) {
-        NavigationService.navigate('LoginScreen');
-      }
-    },
-  );
+  api.interceptors.response.use(response => {
+    console.log('Response:', response);
+    return response;
+  });
 
   const login = (username, password) =>
-    api.post('login.php', qs.stringify({username, password}), {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-    });
+    api.post('login.php', qs.stringify({username, password}));
 
-  const signup = (username, password, role) =>
-    api.post('register.php', qs.stringify({username, password, role}), {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-    });
+  const signup = (username, password, type) =>
+    api.post('register.php', qs.stringify({username, password, type}));
 
   const getListModems = userId =>
-    api.post('getlistmodem.php', qs.stringify({user_id: userId}), {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-    });
+    api.post('getlistmodem.php', qs.stringify({user_id: userId}));
 
   const getListDevices = (
     userId,
@@ -69,11 +48,7 @@ const create = () => {
       username,
       password,
     };
-    return api.post('getlistdevice.php', qs.stringify(data), {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-    });
+    return api.post('getlistdevice.php', qs.stringify(data));
   };
 
   const addModem = (domain, port, loginName, loginPass, userId, modemName) => {
@@ -85,11 +60,7 @@ const create = () => {
       user_id: userId,
       modem_name: modemName,
     };
-    return api.post('addmodem.php', qs.stringify(data), {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-    });
+    return api.post('addmodem.php', qs.stringify(data));
   };
 
   const editModem = (
@@ -110,15 +81,11 @@ const create = () => {
       user_id: userId,
       modem_name: modemName,
     };
-    return api.post('updatemodem.php', qs.stringify(data), {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-    });
+    return api.post('updatemodem.php', qs.stringify(data));
   };
 
   const getListTimelines = userId =>
-    api.post('getlistpost.php', qs.stringify({user_id: userId}), {
+    api.post('getlistpost.php', qs.stringify({user_id: userId, modem_id: ''}), {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
@@ -132,22 +99,13 @@ const create = () => {
       modem_id: modemId,
       content,
     };
-    return api.post('createpost.php', qs.stringify(data), {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-    });
+    return api.post('createpost.php', qs.stringify(data));
   };
 
   const getTimelineDetail = (userId, postId) =>
     api.post(
       'getpostdetail.php',
       qs.stringify({user_id: userId, post_id: postId}),
-      {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-      },
     );
 
   const editTimeline = (
@@ -166,12 +124,32 @@ const create = () => {
       // modem_id: modemId,
       content,
     };
-    return api.post('updatepost.php', qs.stringify(data), {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-    });
+    return api.post('updatepost.php', qs.stringify(data));
   };
+
+  const getProfile = userId =>
+    api.post('getprofile.php', qs.stringify({user_id: userId}));
+
+  const updateProfile = (userId, username, status, expireDate) =>
+    api.post(
+      'updateprofile.php',
+      qs.stringify({
+        user_id: userId,
+        username,
+        status,
+        expired_date: expireDate,
+      }),
+    );
+
+  const changePassword = (userId, currentPassword, newPassword) =>
+    api.post(
+      'updatepassword.php',
+      qs.stringify({
+        user_id: userId,
+        current_pass: currentPassword,
+        new_pass: newPassword,
+      }),
+    );
 
   return {
     login,
@@ -184,6 +162,9 @@ const create = () => {
     addTimeline,
     getTimelineDetail,
     editTimeline,
+    getProfile,
+    updateProfile,
+    changePassword,
   };
 };
 

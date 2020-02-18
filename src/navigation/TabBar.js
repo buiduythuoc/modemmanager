@@ -15,7 +15,10 @@ import EditModemScreen from '../scenes/modem/edit';
 // notification
 import NotificationScreen from '../scenes/notification/list';
 import NotificationDetailScreen from '../scenes/notification/detail';
+// my page
 import MyPageScreen from '../scenes/myPage';
+import ChangePasswordScreen from '../scenes/myPage/changePassword';
+
 import {images, colors} from '../themes';
 import Icon from '../components/atoms/Icon';
 import styles from './styles';
@@ -125,6 +128,7 @@ NotificationNav.navigationOptions = ({navigation}) => {
 const MyPageNav = createStackNavigator(
   {
     MyPageScreen: {screen: MyPageScreen},
+    ChangePasswordScreen: {screen: ChangePasswordScreen},
   },
   {
     navigationOptions: {
@@ -133,6 +137,17 @@ const MyPageNav = createStackNavigator(
     },
   },
 );
+
+MyPageNav.navigationOptions = ({navigation}) => {
+  const {routeName} = navigation.state.routes[navigation.state.index];
+  let tabBarVisible = true;
+  if (routeName === 'ChangePasswordScreen') {
+    tabBarVisible = false;
+  }
+  return {
+    tabBarVisible,
+  };
+};
 
 const tabBarConfig = {
   tabBarOptions: {

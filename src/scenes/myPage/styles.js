@@ -16,9 +16,23 @@ const styles = StyleSheet.create({
   labelInput: {
     color: colors.gray01,
   },
+  input: {
+    color: colors.black,
+  },
   userNameInput: {
     width: '100%',
     marginTop: scaleSize(20),
+  },
+  iconEditContainer: {
+    position: 'absolute',
+    flex: 1,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+    padding: scaleSize(10),
   },
   passwordInput: {
     width: '100%',

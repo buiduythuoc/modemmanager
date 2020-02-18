@@ -1,14 +1,14 @@
 import React from 'react';
 import {View, FlatList, BackHandler, Text, RefreshControl} from 'react-native';
 import {connect} from 'react-redux';
-import {images} from '../../../themes';
+import {images, colors} from '../../../themes';
 import styles from './styles';
-import TabHeader from '../../../components/organisms/TabHeader';
 import Button from '../../../components/atoms/Button';
 import ModemItem from '../../../components/organisms/ModemItem';
 import {scaleSize} from '../../../themes/mixins';
 import ModemActions from '../../../stores/modemRedux';
 import Loading from '../../../components/organisms/Loading';
+import RNParallax from '../../../components/organisms/RNParallax';
 
 class ListModem extends React.Component {
   constructor(props) {
@@ -71,24 +71,25 @@ class ListModem extends React.Component {
     );
   };
 
-  render() {
-    const {isFetching, isRefreshing} = this.state;
-    const {listModems} = this.props;
-
+  renderNavBar = () => {
     return (
-      <View style={styles.container}>
-        <TabHeader
-          source={images.imgMapList}
-          title={'List Modem'}
-          height={scaleSize(133)}
-        />
+      <View>
         <Button
           style={styles.addButton}
-          height={scaleSize(60)}
+          height={scaleSize(54)}
           title="Add New Modem"
           icon={images.icRoundedAdd}
           onClick={this.handleOnClickAdd}
         />
+      </View>
+    );
+  };
+
+  renderContent = () => {
+    const {isRefreshing} = this.state;
+    const {listModems} = this.props;
+    return (
+      <View>
         <Text style={styles.modemCount}>{listModems.length + ' modems'}</Text>
         <FlatList
           style={styles.flatList}
@@ -109,6 +110,32 @@ class ListModem extends React.Component {
               onRefresh={this.handleOnRefresh}
             />
           }
+        />
+      </View>
+    );
+  };
+
+  render() {
+    const {isFetching} = this.state;
+
+    return (
+      <View style={styles.container}>
+        <RNParallax
+          headerMinHeight={scaleSize(54)}
+          headerMaxHeight={scaleSize(133)}
+          extraScrollHeight={10}
+          navbarColor={colors.primary}
+          backgroundImage={images.imgMapList}
+          backgroundColor={colors.primary}
+          renderAddButton={this.renderNavBar}
+          renderContent={this.renderContent}
+          containerStyle={styles.container}
+          contentContainerStyle={styles.contentContainer}
+          innerContainerStyle={styles.container}
+          scrollViewProps={{
+            onScrollBeginDrag: () => console.log('onScrollBeginDrag'),
+            onScrollEndDrag: () => console.log('onScrollEndDrag'),
+          }}
         />
         <Loading show={isFetching} />
       </View>

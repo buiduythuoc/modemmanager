@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.listBackground,
   },
   addButton: {
-    marginTop: scaleSize(-30),
+    marginTop: scaleSize(106),
     marginHorizontal: scaleSize(19),
     backgroundColor: colors.addButton,
     borderColor: colors.addButton,
@@ -18,7 +18,8 @@ const styles = StyleSheet.create({
     fontWeight: '300',
     textAlign: 'center',
     lineHeight: scaleSize(16),
-    marginVertical: scaleSize(10),
+    marginTop: scaleSize(37),
+    marginBottom: scaleSize(10),
     color: colors.gray03,
   },
 

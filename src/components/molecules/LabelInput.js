@@ -37,11 +37,15 @@ const LabelInput = props => {
     borderColor,
     borderRadius,
     onChangeText,
+    onFocus,
     inputStyle,
     placeholder,
     placeholderTextColor,
     secureTextEntry,
     value,
+    multiline,
+    editable,
+    children,
   } = props;
   return (
     <View style={{...styles.container, ...style}}>
@@ -55,11 +59,15 @@ const LabelInput = props => {
         borderColor={borderColor}
         borderRadius={borderRadius}
         onChangeText={onChangeText}
+        onFocus={onFocus}
         placeholder={placeholder}
         placeholderTextColor={placeholderTextColor}
         secureTextEntry={secureTextEntry}
         value={value}
+        multiline={multiline}
+        editable={editable}
       />
+      {children}
     </View>
   );
 };
@@ -80,8 +88,11 @@ LabelInput.propTypes = {
   placeholder: PropTypes.string,
   placeholderTextColor: PropTypes.string,
   onChangeText: PropTypes.func,
+  onFocus: PropTypes.func,
   secureTextEntry: PropTypes.bool,
   value: PropTypes.string,
+  multiline: PropTypes.bool,
+  editable: PropTypes.bool,
 };
 
 LabelInput.defaultProps = {
@@ -97,8 +108,11 @@ LabelInput.defaultProps = {
   placeholder: '',
   placeholderTextColor: colors.white,
   onChangeText: null,
+  onFocus: null,
   secureTextEntry: false,
   value: '',
+  multiline: false,
+  editable: true,
 };
 
 const styles = StyleSheet.create({
@@ -117,5 +131,6 @@ const styles = StyleSheet.create({
   input: {
     height: scaleSize(40),
     color: colors.white,
+    padding: scaleSize(4),
   },
 });

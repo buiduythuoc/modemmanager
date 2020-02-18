@@ -149,6 +149,7 @@ class CreateTimeline extends React.Component {
               placeholder="Write your own ......."
               placeholderTextColor={colors.gray05}
               value={subTitle}
+              multiline={true}
               onChangeText={text => this.setState({subTitle: text})}
             />
             <LabelInput
@@ -161,6 +162,7 @@ class CreateTimeline extends React.Component {
               placeholder="Write your own ......."
               placeholderTextColor={colors.gray05}
               value={content}
+              multiline={true}
               onChangeText={text => this.setState({content: text})}
             />
             <Button

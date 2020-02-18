@@ -10,6 +10,7 @@ const Input = props => {
     borderColor,
     borderRadius,
     onChangeText,
+    onFocus,
     style,
     ...attributes
   } = props;
@@ -30,6 +31,7 @@ const Input = props => {
     <TextInput
       style={inputStyle}
       onChangeText={text => (onChangeText ? onChangeText(text) : {})}
+      onFocus={() => (onFocus ? onFocus() : {})}
       {...attributes}
     />
   );
@@ -42,6 +44,7 @@ Input.propTypes = {
   borderColor: PropTypes.string,
   borderRadius: PropTypes.number,
   onChangeText: PropTypes.func,
+  onFocus: PropTypes.func,
 };
 
 Input.defaultProps = {
@@ -49,4 +52,5 @@ Input.defaultProps = {
   borderColor: colors.white,
   borderRadius: scaleSize(5),
   onChangeText: null,
+  onFocus: null,
 };

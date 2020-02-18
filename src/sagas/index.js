@@ -5,6 +5,7 @@ import {takeLatest, all} from 'redux-saga/effects';
 import {ModemTypes} from '../stores/modemRedux';
 import {AuthTypes} from '../stores/authRedux';
 import {TimelineTypes} from '../stores/timelineRedux';
+import {MyPageTypes} from '../stores/myPageRedux';
 
 /* ------------- Sagas ------------- */
 
@@ -16,6 +17,7 @@ import {
   fetchTimelineDetail,
   editTimeline,
 } from './timelineSaga';
+import {fetchProfile, updateProfile, changePassword} from './myPageSaga';
 
 /* ------------- API ------------- */
 
@@ -31,13 +33,19 @@ export default function* root() {
     // some sagas receive extra parameters in addition to an action
     takeLatest(AuthTypes.AUTH_LOGIN, login),
     takeLatest(AuthTypes.AUTH_REGISTER, signup),
+    // modem
     takeLatest(ModemTypes.MODEM_FETCH, fetchModems),
     takeLatest(ModemTypes.DEVICE_FETCH, fetchDevices),
     takeLatest(ModemTypes.MODEM_ADD, addModem),
     takeLatest(ModemTypes.MODEM_EDIT, editModem),
+    // timeline
     takeLatest(TimelineTypes.TIMELINE_FETCH, fetchTimelines),
     takeLatest(TimelineTypes.TIMELINE_ADD, addTimeline),
     takeLatest(TimelineTypes.TIMELINE_DETAIL, fetchTimelineDetail),
     takeLatest(TimelineTypes.TIMELINE_EDIT, editTimeline),
+    // myPage
+    takeLatest(MyPageTypes.MY_PAGE_FETCH, fetchProfile),
+    takeLatest(MyPageTypes.MY_PAGE_UPDATE, updateProfile),
+    takeLatest(MyPageTypes.MY_PAGE_CHANGE_PASSWORD, changePassword),
   ]);
 }
