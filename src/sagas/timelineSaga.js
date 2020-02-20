@@ -14,7 +14,6 @@ export function* addTimeline(action) {
     modemId,
     content,
   );
-  console.log(response);
 
   if (response.status === 200 && response.data.status === 1) {
     if (onSuccess) {
@@ -32,12 +31,11 @@ export function* fetchTimelines(action) {
   const {userId} = params;
   // make the call to the api
   const response = yield call(api.create().getListTimelines, userId);
-  console.log(action, response, onSuccess);
 
   if (response.status === 200 && response.data.status === 1) {
+    const listTimelines = response.data.data ? response.data.data : [];
+    yield put(TimelineActions.timelineSet(listTimelines));
     if (onSuccess) {
-      const listTimelines = response.data.data ? response.data.data : [];
-      yield put(TimelineActions.timelineSet(listTimelines));
       onSuccess();
     }
   } else {
@@ -52,7 +50,6 @@ export function* fetchTimelineDetail(action) {
   const {userId, postId} = params;
   // make the call to the api
   const response = yield call(api.create().getTimelineDetail, userId, postId);
-  console.log(action, response, onSuccess);
 
   if (response.status === 200 && response.data.status === 1) {
     if (onSuccess) {
@@ -78,9 +75,49 @@ export function* editTimeline(action) {
     modemId,
     content,
   );
-  console.log(response);
 
   if (response.status === 200 && response.data.status === 1) {
+    if (onSuccess) {
+      onSuccess();
+    }
+  } else {
+    if (onError) {
+      onError();
+    }
+  }
+}
+
+export function* postComment(action) {
+  const {params, onSuccess, onError} = action;
+  const {postId, comment, userId} = params;
+  // make the call to the api
+  const response = yield call(
+    api.create().postComment,
+    userId,
+    postId,
+    comment,
+  );
+
+  if (response.status === 200 && response.data.status === 1) {
+    if (onSuccess) {
+      onSuccess();
+    }
+  } else {
+    if (onError) {
+      onError();
+    }
+  }
+}
+
+export function* fetchComments(action) {
+  const {params, onSuccess, onError} = action;
+  const {postId, userId} = params;
+  // make the call to the api
+  const response = yield call(api.create().fetchComments, userId, postId);
+
+  if (response.status === 200 && response.data.status === 1) {
+    const comments = response.data.comments ? response.data.comments : [];
+    yield put(TimelineActions.timelineSetComments(postId, comments));
     if (onSuccess) {
       onSuccess();
     }

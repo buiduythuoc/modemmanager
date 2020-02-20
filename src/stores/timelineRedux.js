@@ -9,6 +9,9 @@ const {Types, Creators} = createActions({
   timelineAdd: ['params', 'onSuccess', 'onError'],
   timelineEdit: ['params', 'onSuccess', 'onError'],
   timelineDetail: ['params', 'onSuccess', 'onError'],
+  timelinePostComment: ['params', 'onSuccess', 'onError'],
+  timelineFetchComments: ['params', 'onSuccess', 'onError'],
+  timelineSetComments: ['postId', 'comments'],
 });
 
 export const TimelineTypes = Types;
@@ -28,7 +31,6 @@ export const TimelineSelectors = {};
 
 export const setTimeline = (state, action) => {
   const {data} = action;
-  console.log(action);
   return {...state, list: data};
 };
 
@@ -48,6 +50,25 @@ export const fetchTimelineDetail = (state, action) => {
   return state;
 };
 
+export const fetchComments = (state, action) => {
+  return state;
+};
+
+export const postComment = (state, action) => {
+  return state;
+};
+
+export const setComments = (state, action) => {
+  const {postId, comments} = action;
+  const listTimelines = state.list.map(item => {
+    if (item.id === postId) {
+      item.comments = comments;
+    }
+    return item;
+  });
+  return {...state, list: listTimelines};
+};
+
 /* ------------- Hookup Reducers To Types ------------- */
 
 export const reducer = createReducer(INITIAL_STATE, {
@@ -56,4 +77,7 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.TIMELINE_ADD]: addTimeline,
   [Types.TIMELINE_EDIT]: editTimeline,
   [Types.TIMELINE_DETAIL]: fetchTimelineDetail,
+  [Types.TIMELINE_POST_COMMENT]: postComment,
+  [Types.TIMELINE_FETCH_COMMENTS]: fetchComments,
+  [Types.TIMELINE_SET_COMMENTS]: setComments,
 });

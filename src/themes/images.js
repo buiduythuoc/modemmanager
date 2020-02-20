@@ -21,6 +21,10 @@ import icPortBlack from '../assets/images/ic_port_black.png';
 import icWifiBlack from '../assets/images/ic_wifi_black.png';
 import icDelete from '../assets/images/ic_delete.png';
 import icDropdown from '../assets/images/ic_dropdown.png';
+import icSendActive from '../assets/images/ic_send_active.png';
+import icSendInactive from '../assets/images/ic_send_inactive.png';
+import icProvider from '../assets/images/ic_provider.png';
+import icRole from '../assets/images/ic_role.png';
 
 // tab bar
 import icTabListActive from '../assets/images/ic_tab_list_active.png';
@@ -64,6 +68,10 @@ const images = {
   icWifiBlack,
   icDelete,
   icDropdown,
+  icSendActive,
+  icSendInactive,
+  icProvider,
+  icRole,
   // tab bar
   icTabListActive,
   icTabListInactive,

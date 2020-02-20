@@ -30,9 +30,8 @@ const renderLabel = props => {
   return null;
 };
 
-const LabelInput = props => {
+const renderInputText = props => {
   const {
-    style,
     rounded,
     borderColor,
     borderRadius,
@@ -45,28 +44,38 @@ const LabelInput = props => {
     value,
     multiline,
     editable,
-    children,
+    renderInput,
   } = props;
+  if (renderInput) {
+    return renderInput();
+  }
+  return (
+    <Input
+      style={{...styles.input, ...inputStyle}}
+      rounded={rounded}
+      borderColor={borderColor}
+      borderRadius={borderRadius}
+      onChangeText={onChangeText}
+      onFocus={onFocus}
+      placeholder={placeholder}
+      placeholderTextColor={placeholderTextColor}
+      secureTextEntry={secureTextEntry}
+      value={value}
+      multiline={multiline}
+      editable={editable}
+    />
+  );
+};
+
+const LabelInput = props => {
+  const {style, children} = props;
   return (
     <View style={{...styles.container, ...style}}>
       <View style={styles.labelContainer}>
         {renderIcon(props)}
         {renderLabel(props)}
       </View>
-      <Input
-        style={{...styles.input, ...inputStyle}}
-        rounded={rounded}
-        borderColor={borderColor}
-        borderRadius={borderRadius}
-        onChangeText={onChangeText}
-        onFocus={onFocus}
-        placeholder={placeholder}
-        placeholderTextColor={placeholderTextColor}
-        secureTextEntry={secureTextEntry}
-        value={value}
-        multiline={multiline}
-        editable={editable}
-      />
+      {renderInputText(props)}
       {children}
     </View>
   );
@@ -93,6 +102,7 @@ LabelInput.propTypes = {
   value: PropTypes.string,
   multiline: PropTypes.bool,
   editable: PropTypes.bool,
+  renderInput: PropTypes.func,
 };
 
 LabelInput.defaultProps = {
@@ -113,6 +123,7 @@ LabelInput.defaultProps = {
   value: '',
   multiline: false,
   editable: true,
+  renderInput: null,
 };
 
 const styles = StyleSheet.create({

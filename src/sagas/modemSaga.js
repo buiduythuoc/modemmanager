@@ -22,7 +22,6 @@ export function* addModem(action) {
     userId,
     modemName,
   );
-  console.log(action, response);
 
   if (response.status === 200 && response.data.status === 1) {
     if (onSuccess) {
@@ -57,7 +56,6 @@ export function* editModem(action) {
     userId,
     modemName,
   );
-  console.log(action, response);
 
   if (response.status === 200 && response.data.status === 1) {
     if (onSuccess) {
@@ -75,12 +73,11 @@ export function* fetchModems(action) {
   const {userId} = params;
   // make the call to the api
   const response = yield call(api.create().getListModems, userId);
-  console.log(action, response);
 
   if (response.status === 200 && response.data.status === 1) {
+    const listModems = response.data.data ? response.data.data : [];
+    yield put(ModemActions.modemSet(listModems));
     if (onSuccess) {
-      const listModems = response.data.data ? response.data.data : [];
-      yield put(ModemActions.modemSet(listModems));
       onSuccess();
     }
   } else {
@@ -103,12 +100,11 @@ export function* fetchDevices(action) {
     username,
     password,
   );
-  console.log(action, response);
 
   if (response.status === 200 && response.data.status === 1) {
+    const listDevices = response.data.data ? response.data.data : [];
+    yield put(ModemActions.deviceSet(listDevices));
     if (onSuccess) {
-      const listDevices = response.data.data ? response.data.data : [];
-      yield put(ModemActions.deviceSet(listDevices));
       onSuccess();
     }
   } else {

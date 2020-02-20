@@ -12,9 +12,9 @@ const Dropdown = props => {
     <View style={{...styles.container, ...style}}>
       <View style={styles.labelContainer}>
         <Icon
-          source={images.icUserWhite}
-          width={scaleSize(10)}
-          height={scaleSize(13)}
+          source={images.icRole}
+          width={scaleSize(17)}
+          height={scaleSize(17)}
           style={styles.iconRole}
         />
         <Text style={styles.label}>{label}</Text>

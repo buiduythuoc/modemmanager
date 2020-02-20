@@ -1,7 +1,8 @@
 import React from 'react';
-import {View, Alert} from 'react-native';
+import {View, Alert, Text} from 'react-native';
 import {connect} from 'react-redux';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import RNPickerSelect from 'react-native-picker-select';
 import {images, colors} from '../../../themes';
 import styles from './styles';
 import Button from '../../../components/atoms/Button';
@@ -128,6 +129,50 @@ class CreateModem extends React.Component {
             placeholderTextColor={colors.gray05}
             onChangeText={text => this.setState({port: text})}
             value={port}
+          />
+          <LabelInput
+            style={styles.portInput}
+            inputStyle={styles.input}
+            label="Provider"
+            labelStyle={styles.labelStyle}
+            borderColor={colors.gray04}
+            iconSrc={images.icProvider}
+            iconWidth={scaleSize(15)}
+            iconHeight={scaleSize(15)}
+            renderInput={() => (
+              <View style={styles.picker}>
+                <RNPickerSelect
+                  onValueChange={value => this.setState({modemId: value})}
+                  items={[
+                    {label: 'FPT', value: 'fpt'},
+                    {label: 'VNPT', value: 'vnpt'},
+                    {label: 'VIETTEL', value: 'viettel'},
+                  ]}
+                />
+              </View>
+            )}
+          />
+          <LabelInput
+            style={styles.portInput}
+            inputStyle={styles.input}
+            label="Provider Modem"
+            labelStyle={styles.labelStyle}
+            borderColor={colors.gray04}
+            iconSrc={images.icProvider}
+            iconWidth={scaleSize(15)}
+            iconHeight={scaleSize(15)}
+            renderInput={() => (
+              <View style={styles.picker}>
+                <RNPickerSelect
+                  onValueChange={value => this.setState({modemId: value})}
+                  items={[
+                    {label: 'FPT', value: 'fpt'},
+                    {label: 'VNPT', value: 'vnpt'},
+                    {label: 'VIETTEL', value: 'viettel'},
+                  ]}
+                />
+              </View>
+            )}
           />
           <LabelInput
             style={styles.userNameInput}

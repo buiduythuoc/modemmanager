@@ -16,6 +16,8 @@ import {
   fetchTimelines,
   fetchTimelineDetail,
   editTimeline,
+  postComment,
+  fetchComments,
 } from './timelineSaga';
 import {fetchProfile, updateProfile, changePassword} from './myPageSaga';
 
@@ -43,6 +45,8 @@ export default function* root() {
     takeLatest(TimelineTypes.TIMELINE_ADD, addTimeline),
     takeLatest(TimelineTypes.TIMELINE_DETAIL, fetchTimelineDetail),
     takeLatest(TimelineTypes.TIMELINE_EDIT, editTimeline),
+    takeLatest(TimelineTypes.TIMELINE_POST_COMMENT, postComment),
+    takeLatest(TimelineTypes.TIMELINE_FETCH_COMMENTS, fetchComments),
     // myPage
     takeLatest(MyPageTypes.MY_PAGE_FETCH, fetchProfile),
     takeLatest(MyPageTypes.MY_PAGE_UPDATE, updateProfile),

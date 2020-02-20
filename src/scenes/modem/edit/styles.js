@@ -9,9 +9,7 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    paddingLeft: scaleSize(30),
-    paddingRight: scaleSize(30),
-    paddingTop: scaleSize(42),
+    padding: scaleSize(20),
     borderTopLeftRadius: scaleSize(25),
     borderTopRightRadius: scaleSize(25),
     backgroundColor: colors.white,
@@ -24,7 +22,6 @@ const styles = StyleSheet.create({
     color: colors.gray01,
   },
   modemNameInput: {
-    marginTop: scaleSize(37),
     width: '100%',
   },
   domainNameInput: {

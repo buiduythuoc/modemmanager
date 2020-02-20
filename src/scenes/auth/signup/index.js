@@ -55,7 +55,7 @@ class SignupScreen extends React.Component {
       {username, password, role},
       () => {
         this.setState({isFetching: false});
-        navigation.navigate('TabBar');
+        setTimeout(() => navigation.navigate('TabBar'), 1000);
       },
       () => {
         this.setState({isFetching: false});
@@ -80,13 +80,6 @@ class SignupScreen extends React.Component {
         />
         <View style={styles.content}>
           <Text style={styles.managementText}>Management</Text>
-          {/* <LabelInput
-            style={styles.emailInput}
-            iconSrc={images.icEmail}
-            iconWidth={scaleSize(12)}
-            iconHeight={scaleSize(12)}
-            label="Email"
-          /> */}
           <View style={styles.formContainer}>
             <LabelInput
               style={styles.userNameInput}

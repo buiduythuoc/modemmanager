@@ -138,7 +138,7 @@ class MyPage extends React.Component {
             onClick={this.handleOnClickUpdateProfile}
           />
         </View>
-        {isShowDatePicker && (
+        {/* {isShowDatePicker && (
           <DateTimePicker
             testID="dateTimePicker"
             timeZoneOffsetInMinutes={0}
@@ -148,7 +148,7 @@ class MyPage extends React.Component {
             display="default"
             onChange={() => this.setState({isShowDatePicker: false})}
           />
-        )}
+        )} */}
         <Loading show={isFetching} />
       </View>
     );

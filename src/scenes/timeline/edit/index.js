@@ -21,11 +21,12 @@ class EditTimeline extends React.Component {
 
   constructor(props) {
     super(props);
-    const {navigation} = props;
+    const {navigation, listTimeline} = props;
+    const postId = navigation.getParam('postId', 0);
     this.state = {
       modemItems: [],
-      timelineData: navigation.getParam('timelineData', null),
       isLoading: false,
+      timelineData: listTimeline.find(item => item.id === postId),
     };
   }
 
@@ -147,6 +148,7 @@ class EditTimeline extends React.Component {
               placeholder="Write your own ......."
               placeholderTextColor={colors.gray05}
               value={timelineData.sub_title}
+              multiline={true}
               onChangeText={text =>
                 this.setState({
                   timelineData: {...timelineData, sub_title: text},
@@ -163,6 +165,7 @@ class EditTimeline extends React.Component {
               placeholder="Write your own ......."
               placeholderTextColor={colors.gray05}
               value={timelineData.content}
+              multiline={true}
               onChangeText={text =>
                 this.setState({timelineData: {...timelineData, content: text}})
               }
@@ -182,6 +185,7 @@ class EditTimeline extends React.Component {
 }
 
 const mapStateToProps = state => ({
+  listTimeline: state.timeline.list,
   listModems: state.modem.list,
   user: state.auth.user,
 });

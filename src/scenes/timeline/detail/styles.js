@@ -8,9 +8,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.gray06,
   },
   content: {
-    paddingHorizontal: scaleSize(20),
+    padding: scaleSize(20),
+    marginBottom: scaleSize(55),
     flex: 1,
-    paddingTop: scaleSize(42),
     borderTopLeftRadius: scaleSize(25),
     borderTopRightRadius: scaleSize(25),
     backgroundColor: colors.white,
@@ -39,9 +39,25 @@ const styles = StyleSheet.create({
     lineHeight: scaleSize(19),
     color: colors.gray02,
   },
+  inputContainer: {
+    flexDirection: 'row',
+    marginTop: scaleSize(30),
+    alignItems: 'center',
+  },
+  sendButton: {
+    width: scaleSize(70),
+  },
   input: {
     height: scaleSize(47),
-    marginTop: scaleSize(30),
+    flex: 1,
+    marginRight: scaleSize(10),
+    paddingTop: scaleSize(13),
+    paddingHorizontal: scaleSize(10),
+  },
+  flatList: {
+    flex: 1,
+    marginTop: scaleSize(37),
+    marginBottom: scaleSize(55),
   },
   buttonContainer: {
     position: 'absolute',

@@ -406,6 +406,7 @@ RNParallax.propTypes = {
 
 RNParallax.defaultProps = {
   renderNavBar: () => <View />,
+  renderAddButton: () => <View />,
   navbarColor: DEFAULT_NAVBAR_COLOR,
   backgroundColor: DEFAULT_BACKGROUND_COLOR,
   backgroundImage: null,

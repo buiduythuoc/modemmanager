@@ -127,6 +127,24 @@ const create = () => {
     return api.post('updatepost.php', qs.stringify(data));
   };
 
+  const postComment = (userId, postId, comment) => {
+    const data = {
+      post_id: postId,
+      user_id: userId,
+      comment,
+    };
+    return api.post('addcomment.php', qs.stringify(data));
+  };
+
+  const fetchComments = (userId, postId) => {
+    const data = {
+      post_id: postId,
+      user_id: userId,
+    };
+    return api.post('getpostcomment.php', qs.stringify(data));
+  };
+
+  // my page
   const getProfile = userId =>
     api.post('getprofile.php', qs.stringify({user_id: userId}));
 
@@ -154,14 +172,19 @@ const create = () => {
   return {
     login,
     signup,
+    // modem
     getListModems,
     getListDevices,
     addModem,
     editModem,
+    // timeline
     getListTimelines,
     addTimeline,
     getTimelineDetail,
     editTimeline,
+    postComment,
+    fetchComments,
+    //my page
     getProfile,
     updateProfile,
     changePassword,

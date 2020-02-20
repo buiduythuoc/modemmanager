@@ -52,7 +52,7 @@ class LoginScreen extends React.Component {
       {username, password},
       () => {
         this.setState({isFetching: false});
-        setTimeout(() => navigation.navigate('TabBar'), 2000);
+        setTimeout(() => navigation.navigate('TabBar'), 1000);
       },
       () => {
         this.setState({isFetching: false});
