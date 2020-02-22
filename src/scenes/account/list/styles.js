@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
   },
   flatList: {
     flex: 1,
-    paddingHorizontal: scaleSize(10),
+    marginHorizontal: scaleSize(10),
   },
 });
 

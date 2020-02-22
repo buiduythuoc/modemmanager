@@ -1,11 +1,10 @@
 import React from 'react';
-import {View, Text, TouchableOpacity, FlatList} from 'react-native';
+import {View, Text, TouchableOpacity, FlatList, Alert} from 'react-native';
 import {connect} from 'react-redux';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import styles from './styles';
 import NavHeader from '../../../components/molecules/NavHeader';
 import ImageSlider from '../../../components/organisms/ImageSlider';
-import Button from '../../../components/atoms/Button';
 import {colors, images} from '../../../themes';
 import TimelineActions from '../../../stores/timelineRedux';
 import Loading from '../../../components/organisms/Loading';
@@ -25,7 +24,6 @@ class TimelineDetail extends React.Component {
     this.state = {
       isLoading: false,
       comment: '',
-      commentInputHeight: scaleSize(47),
       postId: navigation.getParam('timelineId', 0),
     };
   }
@@ -45,8 +43,6 @@ class TimelineDetail extends React.Component {
     const {navigation} = this.props;
     navigation.navigate('TimelineEditScreen', {postId});
   };
-
-  handleOnClickDelete = () => {};
 
   handleOnClickPostComment = () => {
     const {postId} = this.state;
@@ -74,9 +70,58 @@ class TimelineDetail extends React.Component {
     );
   };
 
+  handleOnClickDelete = () => {
+    console.log('here');
+    const {postId} = this.state;
+    const {user, deleteTimeline, fetchTimeline, navigation} = this.props;
+    if (postId === 0) {
+      return;
+    }
+
+    Alert.alert(
+      'Warning',
+      'Do you want to delete this post',
+      [
+        {
+          text: 'OK',
+          onPress: () => {
+            const params = {
+              userId: user.user_id,
+              postId,
+            };
+            this.setState({isLoading: true});
+            deleteTimeline(
+              params,
+              () => {
+                this.setState({isFetching: false});
+                fetchTimeline({userId: user.user_id});
+                navigation.goBack();
+                // Alert.alert(
+                //   'Success',
+                //   ' Post has been deleted',
+                //   [{text: 'OK', onPress: () => navigation.goBack()}],
+                //   {cancelable: false},
+                // );
+              },
+              () => {
+                this.setState({isFetching: false});
+              },
+            );
+          },
+        },
+        {
+          text: 'Cancel',
+          style: 'cancel',
+          onPress: () => {},
+        },
+      ],
+      {cancelable: false},
+    );
+  };
+
   fetchTimelineDetail = () => {
     const {postId} = this.state;
-    const {fetchTimeline, user} = this.props;
+    const {fetchTimelineDetail, user} = this.props;
     if (postId === 0) {
       return;
     }
@@ -86,7 +131,7 @@ class TimelineDetail extends React.Component {
       postId,
     };
     this.setState({isLoading: true});
-    fetchTimeline(
+    fetchTimelineDetail(
       params,
       () => {
         this.setState({isLoading: false});
@@ -121,59 +166,42 @@ class TimelineDetail extends React.Component {
   };
 
   renderActionPost = () => {
-    return (
-      <View style={styles.actionPostContainer}>
-        <TouchableOpacity
-          style={styles.editButton}
-          onPress={this.handleOnClickEdit}>
-          <Icon
-            width={scaleSize(15)}
-            height={scaleSize(15)}
-            source={images.icEditBlue}
-          />
-          <Text style={styles.editText}>Edit</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.deleteButton}>
-          <Icon
-            width={scaleSize(15)}
-            height={scaleSize(15)}
-            source={images.icDeleteRed}
-          />
-          <Text style={styles.deleteText}>Delete</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  };
-
-  renderButtonContainer() {
     const {user} = this.props;
     if (user.type === 'admin' || user.type === 'root') {
       return (
-        <View style={styles.buttonContainer}>
-          <Button
+        <View style={styles.actionPostContainer}>
+          <TouchableOpacity
             style={styles.editButton}
-            title="EDIT"
-            onClick={this.handleOnClickEdit}
-          />
-          <Button
+            onPress={this.handleOnClickEdit}>
+            {/* <Icon
+              width={scaleSize(15)}
+              height={scaleSize(15)}
+              source={images.icEditBlue}
+            /> */}
+            <Text style={styles.editText}>Edit</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
             style={styles.deleteButton}
-            title="DELETE"
-            onClick={this.handleOnClickDelete}
-          />
+            onPress={this.handleOnClickDelete}>
+            {/* <Icon
+              width={scaleSize(15)}
+              height={scaleSize(15)}
+              source={images.icDeleteRed}
+            /> */}
+            <Text style={styles.deleteText}>Delete</Text>
+          </TouchableOpacity>
         </View>
       );
     }
-
     return null;
-  }
+  };
 
   render() {
-    const {isLoading, comment, commentInputHeight, postId} = this.state;
+    const {isLoading, comment, postId} = this.state;
     const {listTimeline} = this.props;
     const timelineData = listTimeline.find(item => item.id === postId);
     const comments = timelineData ? timelineData.comments : [];
-    const sendImage =
-      comment.trim() !== '' ? images.icSendActive : images.icSendInactive;
+    const isShowSendButton = comment.trim() !== '' ? true : false;
     const activeOpacity = comment.trim() !== '' ? 0.4 : 1;
     if (!timelineData) {
       return null;
@@ -201,15 +229,17 @@ class TimelineDetail extends React.Component {
               value={comment}
               onChangeText={text => this.setState({comment: text})}
             />
-            <TouchableOpacity
-              activeOpacity={activeOpacity}
-              onPress={this.handleOnClickPostComment}>
-              <Icon
-                source={sendImage}
-                width={scaleSize(40)}
-                height={scaleSize(40)}
-              />
-            </TouchableOpacity>
+            {isShowSendButton && (
+              <TouchableOpacity
+                activeOpacity={activeOpacity}
+                onPress={this.handleOnClickPostComment}>
+                <Icon
+                  source={images.icSendActive}
+                  width={scaleSize(35)}
+                  height={scaleSize(35)}
+                />
+              </TouchableOpacity>
+            )}
           </View>
           <FlatList
             style={styles.flatList}
@@ -230,12 +260,16 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchTimeline: (params, onSuccess, onError) =>
+  fetchTimelineDetail: (params, onSuccess, onError) =>
     dispatch(TimelineActions.timelineDetail(params, onSuccess, onError)),
+  fetchTimeline: (params, onSuccess, onError) =>
+    dispatch(TimelineActions.timelineFetch(params, onSuccess, onError)),
   fetchComments: (params, onSuccess, onError) =>
     dispatch(TimelineActions.timelineFetchComments(params, onSuccess, onError)),
   postComment: (params, onSuccess, onError) =>
     dispatch(TimelineActions.timelinePostComment(params, onSuccess, onError)),
+  deleteTimeline: (params, onSuccess, onError) =>
+    dispatch(TimelineActions.timelineDelete(params, onSuccess, onError)),
 });
 
 export default connect(

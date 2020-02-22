@@ -13,6 +13,8 @@ const {Types, Creators} = createActions({
   providerFetch: ['params', 'onSuccess', 'onError'],
   providerSet: ['data'],
   deviceBlock: ['params', 'onSuccess', 'onError'],
+  deviceBlockListFetch: ['params', 'onSuccess', 'onError'],
+  deviceBlockSet: ['modemId', 'blockDevices'],
 });
 
 export const ModemTypes = Types;
@@ -76,6 +78,21 @@ export const blockDevice = (state, action) => {
   return state;
 };
 
+export const fetchBlockDevices = (state, action) => {
+  return state;
+};
+
+export const setBlockDeviceList = (state, action) => {
+  const {modemId, blockDevices} = action;
+  const list = state.list.map(item => {
+    if (item.id === modemId) {
+      item.blockDevices = blockDevices;
+    }
+    return item;
+  });
+  return {...state, list};
+};
+
 /* ------------- Hookup Reducers To Types ------------- */
 
 export const reducer = createReducer(INITIAL_STATE, {
@@ -87,5 +104,6 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.DEVICE_SET]: setDeviceList,
   [Types.PROVIDER_FETCH]: fetchProviders,
   [Types.PROVIDER_SET]: setProviderList,
-  [Types.DEVICE_BLOCK]: blockDevice,
+  [Types.DEVICE_BLOCK_LIST_FETCH]: blockDevice,
+  [Types.DEVICE_BLOCK_SET]: setBlockDeviceList,
 });

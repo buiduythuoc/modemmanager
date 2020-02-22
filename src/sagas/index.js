@@ -17,6 +17,7 @@ import {
   fetchDevices,
   fetchProviders,
   blockDevice,
+  fetchBlockDevices,
 } from './modemSaga';
 import {login, signup} from './authSaga';
 import {
@@ -26,6 +27,7 @@ import {
   editTimeline,
   postComment,
   fetchComments,
+  deleteTimeline,
 } from './timelineSaga';
 import {fetchMyProfile, updateMyProfile, changePassword} from './myPageSaga';
 import {
@@ -56,11 +58,13 @@ export default function* root() {
     takeLatest(ModemTypes.PROVIDER_FETCH, fetchProviders),
     takeLatest(ModemTypes.MODEM_ADD, addModem),
     takeLatest(ModemTypes.MODEM_EDIT, editModem),
+    takeLatest(ModemTypes.DEVICE_BLOCK_LIST_FETCH, fetchBlockDevices),
     // timeline
     takeLatest(TimelineTypes.TIMELINE_FETCH, fetchTimelines),
     takeLatest(TimelineTypes.TIMELINE_ADD, addTimeline),
     takeLatest(TimelineTypes.TIMELINE_DETAIL, fetchTimelineDetail),
     takeLatest(TimelineTypes.TIMELINE_EDIT, editTimeline),
+    takeLatest(TimelineTypes.TIMELINE_DELETE, deleteTimeline),
     takeLatest(TimelineTypes.TIMELINE_POST_COMMENT, postComment),
     takeLatest(TimelineTypes.TIMELINE_FETCH_COMMENTS, fetchComments),
     // myPage

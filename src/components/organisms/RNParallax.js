@@ -9,6 +9,7 @@ import {
   Dimensions,
   StatusBar,
 } from 'react-native';
+import {scaleSize} from '../../themes/mixins';
 
 const {height: SCREEN_HEIGHT} = Dimensions.get('window');
 
@@ -175,7 +176,7 @@ class RNParallax extends Component {
     const {scrollY} = this.state;
     return scrollY.interpolate({
       inputRange: this.getInputRange(),
-      outputRange: [0, 0, -80],
+      outputRange: [0, 0, scaleSize(-80)],
       extrapolate: 'clamp',
     });
   }
@@ -184,7 +185,7 @@ class RNParallax extends Component {
     const {scrollY} = this.state;
     return scrollY.interpolate({
       inputRange: this.getInputRange(),
-      outputRange: [0, 0, -80],
+      outputRange: [0, 0, scaleSize(-80)],
       extrapolate: 'clamp',
     });
   }

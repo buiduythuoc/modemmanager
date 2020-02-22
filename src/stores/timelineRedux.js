@@ -8,6 +8,7 @@ const {Types, Creators} = createActions({
   timelineSet: ['data'],
   timelineAdd: ['params', 'onSuccess', 'onError'],
   timelineEdit: ['params', 'onSuccess', 'onError'],
+  timelineDelete: ['params', 'onSuccess', 'onError'],
   timelineDetail: ['params', 'onSuccess', 'onError'],
   timelinePostComment: ['params', 'onSuccess', 'onError'],
   timelineFetchComments: ['params', 'onSuccess', 'onError'],
@@ -46,6 +47,10 @@ export const editTimeline = (state, action) => {
   return state;
 };
 
+export const deleteTimeline = (state, action) => {
+  return state;
+};
+
 export const fetchTimelineDetail = (state, action) => {
   return state;
 };
@@ -76,6 +81,7 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.TIMELINE_FETCH]: fetchTimeline,
   [Types.TIMELINE_ADD]: addTimeline,
   [Types.TIMELINE_EDIT]: editTimeline,
+  [Types.TIMELINE_DELETE]: deleteTimeline,
   [Types.TIMELINE_DETAIL]: fetchTimelineDetail,
   [Types.TIMELINE_POST_COMMENT]: postComment,
   [Types.TIMELINE_FETCH_COMMENTS]: fetchComments,

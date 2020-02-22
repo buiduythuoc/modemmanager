@@ -58,10 +58,8 @@ class MyPage extends React.Component {
 
   handleOnClickLogout = () => {
     const {logout} = this.props;
+    NavigationService.navigate('LoginScreen');
     logout();
-    setTimeout(() => {
-      NavigationService.navigate('LoginScreen');
-    }, 1000);
   };
 
   handleOnClickUpdateProfile = () => {

@@ -16,6 +16,7 @@ export function* addModem(action) {
     modemProvider,
   } = params;
   // make the call to the api
+  const publicIpResponse = yield call(api.create().getPublicIp);
   const response = yield call(
     api.create().addModem,
     domainName,
@@ -26,6 +27,7 @@ export function* addModem(action) {
     modemName,
     provider,
     modemProvider,
+    publicIpResponse.data,
   );
 
   if (response.status === 200 && response.data.status === 1) {
@@ -159,6 +161,25 @@ export function* blockDevice(action) {
       ? response.data.message
       : 'Some error';
     Alert.alert('Error', errorMessage);
+    if (onError) {
+      onError();
+    }
+  }
+}
+
+export function* fetchBlockDevices(action) {
+  const {params, onSuccess, onError} = action;
+  const {userId, modemId} = params;
+  // make the call to the api
+  const response = yield call(api.create().getBlockList, userId, modemId);
+
+  if (response.status === 200 && response.data.status === 1) {
+    const blockDevices = response.data.data ? response.data.data : [];
+    yield put(ModemActions.deviceBlockSet(modemId, blockDevices));
+    if (onSuccess) {
+      onSuccess();
+    }
+  } else {
     if (onError) {
       onError();
     }

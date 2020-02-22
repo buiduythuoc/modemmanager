@@ -1,4 +1,5 @@
 import {put, call} from 'redux-saga/effects';
+import {Alert} from 'react-native';
 import TimelineActions from '../stores/timelineRedux';
 import api from '../services/api';
 
@@ -39,6 +40,27 @@ export function* fetchTimelines(action) {
       onSuccess();
     }
   } else {
+    if (onError) {
+      onError();
+    }
+  }
+}
+
+export function* deleteTimeline(action) {
+  const {params, onSuccess, onError} = action;
+  const {userId, postId} = params;
+  // make the call to the api
+  const response = yield call(api.create().deleteTimeline, userId, postId);
+
+  if (response.status === 200 && response.data.status === 1) {
+    if (onSuccess) {
+      onSuccess();
+    }
+  } else {
+    const errorMessage = response.data.message
+      ? response.data.message
+      : 'Some error';
+    Alert.alert('Error', errorMessage);
     if (onError) {
       onError();
     }

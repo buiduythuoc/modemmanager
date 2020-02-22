@@ -15,6 +15,7 @@ import Loading from '../../../components/organisms/Loading';
 class CreateModem extends React.Component {
   constructor(props) {
     super(props);
+    const {navigation} = props;
 
     this.state = {
       modemName: '',
@@ -26,6 +27,7 @@ class CreateModem extends React.Component {
       loginName: '',
       loginPassword: '',
       isFetching: false,
+      userId: navigation.getParam('userId', 0),
     };
   }
 
@@ -66,6 +68,7 @@ class CreateModem extends React.Component {
       loginPassword,
       provider,
       modemProvider,
+      userId,
     } = this.state;
     const params = {
       modemName,
@@ -73,7 +76,7 @@ class CreateModem extends React.Component {
       port,
       loginName,
       loginPassword,
-      userId: user.user_id,
+      userId,
       provider,
       modemProvider,
     };
@@ -93,7 +96,7 @@ class CreateModem extends React.Component {
       params,
       () => {
         this.setState({isFetching: false});
-        fetchModems(user.user_id);
+        fetchModems(userId);
         Alert.alert(
           'Success',
           'Modem created',

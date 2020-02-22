@@ -118,12 +118,6 @@ class EditTimeline extends React.Component {
               <ImagePicker />
             </View>
             <Text style={styles.label}>Modem Name</Text>
-            <View style={styles.modemPicker}>
-              <RNPickerSelect
-                onValueChange={value => this.setState({modemId: value})}
-                items={modemItems}
-              />
-            </View>
             <LabelInput
               style={styles.inputContainer}
               label="Title"

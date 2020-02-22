@@ -41,8 +41,9 @@ class DeviceList extends React.Component {
   };
 
   handleOnClickBlockList = () => {
+    const {modemData} = this.state;
     const {navigation} = this.props;
-    navigation.navigate('BlockListScreen');
+    navigation.navigate('BlockListScreen', {modemId: modemData.id});
   };
 
   handleOnRefresh = () => {
@@ -59,6 +60,7 @@ class DeviceList extends React.Component {
         {
           text: 'OK',
           onPress: () => {
+            this.setState({isFetching: true});
             const {user, blockDevice} = this.props;
             const params = {
               userId: user.user_id,

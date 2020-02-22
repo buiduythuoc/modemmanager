@@ -53,13 +53,18 @@ class ListModem extends React.Component {
   };
 
   handleOnClickAdd = () => {
-    const {navigation} = this.props;
-    navigation.navigate('CreateModemScreen');
+    const {adminId} = this.state;
+    const {navigation, user} = this.props;
+    const userId = adminId !== 0 ? adminId : user.user_id;
+    navigation.navigate('CreateModemScreen', {userId});
   };
 
   handleOnClickEdit = modemData => {
+    const {adminId} = this.state;
+    const {user} = this.props;
     const {navigation} = this.props;
-    navigation.navigate('EditModemScreen', {modemData});
+    const userId = adminId !== 0 ? adminId : user.user_id;
+    navigation.navigate('EditModemScreen', {modemData, userId});
   };
 
   handleOnRefresh = () => {
@@ -189,4 +194,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(ModemActions.modemFetch({userId}, onSuccess, onError)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ListModem);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ListModem);

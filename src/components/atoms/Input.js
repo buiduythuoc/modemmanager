@@ -33,6 +33,7 @@ const Input = props => {
       onChangeText={text => (onChangeText ? onChangeText(text) : {})}
       onFocus={() => (onFocus ? onFocus() : {})}
       {...attributes}
+      autoCorrect={false}
     />
   );
 };

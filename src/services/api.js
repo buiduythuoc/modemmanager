@@ -64,6 +64,7 @@ const create = () => {
     modemName,
     provider,
     modemProvider,
+    publicIp,
   ) => {
     const data = {
       domain,
@@ -74,6 +75,7 @@ const create = () => {
       modem_name: modemName,
       provider,
       provider_modem: modemProvider,
+      public_ip: publicIp,
     };
     return api.post('addmodem.php', qs.stringify(data));
   };
@@ -107,6 +109,15 @@ const create = () => {
         modem_id: modemId,
         device_mac: deviceMac,
         device_name: deviceName,
+      }),
+    );
+
+  const getBlockList = (userId, modemId) =>
+    api.post(
+      'getlistblockdevice.php',
+      qs.stringify({
+        user_id: userId,
+        modem_id: modemId,
       }),
     );
 
@@ -148,6 +159,14 @@ const create = () => {
       content,
     };
     return api.post('updatepost.php', qs.stringify(data));
+  };
+
+  const deleteTimeline = (userId, postId) => {
+    const data = {
+      post_id: postId,
+      user_id: userId,
+    };
+    return api.post('deletepost.php', qs.stringify(data));
   };
 
   const postComment = (userId, postId, comment) => {
@@ -202,6 +221,8 @@ const create = () => {
       qs.stringify({user_id: userId, delete_id: deleteId}),
     );
 
+  const getPublicIp = () => api.get('https://api.ipify.org/');
+
   return {
     login,
     signup,
@@ -212,9 +233,11 @@ const create = () => {
     addModem,
     editModem,
     blockDevice,
+    getBlockList,
     // timeline
     getListTimelines,
     addTimeline,
+    deleteTimeline,
     getTimelineDetail,
     editTimeline,
     postComment,
@@ -226,6 +249,7 @@ const create = () => {
     // account
     getListAccounts,
     deleteAccount,
+    getPublicIp,
   };
 };
 

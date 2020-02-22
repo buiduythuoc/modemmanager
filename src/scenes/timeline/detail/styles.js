@@ -9,6 +9,7 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: scaleSize(20),
+    paddingTop: 20,
     flex: 1,
     borderTopLeftRadius: scaleSize(25),
     borderTopRightRadius: scaleSize(25),
@@ -43,15 +44,12 @@ const styles = StyleSheet.create({
     marginTop: scaleSize(30),
     alignItems: 'center',
   },
-  sendButton: {
-    width: scaleSize(70),
-  },
   input: {
     flex: 1,
     marginRight: scaleSize(10),
-    paddingHorizontal: scaleSize(15),
-    paddingTop: scaleSize(15),
-    paddingBottom: scaleSize(15),
+    paddingHorizontal: scaleSize(12),
+    paddingTop: scaleSize(12),
+    paddingBottom: scaleSize(12),
     borderRadius: scaleSize(30),
     borderWidth: 1,
     borderColor: colors.gray04,
@@ -64,16 +62,18 @@ const styles = StyleSheet.create({
   },
   actionPostContainer: {
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-start',
+    marginTop: scaleSize(10),
   },
   editButton: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   editText: {
-    marginLeft: scaleSize(5),
+    // marginLeft: scaleSize(5),
     fontSize: scaleFont(14),
     color: colors.addButton,
+    textDecorationLine: 'underline',
   },
   deleteButton: {
     marginLeft: scaleSize(5),
@@ -84,6 +84,7 @@ const styles = StyleSheet.create({
     marginLeft: scaleSize(5),
     fontSize: scaleFont(14),
     color: colors.lightRed,
+    textDecorationLine: 'underline',
   },
 });
 

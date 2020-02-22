@@ -20,6 +20,7 @@ class EditModem extends React.Component {
     const {navigation} = props;
     this.state = {
       modemData: navigation.getParam('modemData', null),
+      userId: navigation.getParam('userId', 0),
       isLoading: false,
     };
   }
@@ -31,7 +32,7 @@ class EditModem extends React.Component {
 
   handleOnClickUpdate = () => {
     const {editModem, fetchModems, navigation, user} = this.props;
-    const {modemData} = this.state;
+    const {modemData, userId} = this.state;
     const params = {
       modemId: modemData.id,
       modemName: modemData.modem_name,
@@ -46,7 +47,7 @@ class EditModem extends React.Component {
       params,
       () => {
         this.setState({isFetching: false});
-        fetchModems(user.user_id);
+        fetchModems(userId);
         Alert.alert(
           'Success',
           'Modem updated',

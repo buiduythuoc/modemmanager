@@ -350,6 +350,22 @@ const RootTabBar = createBottomTabNavigator(
         ),
       },
     },
+    MyPageTab: {
+      screen: MyPageNav,
+      path: '/myPage',
+      navigationOptions: {
+        tabBarLabel: 'Account Detail',
+        tabBarIcon: ({focused}) => (
+          <Icon
+            source={
+              focused ? images.icTabMyPageActive : images.icTabMyPageInactive
+            }
+            width={14}
+            height={17}
+          />
+        ),
+      },
+    },
   },
   {
     ...tabBarConfig,
