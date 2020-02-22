@@ -29,7 +29,6 @@ export function* signup(action) {
   const response = yield call(api.create().signup, username, password, role);
 
   if (response.status === 200 && response.data.status === 1) {
-    yield put(AuthActions.authSet(response.data));
     if (onSuccess) {
       onSuccess();
     }

@@ -7,6 +7,7 @@ const {Types, Creators} = createActions({
   authSet: ['data'],
   authSetUser: ['data'],
   authLogin: ['params', 'onSuccess', 'onError'],
+  authLogout: [],
   authRegister: ['params', 'onSuccess', 'onError'],
 });
 
@@ -16,7 +17,10 @@ export default Creators;
 /* ------------- Initial State ------------- */
 
 export const INITIAL_STATE = Immutable({
-  user: null,
+  user: {
+    user_id: 0,
+    type: 'user',
+  },
 });
 
 /* ------------- Selectors ------------- */

@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   },
   bar: {
     backgroundColor: 'transparent',
-    height: DEFAULT_HEADER_MIN_HEIGHT,
+    // height: DEFAULT_HEADER_MIN_HEIGHT,
     position: 'absolute',
     top: 0,
     left: 0,
@@ -172,6 +172,15 @@ class RNParallax extends Component {
   }
 
   getAddButtonTranslate() {
+    const {scrollY} = this.state;
+    return scrollY.interpolate({
+      inputRange: this.getInputRange(),
+      outputRange: [0, 0, -80],
+      extrapolate: 'clamp',
+    });
+  }
+
+  getNavBarTranslate() {
     const {scrollY} = this.state;
     return scrollY.interpolate({
       inputRange: this.getInputRange(),
@@ -304,14 +313,15 @@ class RNParallax extends Component {
   renderHeaderForeground() {
     const {renderNavBar} = this.props;
     const navBarOpacity = this.getNavBarForegroundOpacity();
+    const navBarTranslate = this.getNavBarTranslate();
 
     return (
       <Animated.View
         style={[
           styles.bar,
           {
-            height: this.getHeaderMinHeight(),
             opacity: navBarOpacity,
+            transform: [{translateY: navBarTranslate}],
           },
         ]}>
         {renderNavBar()}
@@ -372,8 +382,8 @@ class RNParallax extends Component {
         {this.renderNavbarBackground()}
         {this.renderHeaderBackground()}
         {this.renderHeaderTitle()}
-        {this.renderHeaderForeground()}
         {this.renderAddButtonForeground()}
+        {this.renderHeaderForeground()}
       </View>
     );
   }

@@ -10,8 +10,10 @@ import LabelInput from '../../components/molecules/LabelInput';
 import Button from '../../components/atoms/Button';
 import {scaleSize} from '../../themes/mixins';
 import MyPageActions from '../../stores/myPageRedux';
+import AuthActions from '../../stores/authRedux';
 import Loading from '../../components/organisms/Loading';
 import Icon from '../../components/atoms/Icon';
+import NavigationService from '../../services/navigationService';
 
 class MyPage extends React.Component {
   constructor(props) {
@@ -34,7 +36,14 @@ class MyPage extends React.Component {
     fetchProfile(
       user.user_id,
       () => {
-        this.setState({isFetching: false, username: user.user_name});
+        setTimeout(
+          () =>
+            this.setState({
+              isFetching: false,
+              username: this.props.user.user_name,
+            }),
+          1000,
+        );
       },
       () => {
         this.setState({isFetching: false});
@@ -45,6 +54,14 @@ class MyPage extends React.Component {
   handleOnClickChangePassword = () => {
     const {navigation} = this.props;
     navigation.navigate('ChangePasswordScreen');
+  };
+
+  handleOnClickLogout = () => {
+    const {logout} = this.props;
+    logout();
+    setTimeout(() => {
+      NavigationService.navigate('LoginScreen');
+    }, 1000);
   };
 
   handleOnClickUpdateProfile = () => {
@@ -80,12 +97,15 @@ class MyPage extends React.Component {
     return (
       <View style={styles.container}>
         <TabHeader
-          source={images.imgMapTimeline}
-          title={'My profile'}
-          height={scaleSize(167)}
+          source={images.imgMapList}
+          title={''}
+          height={scaleSize(133)}
         />
         <View style={styles.content}>
-          <AvatarPicker source={images.imgAvatarDefault} />
+          <AvatarPicker
+            source={images.imgAvatarDefault}
+            onClickLogout={this.handleOnClickLogout}
+          />
           <LabelInput
             style={styles.userNameInput}
             labelStyle={styles.labelInput}
@@ -137,6 +157,13 @@ class MyPage extends React.Component {
             title="UPDATE"
             onClick={this.handleOnClickUpdateProfile}
           />
+
+          {/* <Button
+            style={styles.updateButton}
+            height={scaleSize(45)}
+            title="LOGOUT"
+            onClick={this.handleOnClickLogout}
+          /> */}
         </View>
         {/* {isShowDatePicker && (
           <DateTimePicker
@@ -164,6 +191,10 @@ const mapDispatchToProps = dispatch => ({
     dispatch(MyPageActions.myPageFetch({userId}, onSuccess, onError)),
   updateProfile: (params, onSuccess, onError) =>
     dispatch(MyPageActions.myPageUpdate(params, onSuccess, onError)),
+  logout: () => dispatch(AuthActions.authLogout()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(MyPage);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(MyPage);

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, View, Text} from 'react-native';
+import {Image, View, Text, Alert} from 'react-native';
 import {connect} from 'react-redux';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {images, colors} from '../../../themes';
@@ -55,7 +55,12 @@ class SignupScreen extends React.Component {
       {username, password, role},
       () => {
         this.setState({isFetching: false});
-        setTimeout(() => navigation.navigate('TabBar'), 1000);
+        Alert.alert(
+          'Success',
+          'Account created',
+          [{text: 'OK', onPress: () => navigation.goBack()}],
+          {cancelable: false},
+        );
       },
       () => {
         this.setState({isFetching: false});

@@ -23,6 +23,7 @@ const create = () => {
     return response;
   });
 
+  // auth
   const login = (username, password) =>
     api.post('login.php', qs.stringify({username, password}));
 
@@ -51,7 +52,19 @@ const create = () => {
     return api.post('getlistdevice.php', qs.stringify(data));
   };
 
-  const addModem = (domain, port, loginName, loginPass, userId, modemName) => {
+  const getListProviders = userId =>
+    api.post('getlistprovider.php', qs.stringify({user_id: userId}));
+
+  const addModem = (
+    domain,
+    port,
+    loginName,
+    loginPass,
+    userId,
+    modemName,
+    provider,
+    modemProvider,
+  ) => {
     const data = {
       domain,
       port,
@@ -59,6 +72,8 @@ const create = () => {
       login_pass: loginPass,
       user_id: userId,
       modem_name: modemName,
+      provider,
+      provider_modem: modemProvider,
     };
     return api.post('addmodem.php', qs.stringify(data));
   };
@@ -84,12 +99,20 @@ const create = () => {
     return api.post('updatemodem.php', qs.stringify(data));
   };
 
+  const blockDevice = (userId, modemId, deviceMac, deviceName) =>
+    api.post(
+      'blockdevice.php',
+      qs.stringify({
+        user_id: userId,
+        modem_id: modemId,
+        device_mac: deviceMac,
+        device_name: deviceName,
+      }),
+    );
+
+  // timeline
   const getListTimelines = userId =>
-    api.post('getlistpost.php', qs.stringify({user_id: userId, modem_id: ''}), {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-    });
+    api.post('getlistpost.php', qs.stringify({user_id: userId, modem_id: ''}));
 
   const addTimeline = (title, subTitle, userId, modemId, content) => {
     const data = {
@@ -169,14 +192,26 @@ const create = () => {
       }),
     );
 
+  // account
+  const getListAccounts = userId =>
+    api.post('getlistadmin.php', qs.stringify({user_id: userId}));
+
+  const deleteAccount = (userId, deleteId) =>
+    api.post(
+      'deleteaccountadmin.php',
+      qs.stringify({user_id: userId, delete_id: deleteId}),
+    );
+
   return {
     login,
     signup,
     // modem
     getListModems,
+    getListProviders,
     getListDevices,
     addModem,
     editModem,
+    blockDevice,
     // timeline
     getListTimelines,
     addTimeline,
@@ -188,6 +223,9 @@ const create = () => {
     getProfile,
     updateProfile,
     changePassword,
+    // account
+    getListAccounts,
+    deleteAccount,
   };
 };
 

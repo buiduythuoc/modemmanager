@@ -47,6 +47,11 @@ const styles = StyleSheet.create({
   commentContainer: {
     flex: 1,
     marginLeft: scaleSize(10),
+    borderWidth: 1,
+    borderColor: colors.gray05,
+    borderRadius: scaleSize(5),
+    padding: scaleSize(10),
+    marginTop: scaleSize(5),
   },
   usernameContainer: {
     flexDirection: 'row',

@@ -7,16 +7,16 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.listBackground,
   },
-  deviceCount: {
+  accountCount: {
     fontSize: scaleFont(12),
     fontWeight: '300',
     textAlign: 'center',
-    lineHeight: scaleSize(16),
+    marginTop: scaleSize(15),
+    marginBottom: scaleSize(15),
     color: colors.gray03,
   },
   flatList: {
     flex: 1,
-    marginTop: scaleSize(14),
     paddingHorizontal: scaleSize(10),
   },
 });

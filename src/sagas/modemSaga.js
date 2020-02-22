@@ -1,4 +1,5 @@
 import {put, call} from 'redux-saga/effects';
+import {Alert} from 'react-native';
 import ModemActions from '../stores/modemRedux';
 import api from '../services/api';
 
@@ -11,6 +12,8 @@ export function* addModem(action) {
     loginPassword,
     userId,
     modemName,
+    provider,
+    modemProvider,
   } = params;
   // make the call to the api
   const response = yield call(
@@ -21,6 +24,8 @@ export function* addModem(action) {
     loginPassword,
     userId,
     modemName,
+    provider,
+    modemProvider,
   );
 
   if (response.status === 200 && response.data.status === 1) {
@@ -102,12 +107,58 @@ export function* fetchDevices(action) {
   );
 
   if (response.status === 200 && response.data.status === 1) {
-    const listDevices = response.data.data ? response.data.data : [];
-    yield put(ModemActions.deviceSet(listDevices));
+    const devices = response.data.data ? response.data.data : [];
+    yield put(ModemActions.deviceSet(modemId, devices));
     if (onSuccess) {
       onSuccess();
     }
   } else {
+    if (onError) {
+      onError();
+    }
+  }
+}
+
+export function* fetchProviders(action) {
+  const {params, onSuccess, onError} = action;
+  const {userId} = params;
+  // make the call to the api
+  const response = yield call(api.create().getListProviders, userId);
+
+  if (response.status === 200 && response.data.status === 1) {
+    const listProviders = response.data.data ? response.data.data : [];
+    yield put(ModemActions.providerSet(listProviders));
+    if (onSuccess) {
+      onSuccess();
+    }
+  } else {
+    if (onError) {
+      onError();
+    }
+  }
+}
+
+export function* blockDevice(action) {
+  const {params, onSuccess, onError} = action;
+  const {userId, modemId, deviceMac, deviceName} = params;
+  // make the call to the api
+  const response = yield call(
+    api.create().blockDevice,
+    userId,
+    modemId,
+    deviceMac,
+    deviceName,
+  );
+
+  if (response.status === 200 && response.data.status === 1) {
+    if (onSuccess) {
+      onSuccess();
+    }
+  } else {
+    const errorMessage = response.data.message
+      ? response.data.message
+      : 'Some error';
+    Alert.alert('Error', errorMessage);
     if (onError) {
       onError();
     }

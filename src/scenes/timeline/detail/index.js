@@ -6,13 +6,13 @@ import styles from './styles';
 import NavHeader from '../../../components/molecules/NavHeader';
 import ImageSlider from '../../../components/organisms/ImageSlider';
 import Button from '../../../components/atoms/Button';
-import Input from '../../../components/atoms/Input';
 import {colors, images} from '../../../themes';
 import TimelineActions from '../../../stores/timelineRedux';
 import Loading from '../../../components/organisms/Loading';
 import {scaleSize} from '../../../themes/mixins';
 import Icon from '../../../components/atoms/Icon';
 import CommentItem from '../../../components/organisms/CommentItem';
+import {AutoGrowingTextInput} from 'react-native-autogrow-textinput';
 
 class TimelineDetail extends React.Component {
   static navigationOptions = {
@@ -120,6 +120,31 @@ class TimelineDetail extends React.Component {
     );
   };
 
+  renderActionPost = () => {
+    return (
+      <View style={styles.actionPostContainer}>
+        <TouchableOpacity
+          style={styles.editButton}
+          onPress={this.handleOnClickEdit}>
+          <Icon
+            width={scaleSize(15)}
+            height={scaleSize(15)}
+            source={images.icEditBlue}
+          />
+          <Text style={styles.editText}>Edit</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.deleteButton}>
+          <Icon
+            width={scaleSize(15)}
+            height={scaleSize(15)}
+            source={images.icDeleteRed}
+          />
+          <Text style={styles.deleteText}>Delete</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
   renderButtonContainer() {
     const {user} = this.props;
     if (user.type === 'admin' || user.type === 'root') {
@@ -168,34 +193,13 @@ class TimelineDetail extends React.Component {
           <Text style={styles.title}>{timelineData.title}</Text>
           <Text style={styles.subTitle}>{timelineData.sub_title}</Text>
           <Text style={styles.postContent}>{timelineData.content}</Text>
+          {this.renderActionPost()}
           <View style={styles.inputContainer}>
-            <Input
-              style={{
-                ...styles.input,
-                height: commentInputHeight,
-              }}
-              rounded={true}
-              borderColor={colors.gray04}
-              borderRadius={scaleSize(30)}
-              onChangeText={text => this.setState({comment: text})}
+            <AutoGrowingTextInput
+              style={styles.input}
               placeholder="Write your own ......."
-              placeholderTextColor={colors.gray04}
-              multiline={true}
               value={comment}
-              onContentSizeChange={e => {
-                const inputHeight =
-                  comment.trim() === ''
-                    ? scaleSize(47)
-                    : scaleSize(47) + e.nativeEvent.contentSize.height;
-                console.log(
-                  inputHeight,
-                  e.nativeEvent.contentSize.height,
-                  comment,
-                );
-                this.setState({
-                  commentInputHeight: inputHeight,
-                });
-              }}
+              onChangeText={text => this.setState({comment: text})}
             />
             <TouchableOpacity
               activeOpacity={activeOpacity}
@@ -214,7 +218,6 @@ class TimelineDetail extends React.Component {
             keyExtractor={item => item.id + ''}
           />
         </KeyboardAwareScrollView>
-        {this.renderButtonContainer()}
         <Loading isLoading={isLoading} />
       </View>
     );
@@ -235,4 +238,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(TimelineActions.timelinePostComment(params, onSuccess, onError)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(TimelineDetail);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(TimelineDetail);

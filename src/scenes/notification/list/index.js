@@ -65,9 +65,9 @@ export default class Notification extends React.Component {
     return (
       <View style={styles.container}>
         <TabHeader
-          source={images.imgMapTimeline}
+          source={images.imgMapAccount}
           title={'Notification'}
-          height={scaleSize(167)}
+          height={scaleSize(100)}
         />
         <FlatList
           style={styles.flatList}

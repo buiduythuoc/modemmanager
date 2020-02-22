@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {View, ImageBackground, StyleSheet} from 'react-native';
+import {ImageBackground, StyleSheet, TouchableOpacity} from 'react-native';
 import Icon from '../atoms/Icon';
 import {colors, images} from '../../themes';
 import {scaleSize} from '../../themes/mixins';
 
 const AvatarPicker = props => {
-  const {size, source} = props;
+  const {size, source, onClickLogout, onClickCamera} = props;
   const containerStyle = {
     ...styles.container,
     borderRadius: size / 2,
@@ -15,13 +15,24 @@ const AvatarPicker = props => {
   };
   return (
     <ImageBackground style={containerStyle} resizeMode="cover" source={source}>
-      <View style={styles.iconContainer}>
+      <TouchableOpacity
+        style={styles.iconCameraContainer}
+        onPress={() => onClickCamera()}>
         <Icon
           width={scaleSize(16)}
           height={scaleSize(12)}
           source={images.icCamera}
         />
-      </View>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.iconLogoutContainer}
+        onPress={() => onClickLogout()}>
+        <Icon
+          width={scaleSize(16)}
+          height={scaleSize(16)}
+          source={images.icLogout}
+        />
+      </TouchableOpacity>
     </ImageBackground>
   );
 };
@@ -31,17 +42,32 @@ export default AvatarPicker;
 AvatarPicker.propTypes = {
   size: PropTypes.number,
   source: PropTypes.number.isRequired,
+  onClickLogout: PropTypes.func,
+  onClickCamera: PropTypes.func,
 };
 
 AvatarPicker.defaultProps = {
   size: scaleSize(120),
+  onClickLogout: () => {},
+  onClickCamera: () => {},
 };
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.primary,
   },
-  iconContainer: {
+  iconLogoutContainer: {
+    position: 'absolute',
+    width: scaleSize(32),
+    height: scaleSize(32),
+    right: scaleSize(90),
+    bottom: 0,
+    borderRadius: 16,
+    backgroundColor: colors.addButton,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  iconCameraContainer: {
     position: 'absolute',
     width: scaleSize(32),
     height: scaleSize(32),

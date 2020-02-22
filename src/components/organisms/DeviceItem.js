@@ -6,7 +6,7 @@ import {colors, images} from '../../themes';
 import Icon from '../atoms/Icon';
 
 const DeviceItem = props => {
-  const {data, isLocked} = props;
+  const {data, isLocked, onClick} = props;
   const deviceName = data.name;
   const macAddress = data.mac_address;
   const status = data.online_status;
@@ -27,7 +27,8 @@ const DeviceItem = props => {
         style={{
           ...styles.actionContainer,
           backgroundColor: actionContainerBackgroundColor,
-        }}>
+        }}
+        onPress={() => onClick()}>
         <View
           style={{
             ...styles.actionContent,
@@ -50,10 +51,12 @@ export default DeviceItem;
 DeviceItem.propTypes = {
   data: PropTypes.oneOfType([PropTypes.object]).isRequired,
   isLocked: PropTypes.bool,
+  onClick: PropTypes.func,
 };
 
 DeviceItem.defaultProps = {
   isLocked: false,
+  onClick: () => {},
 };
 
 const styles = StyleSheet.create({

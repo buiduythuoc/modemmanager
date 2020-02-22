@@ -9,7 +9,10 @@ const {Types, Creators} = createActions({
   modemAdd: ['params', 'onSuccess', 'onError'],
   modemEdit: ['params', 'onSuccess', 'onError'],
   deviceFetch: ['params', 'onSuccess', 'onError'],
-  deviceSet: ['data'],
+  deviceSet: ['modemId', 'devices'],
+  providerFetch: ['params', 'onSuccess', 'onError'],
+  providerSet: ['data'],
+  deviceBlock: ['params', 'onSuccess', 'onError'],
 });
 
 export const ModemTypes = Types;
@@ -19,8 +22,7 @@ export default Creators;
 
 export const INITIAL_STATE = Immutable({
   list: [],
-  deviceList: [],
-  blockList: [],
+  providerList: [],
 });
 
 /* ------------- Selectors ------------- */
@@ -51,8 +53,27 @@ export const fetchDevices = (state, action) => {
 };
 
 export const setDeviceList = (state, action) => {
+  const {modemId, devices} = action;
+  const list = state.list.map(item => {
+    if (item.id === modemId) {
+      item.devices = devices;
+    }
+    return item;
+  });
+  return {...state, list};
+};
+
+export const fetchProviders = (state, action) => {
+  return state;
+};
+
+export const setProviderList = (state, action) => {
   const {data} = action;
-  return {...state, deviceList: data};
+  return {...state, providerList: data};
+};
+
+export const blockDevice = (state, action) => {
+  return state;
 };
 
 /* ------------- Hookup Reducers To Types ------------- */
@@ -64,4 +85,7 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.MODEM_EDIT]: editModem,
   [Types.DEVICE_FETCH]: fetchDevices,
   [Types.DEVICE_SET]: setDeviceList,
+  [Types.PROVIDER_FETCH]: fetchProviders,
+  [Types.PROVIDER_SET]: setProviderList,
+  [Types.DEVICE_BLOCK]: blockDevice,
 });

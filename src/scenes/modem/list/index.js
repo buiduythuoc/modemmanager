@@ -1,5 +1,12 @@
 import React from 'react';
-import {View, FlatList, BackHandler, Text, RefreshControl} from 'react-native';
+import {
+  View,
+  FlatList,
+  BackHandler,
+  Text,
+  RefreshControl,
+  TouchableOpacity,
+} from 'react-native';
 import {connect} from 'react-redux';
 import {images, colors} from '../../../themes';
 import styles from './styles';
@@ -9,14 +16,17 @@ import {scaleSize} from '../../../themes/mixins';
 import ModemActions from '../../../stores/modemRedux';
 import Loading from '../../../components/organisms/Loading';
 import RNParallax from '../../../components/organisms/RNParallax';
+import Icon from '../../../components/atoms/Icon';
 
 class ListModem extends React.Component {
   constructor(props) {
     super(props);
 
+    const {navigation} = props;
     this.state = {
       isFetching: true,
       isRefreshing: false,
+      adminId: navigation.getParam('adminId', 0),
     };
   }
 
@@ -58,8 +68,9 @@ class ListModem extends React.Component {
   };
 
   fetchModems = () => {
+    const {adminId} = this.state;
     const {user} = this.props;
-    const userId = user.user_id;
+    const userId = adminId !== 0 ? adminId : user.user_id;
     this.props.fetchModems(
       userId,
       () => {
@@ -72,6 +83,33 @@ class ListModem extends React.Component {
   };
 
   renderNavBar = () => {
+    const {navigation, user} = this.props;
+    if (user.type === 'root') {
+      return (
+        <View style={styles.navBar}>
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => navigation.goBack()}>
+            <Icon
+              width={scaleSize(17)}
+              height={scaleSize(12)}
+              source={images.icBackWhite}
+            />
+          </TouchableOpacity>
+          <Text style={styles.title}>List modem</Text>
+          <View style={styles.backButton} />
+        </View>
+      );
+    }
+
+    return (
+      <View style={styles.navBar}>
+        <Text style={styles.title}>List modem</Text>
+      </View>
+    );
+  };
+
+  renderAddButton = () => {
     return (
       <View>
         <Button
@@ -121,21 +159,19 @@ class ListModem extends React.Component {
     return (
       <View style={styles.container}>
         <RNParallax
-          headerMinHeight={scaleSize(54)}
+          headerMinHeight={scaleSize(53)}
           headerMaxHeight={scaleSize(133)}
           extraScrollHeight={10}
           navbarColor={colors.primary}
           backgroundImage={images.imgMapList}
+          backgroundImageScale={1}
           backgroundColor={colors.primary}
-          renderAddButton={this.renderNavBar}
+          renderAddButton={this.renderAddButton}
           renderContent={this.renderContent}
+          renderNavBar={this.renderNavBar}
           containerStyle={styles.container}
           contentContainerStyle={styles.contentContainer}
           innerContainerStyle={styles.container}
-          scrollViewProps={{
-            onScrollBeginDrag: () => console.log('onScrollBeginDrag'),
-            onScrollEndDrag: () => console.log('onScrollEndDrag'),
-          }}
         />
         <Loading show={isFetching} />
       </View>
@@ -153,7 +189,4 @@ const mapDispatchToProps = dispatch => ({
     dispatch(ModemActions.modemFetch({userId}, onSuccess, onError)),
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(ListModem);
+export default connect(mapStateToProps, mapDispatchToProps)(ListModem);

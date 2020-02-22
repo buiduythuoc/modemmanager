@@ -13,6 +13,24 @@ const styles = StyleSheet.create({
     backgroundColor: colors.addButton,
     borderColor: colors.addButton,
   },
+  navBar: {
+    height: scaleSize(100),
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  backButton: {
+    width: scaleSize(66),
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  title: {
+    color: colors.white,
+    flex: 1,
+    textAlign: 'center',
+    fontSize: scaleFont(18),
+    fontWeight: '600',
+  },
   modemCount: {
     fontSize: scaleFont(12),
     fontWeight: '300',

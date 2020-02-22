@@ -19,9 +19,8 @@ const fadeIn = {
 class SplashScreen extends React.Component {
   componentDidMount() {
     const {navigation, user} = this.props;
-    console.log('user', user);
     let screenName = 'LoginScreen';
-    if (user) {
+    if (user && user.user_id !== 0) {
       screenName = 'TabBar';
     }
     setTimeout(() => {

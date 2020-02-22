@@ -9,8 +9,7 @@ const styles = StyleSheet.create({
   },
   flatList: {
     flex: 1,
-    marginTop: scaleSize(-65),
-    paddingHorizontal: scaleSize(27),
+    padding: scaleSize(10),
   },
 });
 

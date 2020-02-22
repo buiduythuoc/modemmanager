@@ -14,21 +14,39 @@ const TabHeader = props => {
     rightIconHeight,
     rightIconWidth,
     onRightClick,
+    onLeftClick,
+    style,
   } = props;
+  if (source) {
+    return (
+      <ImageBackground
+        resizeMode="cover"
+        source={source}
+        style={{...styles.container, height: height}}>
+        <NavHeader
+          title={title}
+          renderLeft={() => <View style={styles.leftNavHeader} />}
+          rightIcon={rightIcon}
+          rightIconWidth={rightIconWidth}
+          rightIconHeight={rightIconHeight}
+          onRightClick={onRightClick}
+          onLeftClick={onLeftClick}
+        />
+      </ImageBackground>
+    );
+  }
   return (
-    <ImageBackground
-      resizeMode="contain"
-      source={source}
-      style={{...styles.container, height: height}}>
+    <View style={{...styles.container, height: height, ...style}}>
       <NavHeader
         title={title}
-        renderLeft={() => <View style={styles.leftNavHeader} />}
+        titleColor={colors.gray01}
         rightIcon={rightIcon}
         rightIconWidth={rightIconWidth}
         rightIconHeight={rightIconHeight}
         onRightClick={onRightClick}
+        onLeftClick={onLeftClick}
       />
-    </ImageBackground>
+    </View>
   );
 };
 
@@ -36,19 +54,24 @@ export default TabHeader;
 
 TabHeader.propTypes = {
   height: PropTypes.number,
-  source: PropTypes.number.isRequired,
+  source: PropTypes.number,
   title: PropTypes.string,
   rightIcon: PropTypes.number,
   rightIconWidth: PropTypes.number,
   rightIconHeight: PropTypes.number,
+  onLeftClick: PropTypes.func,
+  onRightClick: PropTypes.func,
 };
 
 TabHeader.defaultProps = {
   width: '100%',
   title: '',
+  source: null,
   rightIcon: null,
   rightIconWidth: 24,
   rightIconHeight: 24,
+  onLeftClick: () => {},
+  onRightClick: () => {},
 };
 
 const styles = StyleSheet.create({

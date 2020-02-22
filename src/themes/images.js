@@ -25,6 +25,9 @@ import icSendActive from '../assets/images/ic_send_active.png';
 import icSendInactive from '../assets/images/ic_send_inactive.png';
 import icProvider from '../assets/images/ic_provider.png';
 import icRole from '../assets/images/ic_role.png';
+import icDeleteRed from '../assets/images/ic_delete_red.png';
+import icLogout from '../assets/images/ic_logout.png';
+import icSetting from '../assets/images/ic_setting.png';
 
 // tab bar
 import icTabListActive from '../assets/images/ic_tab_list_active.png';
@@ -39,6 +42,7 @@ import icTabMyPageInactive from '../assets/images/ic_tab_mypage_inactive.png';
 import imgMap from '../assets/images/img_map.png';
 import imgMapSignup from '../assets/images/img_map_signup.png';
 import imgMapList from '../assets/images/img_map_list.png';
+import imgMapAccount from '../assets/images/img_map_account.png';
 import imgMapTimeline from '../assets/images/img_map_timeline.png';
 import imgTimelineDefault from '../assets/images/img_timeline_default.png';
 import imgNotificationAvatarDefault from '../assets/images/img_notification_avatar_default.png';
@@ -72,6 +76,9 @@ const images = {
   icSendInactive,
   icProvider,
   icRole,
+  icDeleteRed,
+  icLogout,
+  icSetting,
   // tab bar
   icTabListActive,
   icTabListInactive,
@@ -85,6 +92,7 @@ const images = {
   imgMap,
   imgMapSignup,
   imgMapList,
+  imgMapAccount,
   imgMapTimeline,
   imgTimelineDefault,
   imgNotificationAvatarDefault,

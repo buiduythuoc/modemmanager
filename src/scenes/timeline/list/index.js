@@ -47,12 +47,12 @@ class Timeline extends React.Component {
 
   renderTabHeader = () => {
     const {user} = this.props;
-    if (user.type === 'admin' || user.type === 'root') {
+    if (user && (user.type === 'admin' || user.type === 'root')) {
       return (
         <TabHeader
-          source={images.imgMapTimeline}
+          source={images.imgMapAccount}
           title={'Timeline'}
-          height={scaleSize(167)}
+          height={scaleSize(100)}
           rightIcon={images.icAdd}
           rightIconWidth={scaleSize(20)}
           rightIconHeight={scaleSize(20)}
@@ -63,9 +63,9 @@ class Timeline extends React.Component {
 
     return (
       <TabHeader
-        source={images.imgMapTimeline}
+        source={images.imgAvatarDefault}
         title={'Timeline'}
-        height={scaleSize(167)}
+        height={scaleSize(100)}
       />
     );
   };

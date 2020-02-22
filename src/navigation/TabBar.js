@@ -18,6 +18,9 @@ import NotificationDetailScreen from '../scenes/notification/detail';
 // my page
 import MyPageScreen from '../scenes/myPage';
 import ChangePasswordScreen from '../scenes/myPage/changePassword';
+// account
+import AccountListScreen from '../scenes/account/list';
+import AccountDetailDetailScreen from '../scenes/account/detail';
 
 import {images, colors} from '../themes';
 import Icon from '../components/atoms/Icon';
@@ -32,17 +35,34 @@ const baseNavigationOptions = {
   statusBarStyle: 'dark-content',
 };
 
-const ListDevicesNav = createStackNavigator(
+const ListAccountNav = createStackNavigator(
   {
-    ListDevicesScreen: {screen: TimelineListScreen},
+    AccountListScreen: {screen: AccountListScreen},
+    AccountDetailDetailScreen: {screen: AccountDetailDetailScreen},
+    ListModemScreen: {screen: ListModemScreen},
+    DeviceListScreen: {screen: DeviceListScreen},
+    BlockListScreen: {screen: BlockListScreen},
+    CreateModemScreen: {screen: CreateModemScreen},
+    EditModemScreen: {screen: EditModemScreen},
   },
   {
     navigationOptions: {
       ...baseNavigationOptions,
-      title: 'Timeline',
+      title: 'Account',
     },
   },
 );
+
+ListAccountNav.navigationOptions = ({navigation}) => {
+  const {routeName} = navigation.state.routes[navigation.state.index];
+  let tabBarVisible = false;
+  if (routeName === 'AccountListScreen') {
+    tabBarVisible = true;
+  }
+  return {
+    tabBarVisible,
+  };
+};
 
 const ListModemNav = createStackNavigator(
   {
@@ -62,9 +82,9 @@ const ListModemNav = createStackNavigator(
 
 ListModemNav.navigationOptions = ({navigation}) => {
   const {routeName} = navigation.state.routes[navigation.state.index];
-  let tabBarVisible = true;
-  if (routeName === 'CreateModemScreen' || routeName === 'EditModemScreen') {
-    tabBarVisible = false;
+  let tabBarVisible = false;
+  if (routeName === 'ListModemScreen') {
+    tabBarVisible = true;
   }
   return {
     tabBarVisible,
@@ -88,13 +108,9 @@ const TimelineNav = createStackNavigator(
 
 TimelineNav.navigationOptions = ({navigation}) => {
   const {routeName} = navigation.state.routes[navigation.state.index];
-  let tabBarVisible = true;
-  if (
-    routeName === 'CreateTimelineScreen' ||
-    routeName === 'TimelineDetailScreen' ||
-    routeName === 'TimelineEditScreen'
-  ) {
-    tabBarVisible = false;
+  let tabBarVisible = false;
+  if (routeName === 'TimelineListScreen') {
+    tabBarVisible = true;
   }
   return {
     tabBarVisible,
@@ -117,8 +133,8 @@ const NotificationNav = createStackNavigator(
 NotificationNav.navigationOptions = ({navigation}) => {
   const {routeName} = navigation.state.routes[navigation.state.index];
   let tabBarVisible = true;
-  if (routeName === 'NotificationDetailScreen') {
-    tabBarVisible = false;
+  if (routeName === 'NotificationScreen') {
+    tabBarVisible = true;
   }
   return {
     tabBarVisible,
@@ -302,18 +318,14 @@ const UserTabBar = createBottomTabNavigator(
 
 const RootTabBar = createBottomTabNavigator(
   {
-    ListDevicesNav: {
-      screen: ListDevicesNav,
-      path: '/devices',
+    ListAccountNav: {
+      screen: ListAccountNav,
+      path: '/accounts',
       navigationOptions: {
-        tabBarLabel: 'List Devices',
+        tabBarLabel: 'List Accounts',
         tabBarIcon: ({focused}) => (
           <Icon
-            source={
-              focused
-                ? images.icTabTimelineActive
-                : images.icTabTimelineInactive
-            }
+            source={focused ? images.icTabListActive : images.icTabListInactive}
             width={17}
             height={17}
           />
@@ -349,8 +361,7 @@ const RootTabBar = createBottomTabNavigator(
 class TabBar extends React.Component {
   render() {
     const {user} = this.props;
-    const role = user.type;
-    console.log("TabBar", role);
+    const role = user ? user.type : 'user';
     // const role = '';
     if (role === 'root') {
       return <RootTabBar />;
@@ -366,7 +377,4 @@ const mapStateToProps = state => ({
   user: state.auth.user,
 });
 
-export default connect(
-  mapStateToProps,
-  null,
-)(TabBar);
+export default connect(mapStateToProps, null)(TabBar);

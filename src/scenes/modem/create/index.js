@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Alert, Text} from 'react-native';
+import {View, Alert} from 'react-native';
 import {connect} from 'react-redux';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import RNPickerSelect from 'react-native-picker-select';
@@ -20,6 +20,9 @@ class CreateModem extends React.Component {
       modemName: '',
       domainName: '',
       port: '',
+      provider: '',
+      modemProvider: '',
+      listModemProviders: [],
       loginName: '',
       loginPassword: '',
       isFetching: false,
@@ -30,6 +33,24 @@ class CreateModem extends React.Component {
     header: null,
   };
 
+  componentDidMount() {
+    this.fetchProviders();
+  }
+
+  fetchProviders = () => {
+    const {user, fetchProviders} = this.props;
+    const userId = user.user_id;
+    fetchProviders(
+      userId,
+      () => {
+        this.setState({isFetching: false});
+      },
+      () => {
+        this.setState({isFetching: false});
+      },
+    );
+  };
+
   handleOnClickBack = () => {
     const {navigation} = this.props;
     navigation.goBack();
@@ -37,7 +58,15 @@ class CreateModem extends React.Component {
 
   handleOnClickSave = () => {
     const {addModem, fetchModems, navigation, user} = this.props;
-    const {modemName, domainName, port, loginName, loginPassword} = this.state;
+    const {
+      modemName,
+      domainName,
+      port,
+      loginName,
+      loginPassword,
+      provider,
+      modemProvider,
+    } = this.state;
     const params = {
       modemName,
       domainName,
@@ -45,8 +74,18 @@ class CreateModem extends React.Component {
       loginName,
       loginPassword,
       userId: user.user_id,
+      provider,
+      modemProvider,
     };
-    if (!modemName || !domainName || !port || !loginName || !loginPassword) {
+    if (
+      !modemName ||
+      !domainName ||
+      !port ||
+      !loginName ||
+      !loginPassword ||
+      !provider ||
+      !modemProvider
+    ) {
       return;
     }
     this.setState({isFetching: true});
@@ -77,7 +116,10 @@ class CreateModem extends React.Component {
       port,
       loginName,
       loginPassword,
+      listModemProviders,
     } = this.state;
+
+    const {providerList} = this.props;
 
     return (
       <View style={styles.container}>
@@ -126,6 +168,7 @@ class CreateModem extends React.Component {
             iconWidth={scaleSize(13)}
             iconHeight={scaleSize(13)}
             placeholder="Port"
+            keyboardType="numeric"
             placeholderTextColor={colors.gray05}
             onChangeText={text => this.setState({port: text})}
             value={port}
@@ -142,7 +185,20 @@ class CreateModem extends React.Component {
             renderInput={() => (
               <View style={styles.picker}>
                 <RNPickerSelect
-                  onValueChange={value => this.setState({modemId: value})}
+                  onValueChange={value => {
+                    this.setState({
+                      modemProvider: '',
+                      provider: value,
+                      listModemProviders: providerList
+                        .filter(item => item.provider.toLowerCase() === value)
+                        .map(item => {
+                          return {
+                            label: item.modem_type,
+                            value: item.modem_type,
+                          };
+                        }),
+                    });
+                  }}
                   items={[
                     {label: 'FPT', value: 'fpt'},
                     {label: 'VNPT', value: 'vnpt'},
@@ -164,12 +220,8 @@ class CreateModem extends React.Component {
             renderInput={() => (
               <View style={styles.picker}>
                 <RNPickerSelect
-                  onValueChange={value => this.setState({modemId: value})}
-                  items={[
-                    {label: 'FPT', value: 'fpt'},
-                    {label: 'VNPT', value: 'vnpt'},
-                    {label: 'VIETTEL', value: 'viettel'},
-                  ]}
+                  onValueChange={value => this.setState({modemProvider: value})}
+                  items={listModemProviders}
                 />
               </View>
             )}
@@ -218,6 +270,7 @@ class CreateModem extends React.Component {
 
 const mapStateToProps = state => ({
   user: state.auth.user,
+  providerList: state.modem.providerList,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -225,9 +278,8 @@ const mapDispatchToProps = dispatch => ({
     dispatch(ModemActions.modemAdd(params, onSuccess, onError)),
   fetchModems: (userId, onSuccess, onError) =>
     dispatch(ModemActions.modemFetch({userId}, onSuccess, onError)),
+  fetchProviders: (userId, onSuccess, onError) =>
+    dispatch(ModemActions.providerFetch({userId}, onSuccess, onError)),
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(CreateModem);
+export default connect(mapStateToProps, mapDispatchToProps)(CreateModem);

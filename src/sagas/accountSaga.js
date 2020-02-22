@@ -1,18 +1,36 @@
 import {put, call} from 'redux-saga/effects';
 import {Alert} from 'react-native';
-import AuthActions from '../stores/authRedux';
+import AccountActions from '../stores/accountRedux';
 import api from '../services/api';
 
-export function* fetchMyProfile(action) {
+export function* fetchAccounts(action) {
+  const {params, onSuccess, onError} = action;
+  const {userId} = params;
+  // make the call to the api
+  const response = yield call(api.create().getListAccounts, userId);
+
+  if (response.status === 200 && response.data.status === 1) {
+    const accounts = response.data.data ? response.data.data : [];
+    yield put(AccountActions.accountSet(accounts));
+    if (onSuccess) {
+      onSuccess();
+    }
+  } else {
+    if (onError) {
+      onError();
+    }
+  }
+}
+
+export function* fetchProfile(action) {
   const {params, onSuccess, onError} = action;
   const {userId} = params;
   // make the call to the api
   const response = yield call(api.create().getProfile, userId);
 
   if (response.status === 200 && response.data.status === 1) {
-    yield put(AuthActions.authSet(response.data.data));
     if (onSuccess) {
-      onSuccess();
+      onSuccess(response.data.data);
     }
   } else {
     const errorMessage = response.data.message
@@ -25,7 +43,7 @@ export function* fetchMyProfile(action) {
   }
 }
 
-export function* updateMyProfile(action) {
+export function* updateProfile(action) {
   const {params, onSuccess, onError} = action;
   const {userId, username, status, expireDate} = params;
   // make the call to the api
@@ -38,7 +56,6 @@ export function* updateMyProfile(action) {
   );
 
   if (response.status === 200 && response.data.status === 1) {
-    // yield put(AuthActions.authSet(response.data.data));
     if (onSuccess) {
       onSuccess();
     }
@@ -53,16 +70,11 @@ export function* updateMyProfile(action) {
   }
 }
 
-export function* changePassword(action) {
+export function* deleteAccount(action) {
   const {params, onSuccess, onError} = action;
-  const {userId, currentPassword, newPassword} = params;
+  const {userId, deleteId} = params;
   // make the call to the api
-  const response = yield call(
-    api.create().changePassword,
-    userId,
-    currentPassword,
-    newPassword,
-  );
+  const response = yield call(api.create().deleteAccount, userId, deleteId);
 
   if (response.status === 200 && response.data.status === 1) {
     if (onSuccess) {

@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    padding: scaleSize(20),
+    paddingHorizontal: scaleSize(20),
     borderTopLeftRadius: scaleSize(25),
     borderTopRightRadius: scaleSize(25),
     backgroundColor: colors.white,
@@ -32,6 +32,7 @@ const styles = StyleSheet.create({
   },
   modemNameInput: {
     width: '100%',
+    marginTop: scaleSize(20),
   },
   domainNameInput: {
     marginTop: scaleSize(20),
@@ -55,6 +56,7 @@ const styles = StyleSheet.create({
   saveButton: {
     marginTop: scaleSize(29),
     width: '100%',
+    marginBottom: scaleSize(20),
   },
 });
 

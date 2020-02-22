@@ -45,6 +45,7 @@ const renderInputText = props => {
     multiline,
     editable,
     renderInput,
+    keyboardType,
   } = props;
   if (renderInput) {
     return renderInput();
@@ -63,6 +64,7 @@ const renderInputText = props => {
       value={value}
       multiline={multiline}
       editable={editable}
+      keyboardType={keyboardType}
     />
   );
 };
@@ -86,7 +88,7 @@ export default LabelInput;
 LabelInput.propTypes = {
   rounded: PropTypes.bool,
   label: PropTypes.string,
-  labelStyle: ViewPropTypes.style,
+  labelStyle: TextPropTypes.style,
   iconStyle: ViewPropTypes.style,
   iconSrc: PropTypes.number,
   iconWidth: PropTypes.number,
@@ -102,6 +104,7 @@ LabelInput.propTypes = {
   value: PropTypes.string,
   multiline: PropTypes.bool,
   editable: PropTypes.bool,
+  keyboardType: PropTypes.string,
   renderInput: PropTypes.func,
 };
 
@@ -123,6 +126,7 @@ LabelInput.defaultProps = {
   value: '',
   multiline: false,
   editable: true,
+  keyboardType: 'default',
   renderInput: null,
 };
 

@@ -6,10 +6,18 @@ import {ModemTypes} from '../stores/modemRedux';
 import {AuthTypes} from '../stores/authRedux';
 import {TimelineTypes} from '../stores/timelineRedux';
 import {MyPageTypes} from '../stores/myPageRedux';
+import {AccountTypes} from '../stores/accountRedux';
 
 /* ------------- Sagas ------------- */
 
-import {addModem, fetchModems, editModem, fetchDevices} from './modemSaga';
+import {
+  addModem,
+  fetchModems,
+  editModem,
+  fetchDevices,
+  fetchProviders,
+  blockDevice,
+} from './modemSaga';
 import {login, signup} from './authSaga';
 import {
   addTimeline,
@@ -19,7 +27,13 @@ import {
   postComment,
   fetchComments,
 } from './timelineSaga';
-import {fetchProfile, updateProfile, changePassword} from './myPageSaga';
+import {fetchMyProfile, updateMyProfile, changePassword} from './myPageSaga';
+import {
+  fetchAccounts,
+  deleteAccount,
+  fetchProfile,
+  updateProfile,
+} from './accountSaga';
 
 /* ------------- API ------------- */
 
@@ -38,6 +52,8 @@ export default function* root() {
     // modem
     takeLatest(ModemTypes.MODEM_FETCH, fetchModems),
     takeLatest(ModemTypes.DEVICE_FETCH, fetchDevices),
+    takeLatest(ModemTypes.DEVICE_BLOCK, blockDevice),
+    takeLatest(ModemTypes.PROVIDER_FETCH, fetchProviders),
     takeLatest(ModemTypes.MODEM_ADD, addModem),
     takeLatest(ModemTypes.MODEM_EDIT, editModem),
     // timeline
@@ -48,8 +64,13 @@ export default function* root() {
     takeLatest(TimelineTypes.TIMELINE_POST_COMMENT, postComment),
     takeLatest(TimelineTypes.TIMELINE_FETCH_COMMENTS, fetchComments),
     // myPage
-    takeLatest(MyPageTypes.MY_PAGE_FETCH, fetchProfile),
-    takeLatest(MyPageTypes.MY_PAGE_UPDATE, updateProfile),
+    takeLatest(MyPageTypes.MY_PAGE_FETCH, fetchMyProfile),
+    takeLatest(MyPageTypes.MY_PAGE_UPDATE, updateMyProfile),
     takeLatest(MyPageTypes.MY_PAGE_CHANGE_PASSWORD, changePassword),
+    // account
+    takeLatest(AccountTypes.ACCOUNT_FETCH, fetchAccounts),
+    takeLatest(AccountTypes.ACCOUNT_DELETE, deleteAccount),
+    takeLatest(AccountTypes.ACCOUNT_FETCH_PROFILE, fetchProfile),
+    takeLatest(AccountTypes.ACCOUNT_UPDATE_PROFILE, updateProfile),
   ]);
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, FlatList, Text, RefreshControl} from 'react-native';
+import {View, FlatList, Text, RefreshControl, Alert} from 'react-native';
 import {connect} from 'react-redux';
 import styles from './styles';
 import NavHeader from '../../../components/molecules/NavHeader';
@@ -14,7 +14,7 @@ class DeviceList extends React.Component {
     super(props);
     const {navigation} = props;
     this.state = {
-      isFetching: true,
+      isFetching: false,
       isRefreshing: false,
       modemData: navigation.getParam('modemData', null),
     };
@@ -25,6 +25,13 @@ class DeviceList extends React.Component {
   };
 
   componentDidMount() {
+    const {modemData} = this.state;
+    const {listModems} = this.props;
+    const modem = listModems.find(item => item.id === modemData.id);
+    const devices = modem && modem.devices ? modem.devices : [];
+    if (devices.length === 0) {
+      this.setState({isFetching: true});
+    }
     this.fetchDevices();
   }
 
@@ -39,8 +46,51 @@ class DeviceList extends React.Component {
   };
 
   handleOnRefresh = () => {
-    this.setState({isRefreshing: true});
+    this.setState({isRefreshing: true, isFetching: true});
     this.fetchDevices();
+  };
+
+  handleOnClickBlock = modemItem => {
+    const {modemData} = this.state;
+    Alert.alert(
+      'Warning',
+      'Do you want to block ' + modemItem.name,
+      [
+        {
+          text: 'OK',
+          onPress: () => {
+            const {user, blockDevice} = this.props;
+            const params = {
+              userId: user.user_id,
+              modemId: modemData.id,
+              deviceMac: modemItem.mac_address,
+              deviceName: modemItem.name,
+            };
+            blockDevice(
+              params,
+              () => {
+                this.setState({isFetching: false, isRefreshing: false});
+                Alert.alert(
+                  'Success',
+                  modemItem.name + ' has been blocked',
+                  [{text: 'OK', onPress: () => {}}],
+                  {cancelable: false},
+                );
+              },
+              () => {
+                this.setState({isFetching: false, isRefreshing: false});
+              },
+            );
+          },
+        },
+        {
+          text: 'Cancel',
+          style: 'cancel',
+          onPress: () => {},
+        },
+      ],
+      {cancelable: false},
+    );
   };
 
   fetchDevices = () => {
@@ -66,8 +116,10 @@ class DeviceList extends React.Component {
   };
 
   render() {
-    const {isFetching, isRefreshing} = this.state;
-    const {listDevices} = this.props;
+    const {isFetching, isRefreshing, modemData} = this.state;
+    const {listModems} = this.props;
+    const modem = listModems.find(item => item.id === modemData.id);
+    const listDevices = modem && modem.devices ? modem.devices : [];
     return (
       <View style={styles.container}>
         <NavHeader
@@ -86,7 +138,12 @@ class DeviceList extends React.Component {
         <FlatList
           style={styles.flatList}
           data={listDevices}
-          renderItem={({item}) => <DeviceItem data={item} />}
+          renderItem={({item}) => (
+            <DeviceItem
+              data={item}
+              onClick={() => this.handleOnClickBlock(item)}
+            />
+          )}
           keyExtractor={(item, index) => {
             return index + '';
           }}
@@ -104,13 +161,15 @@ class DeviceList extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  listDevices: state.modem.deviceList,
+  listModems: state.modem.list,
   user: state.auth.user,
 });
 
 const mapDispatchToProps = dispatch => ({
   fetchDevices: (params, onSuccess, onError) =>
     dispatch(ModemActions.deviceFetch(params, onSuccess, onError)),
+  blockDevice: (params, onSuccess, onError) =>
+    dispatch(ModemActions.deviceBlock(params, onSuccess, onError)),
 });
 
 export default connect(
