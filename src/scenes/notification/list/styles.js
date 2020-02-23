@@ -8,8 +8,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.listBackground,
   },
   flatList: {
+    marginHorizontal: scaleSize(10),
+    marginTop: scaleSize(10),
     flex: 1,
-    padding: scaleSize(10),
   },
 });
 

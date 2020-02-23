@@ -86,6 +86,7 @@ class LoginScreen extends React.Component {
               label="Username"
               onChangeText={text => this.onChangeUsername(text)}
               value={username}
+              selectionColor={colors.white}
             />
             <LabelInput
               style={styles.passwordInput}
@@ -96,6 +97,7 @@ class LoginScreen extends React.Component {
               onChangeText={text => this.onChangePassword(text)}
               secureTextEntry={true}
               value={password}
+              selectionColor={colors.white}
             />
             <Text
               style={styles.forgotPasswordLink}

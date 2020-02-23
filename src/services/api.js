@@ -122,8 +122,11 @@ const create = () => {
     );
 
   // timeline
-  const getListTimelines = userId =>
-    api.post('getlistpost.php', qs.stringify({user_id: userId, modem_id: ''}));
+  const getListTimelines = (userId, publicIp) =>
+    api.post(
+      'getlistpost.php',
+      qs.stringify({user_id: userId, modem_id: '', public_ip: publicIp}),
+    );
 
   const addTimeline = (title, subTitle, userId, modemId, content) => {
     const data = {

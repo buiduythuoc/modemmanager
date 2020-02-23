@@ -94,6 +94,7 @@ class SignupScreen extends React.Component {
               label="Username"
               onChangeText={text => this.onChangeUsername(text)}
               value={username}
+              selectionColor={colors.white}
             />
             <LabelInput
               style={styles.passwordInput}
@@ -104,6 +105,7 @@ class SignupScreen extends React.Component {
               secureTextEntry={true}
               onChangeText={text => this.onChangePassword(text)}
               value={password}
+              selectionColor={colors.white}
             />
             <Dropdown
               style={styles.roleInput}

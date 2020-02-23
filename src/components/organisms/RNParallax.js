@@ -60,6 +60,13 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
   },
+  addButton: {
+    backgroundColor: 'transparent',
+    position: 'absolute',
+    top: scaleSize(106),
+    left: 0,
+    right: 0,
+  },
   headerTitle: {
     backgroundColor: 'transparent',
     position: 'absolute',
@@ -336,7 +343,7 @@ class RNParallax extends Component {
     return (
       <Animated.View
         style={[
-          styles.bar,
+          styles.addButton,
           {
             height: this.getHeaderMinHeight(),
             transform: [{translateY: buttonTranslate}],

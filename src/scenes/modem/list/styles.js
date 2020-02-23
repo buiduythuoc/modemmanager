@@ -8,7 +8,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.listBackground,
   },
   addButton: {
-    marginTop: scaleSize(106),
     marginHorizontal: scaleSize(19),
     backgroundColor: colors.addButton,
     borderColor: colors.addButton,

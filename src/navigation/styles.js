@@ -12,7 +12,7 @@ export default StyleSheet.create({
   },
   label: {
     height: 15,
-    width: metrics.screenWidth / 4,
+    // width: metrics.screenWidth / ,
     fontSize: 10,
     padding: 0,
   },

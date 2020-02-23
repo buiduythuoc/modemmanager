@@ -46,6 +46,7 @@ const renderInputText = props => {
     editable,
     renderInput,
     keyboardType,
+    selectionColor,
   } = props;
   if (renderInput) {
     return renderInput();
@@ -65,6 +66,7 @@ const renderInputText = props => {
       multiline={multiline}
       editable={editable}
       keyboardType={keyboardType}
+      selectionColor={selectionColor}
     />
   );
 };
@@ -106,6 +108,7 @@ LabelInput.propTypes = {
   editable: PropTypes.bool,
   keyboardType: PropTypes.string,
   renderInput: PropTypes.func,
+  selectionColor: PropTypes.string,
 };
 
 LabelInput.defaultProps = {
@@ -128,6 +131,7 @@ LabelInput.defaultProps = {
   editable: true,
   keyboardType: 'default',
   renderInput: null,
+  selectionColor: colors.primary,
 };
 
 const styles = StyleSheet.create({

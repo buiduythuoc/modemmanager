@@ -116,15 +116,13 @@ class ListModem extends React.Component {
 
   renderAddButton = () => {
     return (
-      <View>
-        <Button
-          style={styles.addButton}
-          height={scaleSize(54)}
-          title="Add New Modem"
-          icon={images.icRoundedAdd}
-          onClick={this.handleOnClickAdd}
-        />
-      </View>
+      <Button
+        style={styles.addButton}
+        height={scaleSize(54)}
+        title="Add New Modem"
+        icon={images.icRoundedAdd}
+        onClick={this.handleOnClickAdd}
+      />
     );
   };
 

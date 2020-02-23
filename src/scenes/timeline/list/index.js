@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, FlatList} from 'react-native';
+import {View, FlatList, RefreshControl} from 'react-native';
 import {connect} from 'react-redux';
 import {images} from '../../../themes';
 import styles from './styles';
@@ -15,6 +15,7 @@ class Timeline extends React.Component {
 
     this.state = {
       isFetching: true,
+      isRefreshing: false,
     };
   }
 
@@ -32,18 +33,28 @@ class Timeline extends React.Component {
     navigation.navigate('TimelineDetailScreen', {timelineId});
   };
 
+  handleOnRefresh = () => {
+    this.setState({isRefreshing: true});
+    this.fetchTimelines();
+  };
+
   componentDidMount() {
+    this.fetchTimelines();
+  }
+
+  fetchTimelines = () => {
     const {fetchTimelines, user} = this.props;
     fetchTimelines(
       user.user_id,
+      user.type,
       () => {
-        this.setState({isFetching: false});
+        this.setState({isFetching: false, isRefreshing: false});
       },
       () => {
-        this.setState({isFetching: false});
+        this.setState({isFetching: false, isRefreshing: false});
       },
     );
-  }
+  };
 
   renderTabHeader = () => {
     const {user} = this.props;
@@ -63,7 +74,7 @@ class Timeline extends React.Component {
 
     return (
       <TabHeader
-        source={images.imgAvatarDefault}
+        source={images.imgMapAccount}
         title={'Timeline'}
         height={scaleSize(100)}
       />
@@ -71,7 +82,7 @@ class Timeline extends React.Component {
   };
 
   render() {
-    const {isFetching} = this.state;
+    const {isFetching, isRefreshing} = this.state;
     const {listTimeline} = this.props;
 
     return (
@@ -87,6 +98,12 @@ class Timeline extends React.Component {
             />
           )}
           keyExtractor={item => item.id + ''}
+          refreshControl={
+            <RefreshControl
+              refreshing={isRefreshing}
+              onRefresh={this.handleOnRefresh}
+            />
+          }
         />
         <Loading show={isFetching} />
       </View>
@@ -100,8 +117,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchTimelines: (userId, onSuccess, onError) =>
-    dispatch(TimelineActions.timelineFetch({userId}, onSuccess, onError)),
+  fetchTimelines: (userId, role, onSuccess, onError) =>
+    dispatch(TimelineActions.timelineFetch({userId, role}, onSuccess, onError)),
 });
 
 export default connect(

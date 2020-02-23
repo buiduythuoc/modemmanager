@@ -29,9 +29,14 @@ export function* addTimeline(action) {
 
 export function* fetchTimelines(action) {
   const {params, onSuccess, onError} = action;
-  const {userId} = params;
+  const {userId, role} = params;
   // make the call to the api
-  const response = yield call(api.create().getListTimelines, userId);
+  let publicIp = '';
+  if (role === 'guest') {
+    const publicIpResponse = yield call(api.create().getPublicIp);
+    publicIp = publicIpResponse.data;
+  }
+  const response = yield call(api.create().getListTimelines, userId, publicIp);
 
   if (response.status === 200 && response.data.status === 1) {
     const listTimelines = response.data.data ? response.data.data : [];

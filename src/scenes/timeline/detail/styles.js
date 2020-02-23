@@ -44,9 +44,11 @@ const styles = StyleSheet.create({
     marginTop: scaleSize(30),
     alignItems: 'center',
   },
+  sendIcon: {
+    marginLeft: scaleSize(10),
+  },
   input: {
     flex: 1,
-    marginRight: scaleSize(10),
     paddingHorizontal: scaleSize(12),
     paddingTop: scaleSize(12),
     paddingBottom: scaleSize(12),

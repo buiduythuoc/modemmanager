@@ -71,7 +71,6 @@ class TimelineDetail extends React.Component {
   };
 
   handleOnClickDelete = () => {
-    console.log('here');
     const {postId} = this.state;
     const {user, deleteTimeline, fetchTimeline, navigation} = this.props;
     if (postId === 0) {
@@ -234,6 +233,7 @@ class TimelineDetail extends React.Component {
                 activeOpacity={activeOpacity}
                 onPress={this.handleOnClickPostComment}>
                 <Icon
+                  style={styles.sendIcon}
                   source={images.icSendActive}
                   width={scaleSize(35)}
                   height={scaleSize(35)}
