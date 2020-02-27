@@ -7,13 +7,17 @@ import Icon from '../atoms/Icon';
 
 const NotificationItem = props => {
   const {data, onClick} = props;
-  const {avatar, title, time} = data;
+  const {title} = data;
+  const time = data.created_at;
 
   return (
     <TouchableOpacity
       style={styles.container}
       onPress={() => (onClick ? onClick() : {})}>
-      <Icon style={styles.avatar} source={avatar} />
+      <Icon
+        style={styles.avatar}
+        source={images.imgNotificationAvatarDefault}
+      />
       <View style={styles.content}>
         <Text style={styles.title} numberOfLines={3} ellipsizeMode="tail">
           {title}

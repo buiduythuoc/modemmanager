@@ -9,7 +9,7 @@ const DeviceItem = props => {
   const {data, isLocked, onClick} = props;
   const deviceName = data.name;
   const macAddress = data.mac_address;
-  const status = data.online_status;
+  const status = data.status;
   const icon = isLocked ? images.icLockOpen : images.icLockWhite;
   const actionContentBackgroundColor = isLocked
     ? colors.lightGreen

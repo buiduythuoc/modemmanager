@@ -8,15 +8,18 @@ import {colors, images} from '../../../themes';
 import {scaleSize} from '../../../themes/mixins';
 import ModemActions from '../../../stores/modemRedux';
 import Loading from '../../../components/organisms/Loading';
+import Firebase from '../../../configs/firebase';
 
 class DeviceList extends React.Component {
   constructor(props) {
     super(props);
     const {navigation} = props;
     this.state = {
-      isFetching: false,
+      isFetching: true,
       isRefreshing: false,
       modemData: navigation.getParam('modemData', null),
+      adminId: navigation.getParam('adminId', 0),
+      deviceList: [],
     };
   }
 
@@ -25,15 +28,25 @@ class DeviceList extends React.Component {
   };
 
   componentDidMount() {
-    const {modemData} = this.state;
-    const {listModems} = this.props;
-    const modem = listModems.find(item => item.id === modemData.id);
-    const devices = modem && modem.devices ? modem.devices : [];
-    if (devices.length === 0) {
-      this.setState({isFetching: true});
-    }
     this.fetchDevices();
   }
+
+  fetchDevices = () => {
+    const {modemData} = this.state;
+    const {user} = this.props;
+    const adminId =
+      this.state.adminId === 0 ? user.user_id : this.state.adminId;
+    const ref = 'admins/' + adminId + '/modems/' + modemData.id + '/devices';
+    Firebase.database()
+      .ref(ref)
+      .on('value', snap => {
+        const deviceList = [];
+        snap.forEach(device => {
+          deviceList.push(device.val());
+        });
+        this.setState({deviceList, isFetching: false, isRefreshing: false});
+      });
+  };
 
   handleOnClickBack = () => {
     const {navigation} = this.props;
@@ -47,7 +60,7 @@ class DeviceList extends React.Component {
   };
 
   handleOnRefresh = () => {
-    this.setState({isRefreshing: true, isFetching: true});
+    this.setState({isRefreshing: true, isFetching: false});
     this.fetchDevices();
   };
 
@@ -95,33 +108,8 @@ class DeviceList extends React.Component {
     );
   };
 
-  fetchDevices = () => {
-    const {user} = this.props;
-    const {modemData} = this.state;
-    const params = {
-      userId: user.user_id,
-      modemId: modemData.id,
-      domain: modemData.domain,
-      port: modemData.port,
-      username: modemData.login_name,
-      password: modemData.login_pass,
-    };
-    this.props.fetchDevices(
-      params,
-      () => {
-        this.setState({isFetching: false, isRefreshing: false});
-      },
-      () => {
-        this.setState({isFetching: false, isRefreshing: false});
-      },
-    );
-  };
-
   render() {
-    const {isFetching, isRefreshing, modemData} = this.state;
-    const {listModems} = this.props;
-    const modem = listModems.find(item => item.id === modemData.id);
-    const listDevices = modem && modem.devices ? modem.devices : [];
+    const {isFetching, isRefreshing, deviceList} = this.state;
     return (
       <View style={styles.container}>
         <NavHeader
@@ -134,12 +122,10 @@ class DeviceList extends React.Component {
           rightIconHeight={scaleSize(19)}
           onRightClick={this.handleOnClickBlockList}
         />
-        <Text style={styles.deviceCount}>
-          {listDevices.length + ' devices'}
-        </Text>
+        <Text style={styles.deviceCount}>{deviceList.length + ' devices'}</Text>
         <FlatList
           style={styles.flatList}
-          data={listDevices}
+          data={deviceList}
           renderItem={({item}) => (
             <DeviceItem
               data={item}
@@ -163,7 +149,6 @@ class DeviceList extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  listModems: state.modem.list,
   user: state.auth.user,
 });
 

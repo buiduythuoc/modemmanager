@@ -2,6 +2,7 @@ import React from 'react';
 import {View, TouchableOpacity, Alert} from 'react-native';
 import {connect} from 'react-redux';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import ImagePicker from 'react-native-image-picker';
 import {images, colors} from '../../themes';
 import styles from './styles';
 import TabHeader from '../../components/organisms/TabHeader';
@@ -24,6 +25,7 @@ class MyPage extends React.Component {
       isShowDatePicker: false,
       username: '',
       expiredAt: '',
+      avatarSource: images.imgAvatarDefault,
     };
   }
 
@@ -62,6 +64,38 @@ class MyPage extends React.Component {
     logout();
   };
 
+  handleOnClickSelectAvatar = () => {
+    const options = {
+      title: 'Select Avatar',
+      // customButtons: [{name: 'fb', title: 'Choose Photo from Facebook'}],
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+    };
+
+    ImagePicker.showImagePicker(options, response => {
+      console.log('Response = ', response);
+
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      } else {
+        const source = {uri: response.uri};
+
+        // You can also display the image using data:
+        // const source = { uri: 'data:image/jpeg;base64,' + response.data };
+
+        this.setState({
+          avatarSource: source,
+        });
+      }
+    });
+  };
+
   handleOnClickUpdateProfile = () => {
     const {username, expiredAt} = this.state;
     const {updateProfile, user} = this.props;
@@ -90,7 +124,13 @@ class MyPage extends React.Component {
   };
 
   render() {
-    const {isFetching, isShowDatePicker, username, expiredAt} = this.state;
+    const {
+      isFetching,
+      isShowDatePicker,
+      username,
+      expiredAt,
+      avatarSource,
+    } = this.state;
     const {user} = this.props;
     return (
       <View style={styles.container}>
@@ -101,8 +141,9 @@ class MyPage extends React.Component {
         />
         <View style={styles.content}>
           <AvatarPicker
-            source={images.imgAvatarDefault}
+            source={avatarSource}
             onClickLogout={this.handleOnClickLogout}
+            onClickCamera={this.handleOnClickSelectAvatar}
           />
           <LabelInput
             style={styles.userNameInput}

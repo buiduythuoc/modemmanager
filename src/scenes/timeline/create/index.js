@@ -3,6 +3,7 @@ import {View, Text, Alert} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {connect} from 'react-redux';
 import RNPickerSelect from 'react-native-picker-select';
+import RNImagePicker from 'react-native-image-picker';
 import {images, colors} from '../../../themes';
 import styles from './styles';
 import Button from '../../../components/atoms/Button';
@@ -29,6 +30,11 @@ class CreateTimeline extends React.Component {
       content: '',
       modemItems: [],
       isLoading: false,
+      imageSource1: null,
+      imageSource2: null,
+      imageSource3: null,
+      imageSource4: null,
+      imageSource5: null,
     };
   }
 
@@ -100,8 +106,45 @@ class CreateTimeline extends React.Component {
     );
   };
 
+  handleOnSelectImage = setState => () => {
+    const options = {
+      title: 'Select Image',
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+    };
+
+    RNImagePicker.showImagePicker(options, response => {
+      console.log('Response = ', response);
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      } else {
+        const source = {uri: response.uri};
+        setState(source);
+        console.log(setState);
+      }
+    });
+  };
+
   render() {
-    const {title, subTitle, content, modemItems, isLoading} = this.state;
+    const {
+      title,
+      subTitle,
+      content,
+      modemItems,
+      isLoading,
+      imageSource1,
+      imageSource2,
+      imageSource3,
+      imageSource4,
+      imageSource5,
+    } = this.state;
+
     return (
       <View style={styles.container}>
         <NavHeader
@@ -114,11 +157,45 @@ class CreateTimeline extends React.Component {
           <KeyboardAwareScrollView contentContainerStyle={styles.scrollView}>
             <Text style={styles.imageText}>Picture</Text>
             <View style={styles.imageContainer}>
-              <ImagePicker style={styles.imagePicker} />
-              <ImagePicker style={styles.imagePicker} />
-              <ImagePicker style={styles.imagePicker} />
-              <ImagePicker style={styles.imagePicker} />
-              <ImagePicker />
+              <ImagePicker
+                style={styles.imagePicker}
+                source={imageSource1}
+                onSelect={this.handleOnSelectImage(source =>
+                  this.setState({imageSource1: source}),
+                )}
+                onClickDelete={() => this.setState({imageSource1: null})}
+              />
+              <ImagePicker
+                style={styles.imagePicker}
+                source={imageSource2}
+                onSelect={this.handleOnSelectImage(source =>
+                  this.setState({imageSource2: source}),
+                )}
+                onClickDelete={() => this.setState({imageSource2: null})}
+              />
+              <ImagePicker
+                style={styles.imagePicker}
+                source={imageSource3}
+                onSelect={this.handleOnSelectImage(source =>
+                  this.setState({imageSource3: source}),
+                )}
+                onClickDelete={() => this.setState({imageSource3: null})}
+              />
+              <ImagePicker
+                style={styles.imagePicker}
+                source={imageSource4}
+                onSelect={this.handleOnSelectImage(source =>
+                  this.setState({imageSource4: source}),
+                )}
+                onClickDelete={() => this.setState({imageSource4: null})}
+              />
+              <ImagePicker
+                source={imageSource5}
+                onSelect={this.handleOnSelectImage(source =>
+                  this.setState({imageSource5: source}),
+                )}
+                onClickDelete={() => this.setState({imageSource5: null})}
+              />
             </View>
             <Text style={styles.label}>Modem Name</Text>
             <View style={styles.modemPicker}>

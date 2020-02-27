@@ -1,53 +1,22 @@
 import React from 'react';
-import {View, FlatList} from 'react-native';
+import {View, FlatList, RefreshControl} from 'react-native';
+import {connect} from 'react-redux';
 import {images} from '../../../themes';
 import styles from './styles';
 import TabHeader from '../../../components/organisms/TabHeader';
 import NotificationItem from '../../../components/organisms/NotificationItem';
 import {scaleSize} from '../../../themes/mixins';
+import Loading from '../../../components/organisms/Loading';
+import Firebase from '../../../configs/firebase';
 
-export default class Notification extends React.Component {
+class Notification extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      listNotifications: [
-        {
-          id: 1,
-          avatar: images.imgTimelineDefault,
-          title:
-            'Something new about router\nOnly manage account can create this',
-          time: '10:20AM 12/12/2019',
-        },
-        {
-          id: 2,
-          avatar: images.imgTimelineDefault,
-          title:
-            'Something new about router\nOnly manage account can create this',
-          time: '10:20AM 12/12/2019',
-        },
-        {
-          id: 3,
-          avatar: images.imgTimelineDefault,
-          title:
-            'Something new about router\nOnly manage account can create this',
-          time: '10:20AM 12/12/2019',
-        },
-        {
-          id: 4,
-          avatar: images.imgTimelineDefault,
-          title:
-            'Something new about router\nOnly manage account can create this',
-          time: '10:20AM 12/12/2019',
-        },
-        {
-          id: 5,
-          avatar: images.imgTimelineDefault,
-          title:
-            'Something new about router\nOnly manage account can create this',
-          time: '10:20AM 12/12/2019',
-        },
-      ],
+      listNotifications: [],
+      isFetching: true,
+      isRefreshing: false,
     };
   }
 
@@ -55,13 +24,52 @@ export default class Notification extends React.Component {
     header: null,
   };
 
-  handleOnClickItem = () => {
+  componentDidMount() {
+    this.fetchNotifications();
+  }
+
+  fetchNotifications() {
+    const {user} = this.props;
+    if (user.type !== 'admin') {
+      this.setState({
+        isFetching: false,
+        isRefreshing: false,
+      });
+      return;
+    }
+
+    const adminId = user.user_id;
+    const ref = 'admins/' + adminId + '/modems';
+    Firebase.database()
+      .ref(ref)
+      .on('value', snap => {
+        const listNotifications = [];
+        snap.forEach(modem => {
+          const notifications = modem.val().notifications;
+          for (let key in notifications) {
+            listNotifications.push(notifications[key]);
+          }
+        });
+        this.setState({
+          listNotifications,
+          isFetching: false,
+          isRefreshing: false,
+        });
+      });
+  }
+
+  handleOnRefresh = () => {
+    this.setState({isRefreshing: true, isFetching: false});
+    this.fetchNotifications();
+  };
+
+  handleOnClickItem = item => {
     const {navigation} = this.props;
-    navigation.navigate('NotificationDetailScreen');
+    navigation.navigate('NotificationDetailScreen', {data: item});
   };
 
   render() {
-    const {listNotifications} = this.state;
+    const {listNotifications, isFetching, isRefreshing} = this.state;
     return (
       <View style={styles.container}>
         <TabHeader
@@ -73,11 +81,30 @@ export default class Notification extends React.Component {
           style={styles.flatList}
           data={listNotifications}
           renderItem={({item}) => (
-            <NotificationItem data={item} onClick={this.handleOnClickItem} />
+            <NotificationItem
+              data={item}
+              onClick={() => this.handleOnClickItem(item)}
+            />
           )}
-          keyExtractor={item => item.id + ''}
+          keyExtractor={(item, index) => index + ''}
+          refreshControl={
+            <RefreshControl
+              refreshing={isRefreshing}
+              onRefresh={this.handleOnRefresh}
+            />
+          }
         />
+        <Loading show={isFetching} />
       </View>
     );
   }
 }
+
+const mapStateToProps = state => ({
+  user: state.auth.user,
+});
+
+export default connect(
+  mapStateToProps,
+  null,
+)(Notification);

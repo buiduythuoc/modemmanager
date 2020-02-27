@@ -48,8 +48,9 @@ class ListModem extends React.Component {
   }
 
   handleOnClickItem = modemData => {
+    const {adminId} = this.state;
     const {navigation} = this.props;
-    navigation.navigate('DeviceListScreen', {modemData});
+    navigation.navigate('DeviceListScreen', {modemData, adminId});
   };
 
   handleOnClickAdd = () => {

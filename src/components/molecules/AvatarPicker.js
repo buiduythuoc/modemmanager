@@ -13,8 +13,13 @@ const AvatarPicker = props => {
     width: size,
     height: size,
   };
+  const imageStyle = {borderRadius: size / 2};
   return (
-    <ImageBackground style={containerStyle} resizeMode="cover" source={source}>
+    <ImageBackground
+      style={containerStyle}
+      resizeMode="cover"
+      imageStyle={imageStyle}
+      source={source}>
       <TouchableOpacity
         style={styles.iconCameraContainer}
         onPress={() => onClickCamera()}>
@@ -41,12 +46,13 @@ export default AvatarPicker;
 
 AvatarPicker.propTypes = {
   size: PropTypes.number,
-  source: PropTypes.number.isRequired,
+  source: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
   onClickLogout: PropTypes.func,
   onClickCamera: PropTypes.func,
 };
 
 AvatarPicker.defaultProps = {
+  source: null,
   size: scaleSize(120),
   onClickLogout: () => {},
   onClickCamera: () => {},
