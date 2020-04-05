@@ -1,10 +1,10 @@
 import React from 'react';
-import {View, Alert} from 'react-native';
+import {View, Alert, SafeAreaView} from 'react-native';
 import {connect} from 'react-redux';
 import {images, colors} from '../../../themes';
 import styles from './styles';
 import Button from '../../../components/atoms/Button';
-import NavHeader from '../../../components/molecules/NavHeader';
+import NavBar from '../../../components/molecules/NavBar';
 import LabelInput from '../../../components/molecules/LabelInput';
 import {scaleSize} from '../../../themes/mixins';
 import ModemActions from '../../../stores/modemRedux';
@@ -65,8 +65,8 @@ class EditModem extends React.Component {
   render() {
     const {modemData, isLoading} = this.state;
     return (
-      <View style={styles.container}>
-        <NavHeader
+      <SafeAreaView style={styles.container}>
+        <NavBar
           title="Edit modem"
           titleColor={colors.gray01}
           leftIcon={images.icBackBlack}
@@ -161,7 +161,7 @@ class EditModem extends React.Component {
           />
         </View>
         <Loading show={isLoading} />
-      </View>
+      </SafeAreaView>
     );
   }
 }

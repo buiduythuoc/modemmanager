@@ -21,6 +21,7 @@ import ChangePasswordScreen from '../scenes/myPage/changePassword';
 // account
 import AccountListScreen from '../scenes/account/list';
 import AccountDetailDetailScreen from '../scenes/account/detail';
+import NotificationSettingScreen from '../scenes/account/notificationSetting';
 
 import {images, colors} from '../themes';
 import Icon from '../components/atoms/Icon';
@@ -39,6 +40,7 @@ const ListAccountNav = createStackNavigator(
   {
     AccountListScreen: {screen: AccountListScreen},
     AccountDetailDetailScreen: {screen: AccountDetailDetailScreen},
+    NotificationSettingScreen: {screen: NotificationSettingScreen},
     ListModemScreen: {screen: ListModemScreen},
     DeviceListScreen: {screen: DeviceListScreen},
     BlockListScreen: {screen: BlockListScreen},

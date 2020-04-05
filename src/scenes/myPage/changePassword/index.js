@@ -1,11 +1,11 @@
 import React from 'react';
-import {View, Alert} from 'react-native';
+import {View, Alert, SafeAreaView} from 'react-native';
 import {connect} from 'react-redux';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {images, colors} from '../../../themes';
 import styles from './styles';
 import Button from '../../../components/atoms/Button';
-import NavHeader from '../../../components/molecules/NavHeader';
+import NavBar from '../../../components/molecules/NavBar';
 import LabelInput from '../../../components/molecules/LabelInput';
 import {scaleSize} from '../../../themes/mixins';
 import MyPageActions from '../../../stores/myPageRedux';
@@ -85,8 +85,8 @@ class ChangePassword extends React.Component {
     const {isFetching, oldPassword, newPassword, confirmPassword} = this.state;
 
     return (
-      <View style={styles.container}>
-        <NavHeader
+      <SafeAreaView style={styles.container}>
+        <NavBar
           title="Edit Password"
           titleColor={colors.gray01}
           leftIcon={images.icBackBlack}
@@ -131,7 +131,7 @@ class ChangePassword extends React.Component {
           />
         </KeyboardAwareScrollView>
         <Loading show={isFetching} />
-      </View>
+      </SafeAreaView>
     );
   }
 }

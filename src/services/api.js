@@ -27,8 +27,8 @@ const create = () => {
   const login = (username, password) =>
     api.post('login.php', qs.stringify({username, password}));
 
-  const signup = (username, password, type) =>
-    api.post('register.php', qs.stringify({username, password, type}));
+  const signup = (username, password, type, avatar = '') =>
+    api.post('register.php', qs.stringify({username, password, type, avatar}));
 
   const getListModems = userId =>
     api.post('getlistmodem.php', qs.stringify({user_id: userId}));
@@ -112,6 +112,17 @@ const create = () => {
       }),
     );
 
+  const unblockDevice = (userId, modemId, deviceMac, deviceName) =>
+    api.post(
+      'unblockdevice.php',
+      qs.stringify({
+        user_id: userId,
+        modem_id: modemId,
+        device_mac: deviceMac,
+        device_name: deviceName,
+      }),
+    );
+
   const getBlockList = (userId, modemId) =>
     api.post(
       'getlistblockdevice.php',
@@ -122,13 +133,27 @@ const create = () => {
     );
 
   // timeline
-  const getListTimelines = (userId, publicIp) =>
+  const getListTimelines = (userId, listIp) =>
     api.post(
       'getlistpost.php',
-      qs.stringify({user_id: userId, modem_id: '', public_ip: publicIp}),
+      qs.stringify({user_id: userId, public_ip: listIp}),
     );
 
-  const addTimeline = (title, subTitle, userId, modemId, content) => {
+  const getListTimelinesByModemId = (userId, modemId) =>
+    api.post(
+      'getlistpostbymodem.php',
+      qs.stringify({user_id: userId, modem_id: modemId}),
+    );
+  const addTimeline = (
+    title,
+    subTitle,
+    userId,
+    modemId,
+    content,
+    imgMain,
+    img1,
+    img2,
+  ) => {
     const data = {
       title,
       sub_title: subTitle,
@@ -136,6 +161,16 @@ const create = () => {
       modem_id: modemId,
       content,
     };
+    if (imgMain) {
+      data.imageurl_main = imgMain;
+    }
+    if (img1) {
+      data.imageurl_sub1 = img1;
+    }
+    if (img2) {
+      data.imageurl_sub2 = img2;
+    }
+
     return api.post('createpost.php', qs.stringify(data));
   };
 
@@ -152,6 +187,9 @@ const create = () => {
     userId,
     modemId,
     content,
+    imgMain,
+    img1,
+    img2,
   ) => {
     const data = {
       post_id: timelineId,
@@ -160,6 +198,9 @@ const create = () => {
       // user_id: userId,
       // modem_id: modemId,
       content,
+      imageurl_main: imgMain,
+      imageurl_sub1: img1,
+      imageurl_sub2: img2,
     };
     return api.post('updatepost.php', qs.stringify(data));
   };
@@ -193,7 +234,7 @@ const create = () => {
   const getProfile = userId =>
     api.post('getprofile.php', qs.stringify({user_id: userId}));
 
-  const updateProfile = (userId, username, status, expireDate) =>
+  const updateProfile = (userId, username, status, expireDate, avatar) =>
     api.post(
       'updateprofile.php',
       qs.stringify({
@@ -201,6 +242,7 @@ const create = () => {
         username,
         status,
         expired_date: expireDate,
+        avatar,
       }),
     );
 
@@ -226,6 +268,19 @@ const create = () => {
 
   const getPublicIp = () => api.get('https://api.ipify.org/');
 
+  const getNotificationSetting = userId =>
+    api.post('getconfignoti.php', qs.stringify({user_id: userId}));
+
+  const updateNotificationSetting = (userId, noOfDevice, isActive) =>
+    api.post(
+      'updateconfignoti.php',
+      qs.stringify({
+        user_id: userId,
+        no_of_device: noOfDevice,
+        is_active: isActive,
+      }),
+    );
+
   return {
     login,
     signup,
@@ -237,8 +292,10 @@ const create = () => {
     editModem,
     blockDevice,
     getBlockList,
+    unblockDevice,
     // timeline
     getListTimelines,
+    getListTimelinesByModemId,
     addTimeline,
     deleteTimeline,
     getTimelineDetail,
@@ -253,6 +310,8 @@ const create = () => {
     getListAccounts,
     deleteAccount,
     getPublicIp,
+    getNotificationSetting,
+    updateNotificationSetting,
   };
 };
 

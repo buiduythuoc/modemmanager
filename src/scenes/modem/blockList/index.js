@@ -1,11 +1,16 @@
 import React from 'react';
-import {View, FlatList, Text, RefreshControl, Alert} from 'react-native';
+import {
+  FlatList,
+  Text,
+  RefreshControl,
+  Alert,
+  SafeAreaView,
+} from 'react-native';
 import {connect} from 'react-redux';
 import styles from './styles';
-import NavHeader from '../../../components/molecules/NavHeader';
+import NavBar from '../../../components/molecules/NavBar';
 import DeviceItem from '../../../components/organisms/DeviceItem';
 import {colors, images} from '../../../themes';
-import {scaleSize} from '../../../themes/mixins';
 import ModemActions from '../../../stores/modemRedux';
 import Loading from '../../../components/organisms/Loading';
 
@@ -44,6 +49,57 @@ class BlockList extends React.Component {
     this.fetchBlockDevices();
   };
 
+  handleOnClickUnblock = modemItem => {
+    const {modemId} = this.state;
+    Alert.alert(
+      'Warning',
+      'Do you want to unblock ' + modemItem.name,
+      [
+        {
+          text: 'OK',
+          onPress: () => {
+            this.setState({isFetching: true});
+            const {user, unblockDevice} = this.props;
+            const params = {
+              userId: user.user_id,
+              modemId: modemId,
+              deviceMac: modemItem.mac_address,
+              deviceName: modemItem.name,
+            };
+            unblockDevice(
+              params,
+              () => {
+                this.setState({isFetching: false, isRefreshing: false});
+                Alert.alert(
+                  'Success',
+                  modemItem.name + ' has been unblocked',
+                  [
+                    {
+                      text: 'OK',
+                      onPress: () => {
+                        this.fetchBlockDevices();
+                      },
+                    },
+                  ],
+                  {cancelable: false},
+                );
+              },
+              () => {
+                this.setState({isFetching: false, isRefreshing: false});
+              },
+            );
+          },
+        },
+        {
+          text: 'Cancel',
+          style: 'cancel',
+          onPress: () => {},
+        },
+      ],
+      {cancelable: false},
+    );
+  };
+
   fetchBlockDevices = () => {
     const {user} = this.props;
     const {modemId} = this.state;
@@ -69,8 +125,8 @@ class BlockList extends React.Component {
     const listBlockDevices =
       modem && modem.blockDevices ? modem.blockDevices : [];
     return (
-      <View style={styles.container}>
-        <NavHeader
+      <SafeAreaView style={styles.container}>
+        <NavBar
           title="Block List"
           titleColor={colors.gray01}
           leftIcon={images.icBackBlack}
@@ -85,7 +141,7 @@ class BlockList extends React.Component {
           renderItem={({item}) => (
             <DeviceItem
               data={item}
-              onClick={() => this.handleOnClickBlock(item)}
+              onClick={() => this.handleOnClickUnblock(item)}
               isLocked={true}
             />
           )}
@@ -100,7 +156,7 @@ class BlockList extends React.Component {
           }
         />
         <Loading show={isFetching} />
-      </View>
+      </SafeAreaView>
     );
   }
 }
@@ -113,6 +169,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   fetchBlockDevices: (params, onSuccess, onError) =>
     dispatch(ModemActions.deviceBlockListFetch(params, onSuccess, onError)),
+  unblockDevice: (params, onSuccess, onError) =>
+    dispatch(ModemActions.deviceUnblock(params, onSuccess, onError)),
 });
 
 export default connect(

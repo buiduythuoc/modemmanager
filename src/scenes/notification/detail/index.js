@@ -1,7 +1,7 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, SafeAreaView} from 'react-native';
 import styles from './styles';
-import NavHeader from '../../../components/molecules/NavHeader';
+import NavBar from '../../../components/molecules/NavBar';
 import {images} from '../../../themes';
 
 export default class NotificationDetail extends React.Component {
@@ -27,8 +27,8 @@ export default class NotificationDetail extends React.Component {
     const {title, description} = data;
     const time = data.created_at;
     return (
-      <View style={styles.container}>
-        <NavHeader
+      <SafeAreaView style={styles.container}>
+        <NavBar
           title=""
           leftIcon={images.icBackBlack}
           onLeftClick={this.handleOnClickBack}
@@ -38,7 +38,7 @@ export default class NotificationDetail extends React.Component {
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.description}>{description}</Text>
         </View>
-      </View>
+      </SafeAreaView>
     );
   }
 }

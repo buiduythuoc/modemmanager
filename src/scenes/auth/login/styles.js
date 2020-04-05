@@ -1,11 +1,12 @@
 import {StyleSheet} from 'react-native';
-import {colors} from '../../../themes';
+import {colors, metrics} from '../../../themes';
 import {scaleSize, scaleFont} from '../../../themes/mixins';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.primary,
+    paddingBottom: metrics.unsafeBottomHeight,
   },
   keyboardAwareScrollViewContent: {
     flexGrow: 1,

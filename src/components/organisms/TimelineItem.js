@@ -15,12 +15,16 @@ const TimelineItem = props => {
   const {data, onClick} = props;
   const {title} = data;
   const time = data.created_date;
+  const imageSrc = data.img_main
+    ? {uri: data.img_main}
+    : images.imgTimelineDefault;
 
   return (
     <TouchableOpacity onPress={() => (onClick ? onClick() : {})}>
       <ImageBackground
         style={styles.container}
-        source={images.imgTimelineDefault}>
+        source={imageSrc}
+        imageStyle={styles.image}>
         <Text style={styles.title}>{title}</Text>
         <View style={styles.line} />
         <View style={styles.timeContainer}>
@@ -55,6 +59,9 @@ const styles = StyleSheet.create({
     height: scaleSize(164),
     marginBottom: scaleSize(10),
     paddingHorizontal: scaleSize(17),
+  },
+  image: {
+    borderRadius: scaleSize(15),
   },
   title: {
     height: scaleSize(38),

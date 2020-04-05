@@ -13,6 +13,7 @@ const {Types, Creators} = createActions({
   providerFetch: ['params', 'onSuccess', 'onError'],
   providerSet: ['data'],
   deviceBlock: ['params', 'onSuccess', 'onError'],
+  deviceUnblock: ['params', 'onSuccess', 'onError'],
   deviceBlockListFetch: ['params', 'onSuccess', 'onError'],
   deviceBlockSet: ['modemId', 'blockDevices'],
 });
@@ -78,6 +79,10 @@ export const blockDevice = (state, action) => {
   return state;
 };
 
+export const unblockDevice = (state, action) => {
+  return state;
+};
+
 export const fetchBlockDevices = (state, action) => {
   return state;
 };
@@ -104,6 +109,8 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.DEVICE_SET]: setDeviceList,
   [Types.PROVIDER_FETCH]: fetchProviders,
   [Types.PROVIDER_SET]: setProviderList,
-  [Types.DEVICE_BLOCK_LIST_FETCH]: blockDevice,
+  [Types.DEVICE_BLOCK_LIST_FETCH]: fetchBlockDevices,
   [Types.DEVICE_BLOCK_SET]: setBlockDeviceList,
+  [Types.DEVICE_BLOCK]: blockDevice,
+  [Types.DEVICE_UNBLOCK]: unblockDevice,
 });

@@ -11,6 +11,8 @@ export function* login(action) {
 
   if (response.status === 200 && response.data.status === 1) {
     yield put(AuthActions.authSet(response.data));
+    // yield put(AuthActions.authSet({...response.data, user_id: 36}));
+
     if (onSuccess) {
       onSuccess();
     }

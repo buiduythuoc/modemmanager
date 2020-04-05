@@ -30,32 +30,52 @@ class Notification extends React.Component {
 
   fetchNotifications() {
     const {user} = this.props;
-    if (user.type !== 'admin') {
-      this.setState({
-        isFetching: false,
-        isRefreshing: false,
-      });
-      return;
-    }
 
-    const adminId = user.user_id;
-    const ref = 'admins/' + adminId + '/modems';
-    Firebase.database()
-      .ref(ref)
-      .on('value', snap => {
-        const listNotifications = [];
-        snap.forEach(modem => {
-          const notifications = modem.val().notifications;
-          for (let key in notifications) {
-            listNotifications.push(notifications[key]);
+    if (user.type === 'admin') {
+      const adminId = user.user_id;
+      const ref = 'admins/' + adminId + '/modems';
+      Firebase.database()
+        .ref(ref)
+        .on('value', snap => {
+          const listNotifications = [];
+          snap.forEach(modem => {
+            const notifications = modem.val().notifications;
+            for (let key in notifications) {
+              listNotifications.push(notifications[key]);
+            }
+          });
+          listNotifications.sort((a, b) => {
+            const date1 = new Date(a.created_at);
+            const date2 = new Date(b.created_at);
+            return date2 - date1;
+          });
+          this.setState({
+            listNotifications,
+            isFetching: false,
+            isRefreshing: false,
+          });
+        });
+    } else {
+      const ref = 'user/notifications';
+      Firebase.database()
+        .ref(ref)
+        .on('value', snap => {
+          const listNotifications = [];
+          for (let key in snap.val()) {
+            listNotifications.push(snap.val()[key]);
           }
+          listNotifications.sort((a, b) => {
+            const date1 = new Date(a.created_at);
+            const date2 = new Date(b.created_at);
+            return date2 - date1;
+          });
+          this.setState({
+            listNotifications,
+            isFetching: false,
+            isRefreshing: false,
+          });
         });
-        this.setState({
-          listNotifications,
-          isFetching: false,
-          isRefreshing: false,
-        });
-      });
+    }
   }
 
   handleOnRefresh = () => {
@@ -79,6 +99,7 @@ class Notification extends React.Component {
         />
         <FlatList
           style={styles.flatList}
+          contentContainerStyle={styles.flatListContainer}
           data={listNotifications}
           renderItem={({item}) => (
             <NotificationItem

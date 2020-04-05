@@ -82,6 +82,7 @@ const styles = StyleSheet.create({
   dropdownText: {
     color: colors.white,
     fontSize: scaleFont(12),
+    paddingVertical: scaleSize(10),
   },
   dropdownModal: {
     width: scaleSize(150),

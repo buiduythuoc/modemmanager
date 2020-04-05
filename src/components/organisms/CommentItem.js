@@ -6,7 +6,9 @@ import {colors, images} from '../../themes';
 
 const CommentItem = props => {
   const {data} = props;
-  const avatar = images.imgNotificationAvatarDefault;
+  const avatar = data.avatar
+    ? {uri: data.avatar}
+    : images.imgNotificationAvatarDefault;
   const username = data.username ? data.username : 'John Smith';
   const time = data.created_date;
   const comment = data.comment;

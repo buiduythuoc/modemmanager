@@ -12,7 +12,7 @@ export function* fetchMyProfile(action) {
   if (response.status === 200 && response.data.status === 1) {
     yield put(AuthActions.authSet(response.data.data));
     if (onSuccess) {
-      onSuccess();
+      onSuccess(response.data.data);
     }
   } else {
     const errorMessage = response.data.message
@@ -27,7 +27,7 @@ export function* fetchMyProfile(action) {
 
 export function* updateMyProfile(action) {
   const {params, onSuccess, onError} = action;
-  const {userId, username, status, expireDate} = params;
+  const {userId, username, status, expireDate, avatar} = params;
   // make the call to the api
   const response = yield call(
     api.create().updateProfile,
@@ -35,6 +35,7 @@ export function* updateMyProfile(action) {
     username,
     status,
     expireDate,
+    avatar,
   );
 
   if (response.status === 200 && response.data.status === 1) {

@@ -25,7 +25,11 @@ class MyPage extends React.Component {
       isShowDatePicker: false,
       username: '',
       expiredAt: '',
-      avatarSource: images.imgAvatarDefault,
+      avatarSource:
+        props.user && props.user.image_url
+          ? {uri: props.user.image_url}
+          : images.imgAvatarDefault,
+      avatarBase64: '',
     };
   }
 
@@ -34,18 +38,18 @@ class MyPage extends React.Component {
   };
 
   componentDidMount() {
+    const {avatarSource} = this.state;
     const {fetchProfile, user} = this.props;
     fetchProfile(
       user.user_id,
-      () => {
-        setTimeout(
-          () =>
-            this.setState({
-              isFetching: false,
-              username: this.props.user.user_name,
-            }),
-          1000,
-        );
+      responseData => {
+        this.setState({
+          isFetching: false,
+          username: responseData.user_name,
+          avatarSource: responseData.image_url
+            ? {uri: responseData.image_url}
+            : avatarSource,
+        });
       },
       () => {
         this.setState({isFetching: false});
@@ -67,7 +71,6 @@ class MyPage extends React.Component {
   handleOnClickSelectAvatar = () => {
     const options = {
       title: 'Select Avatar',
-      // customButtons: [{name: 'fb', title: 'Choose Photo from Facebook'}],
       storageOptions: {
         skipBackup: true,
         path: 'images',
@@ -85,19 +88,16 @@ class MyPage extends React.Component {
         console.log('User tapped custom button: ', response.customButton);
       } else {
         const source = {uri: response.uri};
-
-        // You can also display the image using data:
-        // const source = { uri: 'data:image/jpeg;base64,' + response.data };
-
         this.setState({
           avatarSource: source,
+          avatarBase64: response.data,
         });
       }
     });
   };
 
   handleOnClickUpdateProfile = () => {
-    const {username, expiredAt} = this.state;
+    const {username, expiredAt, avatarBase64} = this.state;
     const {updateProfile, user} = this.props;
     this.setState({isFetching: true});
     const params = {
@@ -105,6 +105,7 @@ class MyPage extends React.Component {
       username,
       status: 1,
       expiredAt,
+      avatar: avatarBase64,
     };
     updateProfile(
       params,
@@ -233,7 +234,4 @@ const mapDispatchToProps = dispatch => ({
   logout: () => dispatch(AuthActions.authLogout()),
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(MyPage);
+export default connect(mapStateToProps, mapDispatchToProps)(MyPage);

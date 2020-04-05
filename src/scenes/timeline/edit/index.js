@@ -1,12 +1,13 @@
 import React from 'react';
-import {View, Text, Alert} from 'react-native';
+import {View, Text, Alert, SafeAreaView} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {connect} from 'react-redux';
 import RNPickerSelect from 'react-native-picker-select';
+import RNImagePicker from 'react-native-image-picker';
 import {images, colors} from '../../../themes';
 import styles from './styles';
 import Button from '../../../components/atoms/Button';
-import NavHeader from '../../../components/molecules/NavHeader';
+import NavBar from '../../../components/molecules/NavBar';
 import LabelInput from '../../../components/molecules/LabelInput';
 import ImagePicker from '../../../components/molecules/ImagePicker';
 import {scaleSize} from '../../../themes/mixins';
@@ -23,10 +24,15 @@ class EditTimeline extends React.Component {
     super(props);
     const {navigation, listTimeline} = props;
     const postId = navigation.getParam('postId', 0);
+    const timelineData = listTimeline.find((item) => item.id === postId);
+
     this.state = {
       modemItems: [],
       isLoading: false,
-      timelineData: listTimeline.find(item => item.id === postId),
+      timelineData,
+      imageSource1: {uri: timelineData.img_main, base64: ''},
+      imageSource2: {uri: timelineData.img_sub1, base64: ''},
+      imageSource3: {uri: timelineData.img_sub2, base64: ''},
     };
   }
 
@@ -35,7 +41,7 @@ class EditTimeline extends React.Component {
     if (listModems.length === 0) {
       this.fetchModems();
     } else {
-      const modemItems = listModems.map(item => {
+      const modemItems = listModems.map((item) => {
         return {label: item.modem_name, value: item.id};
       });
       this.setState({modemItems});
@@ -49,7 +55,7 @@ class EditTimeline extends React.Component {
     this.props.fetchModems(
       userId,
       () => {
-        const modemItems = listModems.map(item => {
+        const modemItems = listModems.map((item) => {
           return {label: item.modem_name, value: item.id};
         });
         this.setState({isLoading: false, modemItems});
@@ -67,7 +73,7 @@ class EditTimeline extends React.Component {
 
   handleOnClickUpdate = () => {
     const {editTimeline, fetchTimelines, navigation, user} = this.props;
-    const {timelineData} = this.state;
+    const {timelineData, imageSource1, imageSource2, imageSource3} = this.state;
     const params = {
       timelineId: timelineData.id,
       modemId: 1,
@@ -75,6 +81,9 @@ class EditTimeline extends React.Component {
       subTitle: timelineData.sub_title,
       content: timelineData.content,
       userId: user.user_id,
+      imgMain: imageSource1.base64,
+      img1: imageSource2.base64,
+      img2: imageSource3.base64,
     };
 
     this.setState({isLoading: true});
@@ -97,11 +106,43 @@ class EditTimeline extends React.Component {
     );
   };
 
+  handleOnSelectImage = (setState) => () => {
+    const options = {
+      title: 'Select Image',
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+    };
+
+    RNImagePicker.showImagePicker(options, (response) => {
+      console.log('Response = ', response);
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      } else {
+        const source = {uri: response.uri, base64: response.data};
+        setState(source);
+        console.log(setState);
+      }
+    });
+  };
+
   render() {
-    const {modemItems, timelineData, isLoading} = this.state;
+    const {
+      imageSource1,
+      imageSource2,
+      imageSource3,
+      timelineData,
+      isLoading,
+    } = this.state;
+
     return (
-      <View style={styles.container}>
-        <NavHeader
+      <SafeAreaView style={styles.container}>
+        <NavBar
           title="Edit Post"
           titleColor={colors.gray01}
           leftIcon={images.icBackBlack}
@@ -111,11 +152,36 @@ class EditTimeline extends React.Component {
           <KeyboardAwareScrollView contentContainerStyle={styles.scrollView}>
             <Text style={styles.imageText}>Picture</Text>
             <View style={styles.imageContainer}>
-              <ImagePicker style={styles.imagePicker} />
-              <ImagePicker style={styles.imagePicker} />
-              <ImagePicker style={styles.imagePicker} />
-              <ImagePicker style={styles.imagePicker} />
-              <ImagePicker />
+              <ImagePicker
+                style={styles.imagePicker}
+                source={imageSource1.uri ? {uri: imageSource1.uri} : null}
+                onSelect={this.handleOnSelectImage((source) =>
+                  this.setState({imageSource1: source}),
+                )}
+                onClickDelete={() =>
+                  this.setState({imageSource1: {uri: null, base64: 'delete'}})
+                }
+              />
+              <ImagePicker
+                style={styles.imagePicker}
+                source={imageSource2.uri ? {uri: imageSource2.uri} : null}
+                onSelect={this.handleOnSelectImage((source) =>
+                  this.setState({imageSource2: source}),
+                )}
+                onClickDelete={() =>
+                  this.setState({imageSource2: {uri: null, base64: 'delete'}})
+                }
+              />
+              <ImagePicker
+                style={styles.imagePicker}
+                source={imageSource3.uri ? {uri: imageSource3.uri} : null}
+                onSelect={this.handleOnSelectImage((source) =>
+                  this.setState({imageSource3: source}),
+                )}
+                onClickDelete={() =>
+                  this.setState({imageSource3: {uri: null, base64: 'delete'}})
+                }
+              />
             </View>
             <Text style={styles.label}>Modem Name</Text>
             <LabelInput
@@ -128,7 +194,7 @@ class EditTimeline extends React.Component {
               placeholder="Write your own ......."
               placeholderTextColor={colors.gray05}
               value={timelineData.title}
-              onChangeText={text =>
+              onChangeText={(text) =>
                 this.setState({timelineData: {...timelineData, title: text}})
               }
             />
@@ -143,7 +209,7 @@ class EditTimeline extends React.Component {
               placeholderTextColor={colors.gray05}
               value={timelineData.sub_title}
               multiline={true}
-              onChangeText={text =>
+              onChangeText={(text) =>
                 this.setState({
                   timelineData: {...timelineData, sub_title: text},
                 })
@@ -160,7 +226,7 @@ class EditTimeline extends React.Component {
               placeholderTextColor={colors.gray05}
               value={timelineData.content}
               multiline={true}
-              onChangeText={text =>
+              onChangeText={(text) =>
                 this.setState({timelineData: {...timelineData, content: text}})
               }
             />
@@ -173,18 +239,18 @@ class EditTimeline extends React.Component {
           </KeyboardAwareScrollView>
         </View>
         <Loading isLoading={isLoading} />
-      </View>
+      </SafeAreaView>
     );
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   listTimeline: state.timeline.list,
   listModems: state.modem.list,
   user: state.auth.user,
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   editTimeline: (params, onSuccess, onError) =>
     dispatch(TimelineActions.timelineEdit(params, onSuccess, onError)),
   fetchModems: (userId, onSuccess, onError) =>
@@ -193,7 +259,4 @@ const mapDispatchToProps = dispatch => ({
     dispatch(TimelineActions.timelineFetch({userId}, onSuccess, onError)),
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(EditTimeline);
+export default connect(mapStateToProps, mapDispatchToProps)(EditTimeline);

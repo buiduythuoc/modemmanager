@@ -70,7 +70,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: scaleFont(14),
     color: colors.black,
-    lineHeight: scaleSize(19),
   },
   timeContainer: {
     flexDirection: 'row',

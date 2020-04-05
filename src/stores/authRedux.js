@@ -39,7 +39,6 @@ export const register = (state, action) => {
 
 export const setAuth = (state, action) => {
   const {data} = action;
-  console.log('setAuth', action);
   return {...state, user: data};
 };
 

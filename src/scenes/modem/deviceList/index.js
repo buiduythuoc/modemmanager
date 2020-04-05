@@ -1,8 +1,15 @@
 import React from 'react';
-import {View, FlatList, Text, RefreshControl, Alert} from 'react-native';
+import {
+  View,
+  FlatList,
+  Text,
+  RefreshControl,
+  Alert,
+  SafeAreaView,
+} from 'react-native';
 import {connect} from 'react-redux';
 import styles from './styles';
-import NavHeader from '../../../components/molecules/NavHeader';
+import NavBar from '../../../components/molecules/NavBar';
 import DeviceItem from '../../../components/organisms/DeviceItem';
 import {colors, images} from '../../../themes';
 import {scaleSize} from '../../../themes/mixins';
@@ -36,7 +43,9 @@ class DeviceList extends React.Component {
     const {user} = this.props;
     const adminId =
       this.state.adminId === 0 ? user.user_id : this.state.adminId;
-    const ref = 'admins/' + adminId + '/modems/' + modemData.id + '/devices';
+    // const ref = 'admins/' + adminId + '/modems/' + modemData.id + '/devices';
+    const ref = 'admins/' + adminId + '/modems/' + '18' + '/devices';
+
     Firebase.database()
       .ref(ref)
       .on('value', snap => {
@@ -111,8 +120,8 @@ class DeviceList extends React.Component {
   render() {
     const {isFetching, isRefreshing, deviceList} = this.state;
     return (
-      <View style={styles.container}>
-        <NavHeader
+      <SafeAreaView style={styles.container}>
+        <NavBar
           title="Device Management"
           titleColor={colors.gray01}
           leftIcon={images.icBackBlack}
@@ -143,7 +152,7 @@ class DeviceList extends React.Component {
           }
         />
         <Loading show={isFetching} />
-      </View>
+      </SafeAreaView>
     );
   }
 }
@@ -153,8 +162,6 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchDevices: (params, onSuccess, onError) =>
-    dispatch(ModemActions.deviceFetch(params, onSuccess, onError)),
   blockDevice: (params, onSuccess, onError) =>
     dispatch(ModemActions.deviceBlock(params, onSuccess, onError)),
 });

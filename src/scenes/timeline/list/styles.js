@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {colors} from '../../../themes';
+import {colors, metrics} from '../../../themes';
 import {scaleSize} from '../../../themes/mixins';
 
 const styles = StyleSheet.create({
@@ -9,8 +9,29 @@ const styles = StyleSheet.create({
   },
   flatList: {
     flex: 1,
-    marginHorizontal: scaleSize(10),
+  },
+  flatListContent: {
+    paddingHorizontal: scaleSize(20),
+    paddingTop: scaleSize(10),
+  },
+  modemPickerContainer: {
+    alignItems: 'flex-end',
     marginTop: scaleSize(10),
+    marginRight: scaleSize(20),
+  },
+  modemPicker: {
+    flexDirection: 'row',
+    width: scaleSize(150),
+    height: scaleSize(30),
+    borderColor: colors.gray04,
+    borderWidth: 1,
+    borderRadius: scaleSize(5),
+    alignItems: 'center',
+    paddingHorizontal: scaleSize(4),
+  },
+  pickerSelect: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

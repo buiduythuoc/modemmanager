@@ -20,6 +20,7 @@ class AccountDetail extends React.Component {
       username: '',
       expiredAt: '',
       userPass: '',
+      avatar: images.imgAvatarDefault,
       userId: navigation.getParam('userId', 0),
     };
   }
@@ -38,6 +39,9 @@ class AccountDetail extends React.Component {
           isFetching: false,
           username: profileData.user_name,
           userPass: profileData.user_pass,
+          avatar: profileData.image_url
+            ? {uri: profileData.image_url}
+            : images.imgAvatarDefault,
         });
       },
       () => {
@@ -124,7 +128,7 @@ class AccountDetail extends React.Component {
   };
 
   render() {
-    const {isFetching, username, userPass, expiredAt} = this.state;
+    const {isFetching, username, userPass, expiredAt, avatar} = this.state;
     return (
       <View style={styles.container}>
         <TabHeader
@@ -134,11 +138,7 @@ class AccountDetail extends React.Component {
           onLeftClick={this.handelOnClickBack}
         />
         <View style={styles.content}>
-          <Image
-            style={styles.avatar}
-            resizeMode="cover"
-            source={images.imgAvatarDefault}
-          />
+          <Image style={styles.avatar} resizeMode="cover" source={avatar} />
           <LabelInput
             style={styles.userNameInput}
             labelStyle={styles.labelInput}

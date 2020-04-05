@@ -45,6 +45,11 @@ class AccountList extends React.Component {
     navigation.navigate('ListModemScreen', {adminId: account.id});
   };
 
+  handleOnClickSettingNotification = () => {
+    const {navigation} = this.props;
+    navigation.navigate('NotificationSettingScreen');
+  };
+
   render() {
     const {isFetching} = this.state;
     const {accounts} = this.props;
@@ -55,6 +60,7 @@ class AccountList extends React.Component {
           title={'List Accounts'}
           height={scaleSize(100)}
           rightIcon={images.icSetting}
+          onRightClick={this.handleOnClickSettingNotification}
         />
         <Text style={styles.accountCount}>{accounts.length + ' Accounts'}</Text>
         <FlatList

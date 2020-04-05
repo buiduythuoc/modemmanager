@@ -1,10 +1,18 @@
 import React from 'react';
-import {View, Text, TouchableOpacity, FlatList, Alert} from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  FlatList,
+  Alert,
+  SafeAreaView,
+  Image,
+} from 'react-native';
 import {connect} from 'react-redux';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import styles from './styles';
-import NavHeader from '../../../components/molecules/NavHeader';
-import ImageSlider from '../../../components/organisms/ImageSlider';
+import NavBar from '../../../components/molecules/NavBar';
+import ImageSlider from 'react-native-image-slider';
 import {colors, images} from '../../../themes';
 import TimelineActions from '../../../stores/timelineRedux';
 import Loading from '../../../components/organisms/Loading';
@@ -164,6 +172,21 @@ class TimelineDetail extends React.Component {
     );
   };
 
+  getImages = (timelineData) => {
+    const sliderImages = [];
+    if (timelineData.img_main) {
+      sliderImages.push(timelineData.img_main);
+    }
+    if (timelineData.img_sub1) {
+      sliderImages.push(timelineData.img_sub1);
+    }
+    if (timelineData.img_sub2) {
+      sliderImages.push(timelineData.img_sub2);
+    }
+
+    return sliderImages;
+  };
+
   renderActionPost = () => {
     const {user} = this.props;
     if (user.type === 'admin' || user.type === 'root') {
@@ -172,21 +195,11 @@ class TimelineDetail extends React.Component {
           <TouchableOpacity
             style={styles.editButton}
             onPress={this.handleOnClickEdit}>
-            {/* <Icon
-              width={scaleSize(15)}
-              height={scaleSize(15)}
-              source={images.icEditBlue}
-            /> */}
             <Text style={styles.editText}>Edit</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.deleteButton}
             onPress={this.handleOnClickDelete}>
-            {/* <Icon
-              width={scaleSize(15)}
-              height={scaleSize(15)}
-              source={images.icDeleteRed}
-            /> */}
             <Text style={styles.deleteText}>Delete</Text>
           </TouchableOpacity>
         </View>
@@ -198,24 +211,37 @@ class TimelineDetail extends React.Component {
   render() {
     const {isLoading, comment, postId} = this.state;
     const {listTimeline} = this.props;
-    const timelineData = listTimeline.find(item => item.id === postId);
-    const comments = timelineData ? timelineData.comments : [];
-    const isShowSendButton = comment.trim() !== '' ? true : false;
-    const activeOpacity = comment.trim() !== '' ? 0.4 : 1;
+    const timelineData = listTimeline.find((item) => item.id === postId);
     if (!timelineData) {
       return null;
     }
+    const sliderImages = this.getImages(timelineData);
+    const comments = timelineData.comments;
+    const isShowSendButton = comment.trim() !== '' ? true : false;
+    const activeOpacity = comment.trim() !== '' ? 0.4 : 1;
 
     return (
-      <View style={styles.container}>
-        <NavHeader
+      <SafeAreaView style={styles.container}>
+        <NavBar
+          style={styles.navBar}
           title="Post Detail"
           titleColor={colors.gray01}
           leftIcon={images.icBackBlack}
           onLeftClick={this.handleOnClickBack}
         />
-        {/* <ImageSlider /> */}
         <KeyboardAwareScrollView style={styles.content}>
+          {sliderImages.length > 0 && (
+            <ImageSlider
+              images={sliderImages}
+              customSlide={({index, item, style, width}) => (
+                <Image
+                  source={{uri: item}}
+                  style={styles.slider}
+                  key={index + ''}
+                />
+              )}
+            />
+          )}
           <Text style={styles.time}>{timelineData.created_date}</Text>
           <Text style={styles.title}>{timelineData.title}</Text>
           <Text style={styles.subTitle}>{timelineData.sub_title}</Text>
@@ -226,7 +252,7 @@ class TimelineDetail extends React.Component {
               style={styles.input}
               placeholder="Write your own ......."
               value={comment}
-              onChangeText={text => this.setState({comment: text})}
+              onChangeText={(text) => this.setState({comment: text})}
             />
             {isShowSendButton && (
               <TouchableOpacity
@@ -245,21 +271,21 @@ class TimelineDetail extends React.Component {
             style={styles.flatList}
             data={comments}
             renderItem={({item, index}) => <CommentItem data={item} />}
-            keyExtractor={item => item.id + ''}
+            keyExtractor={(item) => item.id + ''}
           />
         </KeyboardAwareScrollView>
         <Loading isLoading={isLoading} />
-      </View>
+      </SafeAreaView>
     );
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   listTimeline: state.timeline.list,
   user: state.auth.user,
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   fetchTimelineDetail: (params, onSuccess, onError) =>
     dispatch(TimelineActions.timelineDetail(params, onSuccess, onError)),
   fetchTimeline: (params, onSuccess, onError) =>
@@ -272,7 +298,4 @@ const mapDispatchToProps = dispatch => ({
     dispatch(TimelineActions.timelineDelete(params, onSuccess, onError)),
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(TimelineDetail);
+export default connect(mapStateToProps, mapDispatchToProps)(TimelineDetail);

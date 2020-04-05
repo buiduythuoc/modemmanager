@@ -1,11 +1,21 @@
 import {put, call} from 'redux-saga/effects';
 import {Alert} from 'react-native';
 import TimelineActions from '../stores/timelineRedux';
+import IPActions from '../stores/ipRedux';
 import api from '../services/api';
 
 export function* addTimeline(action) {
   const {params, onSuccess, onError} = action;
-  const {title, subTitle, userId, modemId, content} = params;
+  const {
+    title,
+    subTitle,
+    userId,
+    modemId,
+    content,
+    imgMain,
+    img1,
+    img2,
+  } = params;
   // make the call to the api
   const response = yield call(
     api.create().addTimeline,
@@ -14,6 +24,9 @@ export function* addTimeline(action) {
     userId,
     modemId,
     content,
+    imgMain,
+    img1,
+    img2,
   );
 
   if (response.status === 200 && response.data.status === 1) {
@@ -29,14 +42,38 @@ export function* addTimeline(action) {
 
 export function* fetchTimelines(action) {
   const {params, onSuccess, onError} = action;
-  const {userId, role} = params;
+  const {userId, role, listIp} = params;
   // make the call to the api
-  let publicIp = '';
   if (role === 'guest') {
     const publicIpResponse = yield call(api.create().getPublicIp);
-    publicIp = publicIpResponse.data;
+    const publicIp = publicIpResponse.data;
+    yield put(IPActions.ipAdd(publicIp));
   }
-  const response = yield call(api.create().getListTimelines, userId, publicIp);
+  console.log(listIp);
+  const response = yield call(api.create().getListTimelines, userId, listIp);
+
+  if (response.status === 200 && response.data.status === 1) {
+    const listTimelines = response.data.data ? response.data.data : [];
+    yield put(TimelineActions.timelineSet(listTimelines));
+    if (onSuccess) {
+      onSuccess();
+    }
+  } else {
+    if (onError) {
+      onError();
+    }
+  }
+}
+
+export function* fetchTimelinesByModemId(action) {
+  const {params, onSuccess, onError} = action;
+  const {userId, modemId} = params;
+  // make the call to the api
+  const response = yield call(
+    api.create().getListTimelinesByModemId,
+    userId,
+    modemId,
+  );
 
   if (response.status === 200 && response.data.status === 1) {
     const listTimelines = response.data.data ? response.data.data : [];
@@ -91,7 +128,17 @@ export function* fetchTimelineDetail(action) {
 
 export function* editTimeline(action) {
   const {params, onSuccess, onError} = action;
-  const {timelineId, title, subTitle, userId, modemId, content} = params;
+  const {
+    timelineId,
+    title,
+    subTitle,
+    userId,
+    modemId,
+    content,
+    imgMain,
+    img1,
+    img2,
+  } = params;
   // make the call to the api
   const response = yield call(
     api.create().editTimeline,
@@ -101,6 +148,9 @@ export function* editTimeline(action) {
     userId,
     modemId,
     content,
+    imgMain,
+    img1,
+    img2,
   );
 
   if (response.status === 200 && response.data.status === 1) {

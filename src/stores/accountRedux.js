@@ -10,6 +10,8 @@ const {Types, Creators} = createActions({
   accountUpdateProfile: ['params', 'onSuccess', 'onError'],
   accountSetProfile: ['userId', 'profile'],
   accountDelete: ['params', 'onSuccess', 'onError'],
+  accountFetchNotificationSetting: ['params', 'onSuccess', 'onError'],
+  accountUpdateNotificationSetting: ['params', 'onSuccess', 'onError'],
 });
 
 export const AccountTypes = Types;
@@ -59,6 +61,14 @@ export const setProfile = (state, action) => {
   return {...state, list: accounts};
 };
 
+export const fetchNotificationSetting = (state, action) => {
+  return state;
+};
+
+export const updateNotificationSetting = (state, action) => {
+  return state;
+};
+
 /* ------------- Hookup Reducers To Types ------------- */
 
 export const reducer = createReducer(INITIAL_STATE, {
@@ -68,4 +78,6 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.ACCOUNT_FETCH_PROFILE]: fetchProfile,
   [Types.ACCOUNT_UPDATE_PROFILE]: updateProfile,
   [Types.ACCOUNT_SET_PROFILE]: setProfile,
+  [Types.ACCOUNT_FETCH_NOTIFICATION_SETTING]: fetchNotificationSetting,
+  [Types.ACCOUNT_UPDATE_NOTIFICATION_SETTING]: updateNotificationSetting,
 });

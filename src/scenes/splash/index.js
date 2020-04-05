@@ -1,20 +1,8 @@
 import React from 'react';
 import {View} from 'react-native';
 import {connect} from 'react-redux';
-import * as Animatable from 'react-native-animatable';
-import Icon from '../../components/atoms/Icon';
+import RNSplashScreen from 'react-native-splash-screen';
 import styles from './styles';
-import {scaleSize} from '../../themes/mixins';
-import {images} from '../../themes';
-
-const fadeIn = {
-  from: {
-    opacity: 0,
-  },
-  to: {
-    opacity: 1,
-  },
-};
 
 class SplashScreen extends React.Component {
   componentDidMount() {
@@ -23,24 +11,14 @@ class SplashScreen extends React.Component {
     if (user && user.user_id !== 0) {
       screenName = 'TabBar';
     }
+    RNSplashScreen.hide();
     setTimeout(() => {
       navigation.navigate(screenName);
-    }, 2000);
+    }, 500);
   }
 
   render() {
-    return (
-      <View style={styles.container}>
-        <Animatable.View animation={fadeIn} duration={2000}>
-          <Icon
-            width={scaleSize(100)}
-            height={scaleSize(100)}
-            source={images.icApp}
-            style={styles.appIcon}
-          />
-        </Animatable.View>
-      </View>
-    );
+    return <View style={styles.container} />;
   }
 }
 

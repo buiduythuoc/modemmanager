@@ -1,9 +1,9 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, SafeAreaView} from 'react-native';
 import {images, colors} from '../../../themes';
 import styles from './styles';
 import Button from '../../../components/atoms/Button';
-import NavHeader from '../../../components/molecules/NavHeader';
+import NavBar from '../../../components/molecules/NavBar';
 import LabelInput from '../../../components/molecules/LabelInput';
 import {scaleSize} from '../../../themes/mixins';
 
@@ -15,8 +15,8 @@ export default class ForgotPassword extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <NavHeader
+      <SafeAreaView style={styles.container}>
+        <NavBar
           title="Forgot password"
           titleColor={colors.gray01}
           leftIcon={images.icBackBlack}
@@ -40,7 +40,7 @@ export default class ForgotPassword extends React.Component {
             title="SEND"
           />
         </View>
-      </View>
+      </SafeAreaView>
     );
   }
 }

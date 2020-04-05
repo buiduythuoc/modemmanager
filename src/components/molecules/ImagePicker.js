@@ -31,8 +31,8 @@ const ImagePicker = props => {
   return (
     <TouchableOpacity style={containerStyle} onPress={onSelect}>
       <Icon
-        width={scaleSize(16)}
-        height={scaleSize(12)}
+        width={scaleSize(32)}
+        height={scaleSize(24)}
         source={images.icCamera}
       />
     </TouchableOpacity>

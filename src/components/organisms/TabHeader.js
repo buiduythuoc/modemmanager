@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {View, ImageBackground, StyleSheet} from 'react-native';
-import NavHeader from '../molecules/NavHeader';
+import NavBar from '../molecules/NavBar';
 import {scaleSize} from '../../themes/mixins';
-import {colors} from '../../themes';
+import {colors, metrics} from '../../themes';
 
 const TabHeader = props => {
   const {
@@ -23,9 +23,10 @@ const TabHeader = props => {
         resizeMode="cover"
         source={source}
         style={{...styles.container, height: height}}>
-        <NavHeader
+        <NavBar
+          style={styles.navBar}
           title={title}
-          renderLeft={() => <View style={styles.leftNavHeader} />}
+          renderLeft={() => <View style={styles.leftNavBar} />}
           rightIcon={rightIcon}
           rightIconWidth={rightIconWidth}
           rightIconHeight={rightIconHeight}
@@ -37,7 +38,8 @@ const TabHeader = props => {
   }
   return (
     <View style={{...styles.container, height: height, ...style}}>
-      <NavHeader
+      <NavBar
+        style={styles.navBar}
         title={title}
         titleColor={colors.gray01}
         rightIcon={rightIcon}
@@ -78,7 +80,10 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.primary,
   },
-  leftNavHeader: {
+  navBar: {
+    marginTop: metrics.statusBarHeight,
+  },
+  leftNavBar: {
     width: scaleSize(66),
   },
 });

@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {colors} from '../../../themes';
+import {colors, metrics} from '../../../themes';
 import {scaleSize, scaleFont} from '../../../themes/mixins';
 
 const styles = StyleSheet.create({
@@ -9,13 +9,17 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: scaleSize(20),
-    paddingTop: 20,
     flex: 1,
     borderTopLeftRadius: scaleSize(25),
     borderTopRightRadius: scaleSize(25),
     backgroundColor: colors.white,
   },
+  slider: {
+    width: metrics.screenWidth - 2 * scaleSize(20),
+    height: metrics.screenWidth - 2 * scaleSize(20),
+  },
   time: {
+    marginTop: scaleSize(10),
     fontSize: scaleFont(10),
     lineHeight: scaleSize(14),
     color: colors.gray02,
@@ -49,9 +53,9 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    paddingHorizontal: scaleSize(12),
-    paddingTop: scaleSize(12),
-    paddingBottom: scaleSize(12),
+    paddingHorizontal: 12,
+    paddingTop: 12,
+    paddingBottom: 12,
     borderRadius: scaleSize(30),
     borderWidth: 1,
     borderColor: colors.gray04,

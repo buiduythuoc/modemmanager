@@ -1,20 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {TouchableOpacity, View, Text, StyleSheet} from 'react-native';
+import {TouchableOpacity, View, Text, StyleSheet, Image} from 'react-native';
 import {scaleSize, scaleFont} from '../../themes/mixins';
 import {colors, images} from '../../themes';
-import Icon from '../atoms/Icon';
 
 const AccountItem = props => {
   const {data, onClickModemManagement, onClickAccountDetail} = props;
-  const {avatar, username} = data;
+  const {username} = data;
+  const avatar = data.url ? {uri: data.url} : images.imgAvatarDefault;
 
   return (
     <View style={styles.container}>
-      <Icon
-        style={styles.avatar}
-        source={avatar ? avatar : images.imgNotificationAvatarDefault}
-      />
+      <Image style={styles.avatar} source={avatar} />
       <Text style={styles.username} ellipsizeMode="tail">
         {username}
       </Text>

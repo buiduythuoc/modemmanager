@@ -6,7 +6,7 @@ import {images, colors} from '../../../themes';
 import styles from './styles';
 import Button from '../../../components/atoms/Button';
 import LabelInput from '../../../components/molecules/LabelInput';
-import NavHeader from '../../../components/molecules/NavHeader';
+import NavBar from '../../../components/molecules/NavBar';
 import Dropdown from '../../../components/molecules/Dropdown';
 import {scaleSize} from '../../../themes/mixins';
 import AuthActions from '../../../stores/authRedux';
@@ -125,8 +125,8 @@ class SignupScreen extends React.Component {
           />
           <Text style={styles.copyrightText}>Copyright ABC@ </Text>
         </View>
-        <NavHeader
-          style={styles.navHeader}
+        <NavBar
+          style={styles.navBar}
           leftIcon={images.icBackWhite}
           onLeftClick={this.handleClickBack}
         />

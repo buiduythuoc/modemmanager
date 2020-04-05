@@ -4,7 +4,7 @@ import {takeLatest, all} from 'redux-saga/effects';
 
 import {ModemTypes} from '../stores/modemRedux';
 import {AuthTypes} from '../stores/authRedux';
-import {TimelineTypes} from '../stores/timelineRedux';
+import {TimelineTypes, fetchTimelineByModemId} from '../stores/timelineRedux';
 import {MyPageTypes} from '../stores/myPageRedux';
 import {AccountTypes} from '../stores/accountRedux';
 
@@ -14,9 +14,9 @@ import {
   addModem,
   fetchModems,
   editModem,
-  fetchDevices,
   fetchProviders,
   blockDevice,
+  unblockDevice,
   fetchBlockDevices,
 } from './modemSaga';
 import {login, signup} from './authSaga';
@@ -28,6 +28,7 @@ import {
   postComment,
   fetchComments,
   deleteTimeline,
+  fetchTimelinesByModemId,
 } from './timelineSaga';
 import {fetchMyProfile, updateMyProfile, changePassword} from './myPageSaga';
 import {
@@ -35,6 +36,8 @@ import {
   deleteAccount,
   fetchProfile,
   updateProfile,
+  fetchNotificationSetting,
+  updateNotificationSetting,
 } from './accountSaga';
 
 /* ------------- API ------------- */
@@ -53,14 +56,18 @@ export default function* root() {
     takeLatest(AuthTypes.AUTH_REGISTER, signup),
     // modem
     takeLatest(ModemTypes.MODEM_FETCH, fetchModems),
-    takeLatest(ModemTypes.DEVICE_FETCH, fetchDevices),
     takeLatest(ModemTypes.DEVICE_BLOCK, blockDevice),
+    takeLatest(ModemTypes.DEVICE_UNBLOCK, unblockDevice),
     takeLatest(ModemTypes.PROVIDER_FETCH, fetchProviders),
     takeLatest(ModemTypes.MODEM_ADD, addModem),
     takeLatest(ModemTypes.MODEM_EDIT, editModem),
     takeLatest(ModemTypes.DEVICE_BLOCK_LIST_FETCH, fetchBlockDevices),
     // timeline
     takeLatest(TimelineTypes.TIMELINE_FETCH, fetchTimelines),
+    takeLatest(
+      TimelineTypes.TIMELINE_FETCH_BY_MODEM_ID,
+      fetchTimelinesByModemId,
+    ),
     takeLatest(TimelineTypes.TIMELINE_ADD, addTimeline),
     takeLatest(TimelineTypes.TIMELINE_DETAIL, fetchTimelineDetail),
     takeLatest(TimelineTypes.TIMELINE_EDIT, editTimeline),
@@ -76,5 +83,13 @@ export default function* root() {
     takeLatest(AccountTypes.ACCOUNT_DELETE, deleteAccount),
     takeLatest(AccountTypes.ACCOUNT_FETCH_PROFILE, fetchProfile),
     takeLatest(AccountTypes.ACCOUNT_UPDATE_PROFILE, updateProfile),
+    takeLatest(
+      AccountTypes.ACCOUNT_FETCH_NOTIFICATION_SETTING,
+      fetchNotificationSetting,
+    ),
+    takeLatest(
+      AccountTypes.ACCOUNT_UPDATE_NOTIFICATION_SETTING,
+      updateNotificationSetting,
+    ),
   ]);
 }

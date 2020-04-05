@@ -5,6 +5,7 @@ import Immutable from 'seamless-immutable';
 
 const {Types, Creators} = createActions({
   timelineFetch: ['params', 'onSuccess', 'onError'],
+  timelineFetchByModemId: ['params', 'onSuccess', 'onError'],
   timelineSet: ['data'],
   timelineAdd: ['params', 'onSuccess', 'onError'],
   timelineEdit: ['params', 'onSuccess', 'onError'],
@@ -36,6 +37,10 @@ export const setTimeline = (state, action) => {
 };
 
 export const fetchTimeline = (state, action) => {
+  return state;
+};
+
+export const fetchTimelineByModemId = (state, action) => {
   return state;
 };
 
@@ -79,6 +84,7 @@ export const setComments = (state, action) => {
 export const reducer = createReducer(INITIAL_STATE, {
   [Types.TIMELINE_SET]: setTimeline,
   [Types.TIMELINE_FETCH]: fetchTimeline,
+  [Types.TIMELINE_FETCH_BY_MODEM_ID]: fetchTimelineByModemId,
   [Types.TIMELINE_ADD]: addTimeline,
   [Types.TIMELINE_EDIT]: editTimeline,
   [Types.TIMELINE_DELETE]: deleteTimeline,

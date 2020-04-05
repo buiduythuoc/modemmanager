@@ -90,3 +90,50 @@ export function* deleteAccount(action) {
     }
   }
 }
+
+export function* fetchNotificationSetting(action) {
+  const {params, onSuccess, onError} = action;
+  const {userId} = params;
+  // make the call to the api
+  const response = yield call(api.create().getNotificationSetting, userId);
+
+  if (response.status === 200 && response.data.status === 1) {
+    if (onSuccess) {
+      onSuccess(response.data.data);
+    }
+  } else {
+    const errorMessage = response.data.message
+      ? response.data.message
+      : 'Some error';
+    Alert.alert('Error', errorMessage);
+    if (onError) {
+      onError();
+    }
+  }
+}
+
+export function* updateNotificationSetting(action) {
+  const {params, onSuccess, onError} = action;
+  const {userId, numberOfDevice, isActive} = params;
+  // make the call to the api
+  const response = yield call(
+    api.create().updateNotificationSetting,
+    userId,
+    numberOfDevice,
+    isActive,
+  );
+
+  if (response.status === 200 && response.data.status === 1) {
+    if (onSuccess) {
+      onSuccess();
+    }
+  } else {
+    const errorMessage = response.data.message
+      ? response.data.message
+      : 'Some error';
+    Alert.alert('Error', errorMessage);
+    if (onError) {
+      onError();
+    }
+  }
+}

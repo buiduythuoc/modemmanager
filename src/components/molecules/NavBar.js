@@ -3,7 +3,6 @@ import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
 import PropTypes from 'prop-types';
 import Icon from '../atoms/Icon';
 import {colors, images, metrics} from '../../themes';
-import {scaleSize, scaleFont} from '../../themes/mixins';
 
 const renderLeftIcon = props => {
   const {onLeftClick, leftIcon} = props;
@@ -11,7 +10,7 @@ const renderLeftIcon = props => {
     <TouchableOpacity
       style={styles.leftIconContainer}
       onPress={() => (onLeftClick ? onLeftClick() : {})}>
-      <Icon source={leftIcon} width={scaleSize(17)} height={scaleSize(12)} />
+      <Icon source={leftIcon} width={17} height={12} />
     </TouchableOpacity>
   );
 };
@@ -26,17 +25,11 @@ const renderTitle = props => {
 };
 
 const renderRightIcon = props => {
-  const {
-    rightIcon,
-    rightIconWidth,
-    rightIconHeight,
-    onRightClick,
-    style,
-  } = props;
+  const {rightIcon, rightIconWidth, rightIconHeight, onRightClick} = props;
   if (rightIcon) {
     return (
       <TouchableOpacity
-        style={[styles.rightIconContainer, style]}
+        style={styles.rightIconContainer}
         onPress={() => (onRightClick ? onRightClick() : {})}>
         <Icon
           source={rightIcon}
@@ -49,7 +42,7 @@ const renderRightIcon = props => {
   return <View style={styles.rightIconContainer} />;
 };
 
-const NavHeader = props => {
+const NavBar = props => {
   const {style, renderLeft} = props;
 
   return (
@@ -61,9 +54,9 @@ const NavHeader = props => {
   );
 };
 
-export default NavHeader;
+export default NavBar;
 
-NavHeader.propTypes = {
+NavBar.propTypes = {
   title: PropTypes.string,
   titleColor: PropTypes.string,
   renderRight: PropTypes.func,
@@ -76,13 +69,13 @@ NavHeader.propTypes = {
   onLeftClick: PropTypes.func,
 };
 
-NavHeader.defaultProps = {
+NavBar.defaultProps = {
   title: '',
   titleColor: colors.white,
   renderRight: null,
   rightIcon: null,
-  rightIconWidth: scaleSize(24),
-  rightIconHeight: scaleSize(24),
+  rightIconWidth: 24,
+  rightIconHeight: 24,
   renderLeft: null,
   leftIcon: images.icBackBlack,
   onLeftClick: null,
@@ -92,30 +85,29 @@ NavHeader.defaultProps = {
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    height: scaleSize(100),
+    height: metrics.navBarHeight,
     flexDirection: 'row',
     backgroundColor: 'transparent',
   },
   leftIconContainer: {
-    height: scaleSize(100),
-    width: scaleSize(66),
+    height: metrics.navBarHeight,
+    width: 66,
     justifyContent: 'center',
     alignItems: 'center',
   },
   titleContainer: {
-    height: scaleSize(100),
-    width: metrics.screenWidth - 2 * scaleSize(66),
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
   title: {
     color: colors.white,
-    fontSize: scaleFont(18),
+    fontSize: 18,
     fontWeight: '600',
   },
   rightIconContainer: {
-    height: scaleSize(100),
-    width: scaleSize(66),
+    height: metrics.navBarHeight,
+    width: 66,
     justifyContent: 'center',
     alignItems: 'center',
   },

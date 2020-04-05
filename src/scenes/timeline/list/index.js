@@ -1,13 +1,16 @@
 import React from 'react';
 import {View, FlatList, RefreshControl} from 'react-native';
 import {connect} from 'react-redux';
-import {images} from '../../../themes';
+import RNPickerSelect from 'react-native-picker-select';
+import {images, colors} from '../../../themes';
 import styles from './styles';
 import TabHeader from '../../../components/organisms/TabHeader';
 import TimelineItem from '../../../components/organisms/TimelineItem';
 import {scaleSize} from '../../../themes/mixins';
 import TimelineActions from '../../../stores/timelineRedux';
+import ModemActions from '../../../stores/modemRedux';
 import Loading from '../../../components/organisms/Loading';
+import Icon from '../../../components/atoms/Icon';
 
 class Timeline extends React.Component {
   constructor(props) {
@@ -16,6 +19,7 @@ class Timeline extends React.Component {
     this.state = {
       isFetching: true,
       isRefreshing: false,
+      modemItems: [],
     };
   }
 
@@ -40,13 +44,17 @@ class Timeline extends React.Component {
 
   componentDidMount() {
     this.fetchTimelines();
+    if (this.props.user.type !== 'guest') {
+      this.fetchModems();
+    }
   }
 
   fetchTimelines = () => {
-    const {fetchTimelines, user} = this.props;
+    const {fetchTimelines, user, ipList} = this.props;
     fetchTimelines(
       user.user_id,
       user.type,
+      ipList,
       () => {
         this.setState({isFetching: false, isRefreshing: false});
       },
@@ -54,6 +62,46 @@ class Timeline extends React.Component {
         this.setState({isFetching: false, isRefreshing: false});
       },
     );
+  };
+
+  fetchTimelinesByModemId = modemId => {
+    const {fetchTimelinesByModemId, user} = this.props;
+    fetchTimelinesByModemId(
+      {
+        userId: user.user_id,
+        modemId,
+      },
+      () => {
+        this.setState({isFetching: false, isRefreshing: false});
+      },
+      () => {
+        this.setState({isFetching: false, isRefreshing: false});
+      },
+    );
+  };
+
+  fetchModems = () => {
+    const {user} = this.props;
+    const userId = user.user_id;
+    this.props.fetchModems(
+      userId,
+      listModems => {
+        let modemItems = listModems.map(item => {
+          return {label: item.modem_name, value: item.id};
+        });
+        modemItems.unshift({label: 'All Modems', value: 0});
+        this.setState({modemItems});
+      },
+      () => {},
+    );
+  };
+
+  handleOnSelectModem = modemId => {
+    if (modemId == 0) {
+      this.fetchTimelines();
+    } else {
+      this.fetchTimelinesByModemId(modemId);
+    }
   };
 
   renderTabHeader = () => {
@@ -65,8 +113,8 @@ class Timeline extends React.Component {
           title={'Timeline'}
           height={scaleSize(100)}
           rightIcon={images.icAdd}
-          rightIconWidth={scaleSize(20)}
-          rightIconHeight={scaleSize(20)}
+          rightIconWidth={20}
+          rightIconHeight={20}
           onRightClick={this.handleOnClickAdd}
         />
       );
@@ -81,6 +129,39 @@ class Timeline extends React.Component {
     );
   };
 
+  renderModemSelect = () => {
+    const {modemItems} = this.state;
+    const {user} = this.props;
+    const placeholder = {
+      label: 'Select a modem...',
+      value: null,
+      color: colors.gray06,
+    };
+    if (user.type === 'guest') {
+      return null;
+    }
+
+    return (
+      <View style={styles.modemPickerContainer}>
+        <View style={styles.modemPicker}>
+          <View style={styles.flatList}>
+            <RNPickerSelect
+              placeholder={placeholder}
+              onValueChange={modemId => this.handleOnSelectModem(modemId)}
+              items={modemItems}
+            />
+          </View>
+          <Icon
+            style={{tintColor: colors.primary}}
+            width={scaleSize(15)}
+            height={scaleSize(8)}
+            source={images.icDropdown}
+          />
+        </View>
+      </View>
+    );
+  };
+
   render() {
     const {isFetching, isRefreshing} = this.state;
     const {listTimeline} = this.props;
@@ -88,8 +169,10 @@ class Timeline extends React.Component {
     return (
       <View style={styles.container}>
         {this.renderTabHeader()}
+        {this.renderModemSelect()}
         <FlatList
           style={styles.flatList}
+          contentContainerStyle={styles.flatListContent}
           data={listTimeline}
           renderItem={({item, index}) => (
             <TimelineItem
@@ -114,11 +197,20 @@ class Timeline extends React.Component {
 const mapStateToProps = state => ({
   user: state.auth.user,
   listTimeline: state.timeline.list,
+  ipList: state.ip.list,
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchTimelines: (userId, role, onSuccess, onError) =>
-    dispatch(TimelineActions.timelineFetch({userId, role}, onSuccess, onError)),
+  fetchModems: (userId, onSuccess, onError) =>
+    dispatch(ModemActions.modemFetch({userId}, onSuccess, onError)),
+  fetchTimelines: (userId, role, listIp, onSuccess, onError) =>
+    dispatch(
+      TimelineActions.timelineFetch({userId, role, listIp}, onSuccess, onError),
+    ),
+  fetchTimelinesByModemId: (params, onSuccess, onError) =>
+    dispatch(
+      TimelineActions.timelineFetchByModemId(params, onSuccess, onError),
+    ),
 });
 
 export default connect(

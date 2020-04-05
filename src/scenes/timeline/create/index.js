@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, Alert} from 'react-native';
+import {View, Text, Alert, SafeAreaView} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {connect} from 'react-redux';
 import RNPickerSelect from 'react-native-picker-select';
@@ -7,7 +7,7 @@ import RNImagePicker from 'react-native-image-picker';
 import {images, colors} from '../../../themes';
 import styles from './styles';
 import Button from '../../../components/atoms/Button';
-import NavHeader from '../../../components/molecules/NavHeader';
+import NavBar from '../../../components/molecules/NavBar';
 import LabelInput from '../../../components/molecules/LabelInput';
 import ImagePicker from '../../../components/molecules/ImagePicker';
 import {scaleSize} from '../../../themes/mixins';
@@ -30,11 +30,9 @@ class CreateTimeline extends React.Component {
       content: '',
       modemItems: [],
       isLoading: false,
-      imageSource1: null,
-      imageSource2: null,
-      imageSource3: null,
-      imageSource4: null,
-      imageSource5: null,
+      imageSource1: {uri: null, base64: ''},
+      imageSource2: {uri: null, base64: ''},
+      imageSource3: {uri: null, base64: ''},
     };
   }
 
@@ -51,12 +49,12 @@ class CreateTimeline extends React.Component {
   }
 
   fetchModems = () => {
-    const {user, listModems} = this.props;
+    const {user} = this.props;
     const userId = user.user_id;
     this.setState({isLoading: true});
     this.props.fetchModems(
       userId,
-      () => {
+      listModems => {
         const modemItems = listModems.map(item => {
           return {label: item.modem_name, value: item.id};
         });
@@ -75,13 +73,24 @@ class CreateTimeline extends React.Component {
 
   handleOnClickPost = () => {
     const {addTimeline, fetchTimelines, navigation, user} = this.props;
-    const {modemId, title, subTitle, content} = this.state;
+    const {
+      modemId,
+      title,
+      subTitle,
+      content,
+      imageSource1,
+      imageSource2,
+      imageSource3,
+    } = this.state;
     const params = {
       modemId,
       title,
       subTitle,
       content,
       userId: user.user_id,
+      imgMain: imageSource1.base64,
+      img1: imageSource2.base64,
+      img2: imageSource3.base64,
     };
     if (!modemId || !title || !subTitle || !content) {
       return;
@@ -124,7 +133,7 @@ class CreateTimeline extends React.Component {
       } else if (response.customButton) {
         console.log('User tapped custom button: ', response.customButton);
       } else {
-        const source = {uri: response.uri};
+        const source = {uri: response.uri, base64: response.data};
         setState(source);
         console.log(setState);
       }
@@ -141,13 +150,11 @@ class CreateTimeline extends React.Component {
       imageSource1,
       imageSource2,
       imageSource3,
-      imageSource4,
-      imageSource5,
     } = this.state;
 
     return (
-      <View style={styles.container}>
-        <NavHeader
+      <SafeAreaView style={styles.container}>
+        <NavBar
           title="New Post"
           titleColor={colors.gray01}
           leftIcon={images.icBackBlack}
@@ -159,42 +166,33 @@ class CreateTimeline extends React.Component {
             <View style={styles.imageContainer}>
               <ImagePicker
                 style={styles.imagePicker}
-                source={imageSource1}
+                source={imageSource1.uri ? {uri: imageSource1.uri} : null}
                 onSelect={this.handleOnSelectImage(source =>
                   this.setState({imageSource1: source}),
                 )}
-                onClickDelete={() => this.setState({imageSource1: null})}
+                onClickDelete={() =>
+                  this.setState({imageSource1: {uri: null, base64: ''}})
+                }
               />
               <ImagePicker
                 style={styles.imagePicker}
-                source={imageSource2}
+                source={imageSource2.uri ? {uri: imageSource2.uri} : null}
                 onSelect={this.handleOnSelectImage(source =>
                   this.setState({imageSource2: source}),
                 )}
-                onClickDelete={() => this.setState({imageSource2: null})}
+                onClickDelete={() =>
+                  this.setState({imageSource2: {uri: null, base64: ''}})
+                }
               />
               <ImagePicker
                 style={styles.imagePicker}
-                source={imageSource3}
+                source={imageSource3.uri ? {uri: imageSource3.uri} : null}
                 onSelect={this.handleOnSelectImage(source =>
                   this.setState({imageSource3: source}),
                 )}
-                onClickDelete={() => this.setState({imageSource3: null})}
-              />
-              <ImagePicker
-                style={styles.imagePicker}
-                source={imageSource4}
-                onSelect={this.handleOnSelectImage(source =>
-                  this.setState({imageSource4: source}),
-                )}
-                onClickDelete={() => this.setState({imageSource4: null})}
-              />
-              <ImagePicker
-                source={imageSource5}
-                onSelect={this.handleOnSelectImage(source =>
-                  this.setState({imageSource5: source}),
-                )}
-                onClickDelete={() => this.setState({imageSource5: null})}
+                onClickDelete={() =>
+                  this.setState({imageSource3: {uri: null, base64: ''}})
+                }
               />
             </View>
             <Text style={styles.label}>Modem Name</Text>
@@ -251,7 +249,7 @@ class CreateTimeline extends React.Component {
           </KeyboardAwareScrollView>
         </View>
         <Loading isLoading={isLoading} />
-      </View>
+      </SafeAreaView>
     );
   }
 }
@@ -270,7 +268,4 @@ const mapDispatchToProps = dispatch => ({
     dispatch(TimelineActions.timelineFetch({userId}, onSuccess, onError)),
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(CreateTimeline);
+export default connect(mapStateToProps, mapDispatchToProps)(CreateTimeline);

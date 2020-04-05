@@ -85,7 +85,7 @@ export function* fetchModems(action) {
     const listModems = response.data.data ? response.data.data : [];
     yield put(ModemActions.modemSet(listModems));
     if (onSuccess) {
-      onSuccess();
+      onSuccess(listModems);
     }
   } else {
     if (onError) {
@@ -146,6 +146,33 @@ export function* blockDevice(action) {
   // make the call to the api
   const response = yield call(
     api.create().blockDevice,
+    userId,
+    modemId,
+    deviceMac,
+    deviceName,
+  );
+
+  if (response.status === 200 && response.data.status === 1) {
+    if (onSuccess) {
+      onSuccess();
+    }
+  } else {
+    const errorMessage = response.data.message
+      ? response.data.message
+      : 'Some error';
+    Alert.alert('Error', errorMessage);
+    if (onError) {
+      onError();
+    }
+  }
+}
+
+export function* unblockDevice(action) {
+  const {params, onSuccess, onError} = action;
+  const {userId, modemId, deviceMac, deviceName} = params;
+  // make the call to the api
+  const response = yield call(
+    api.create().unblockDevice,
     userId,
     modemId,
     deviceMac,
