@@ -40,7 +40,7 @@ class NotificationSetting extends React.Component {
     const {fetchNotificationSetting, user} = this.props;
     fetchNotificationSetting(
       user.user_id,
-      (responseData) => {
+      responseData => {
         this.setState({
           isLoading: false,
           enable: responseData.is_active === 1,
@@ -55,7 +55,7 @@ class NotificationSetting extends React.Component {
 
   handleOnClickUpdate = () => {
     const {enable, minNumberOfDevices} = this.state;
-    const {updateNotificationSetting, user} = this.props;
+    const {updateNotificationSetting, user, navigation} = this.props;
     this.setState({isLoading: true});
     updateNotificationSetting(
       {
@@ -70,7 +70,14 @@ class NotificationSetting extends React.Component {
         Alert.alert(
           'Success',
           'Notification Setting has been updated',
-          [{text: 'OK', onPress: () => {}}],
+          [
+            {
+              text: 'OK',
+              onPress: () => {
+                navigation.goBack();
+              },
+            },
+          ],
           {cancelable: false},
         );
       },
@@ -116,7 +123,7 @@ class NotificationSetting extends React.Component {
               style={styles.input}
               value={minNumberOfDevices}
               keyboardType="numeric"
-              onChangeText={(text) => this.setState({minNumberOfDevices: text})}
+              onChangeText={text => this.setState({minNumberOfDevices: text})}
             />
           </View>
           {/* <View style={styles.bandWidthContainer}>
@@ -145,7 +152,7 @@ const mapStateToProps = state => ({
   user: state.auth.user,
 });
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = dispatch => ({
   fetchNotificationSetting: (userId, onSuccess, onError) =>
     dispatch(
       AccountActions.accountFetchNotificationSetting(
@@ -164,4 +171,7 @@ const mapDispatchToProps = (dispatch) => ({
     ),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(NotificationSetting);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(NotificationSetting);

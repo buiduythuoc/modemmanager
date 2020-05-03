@@ -1,10 +1,10 @@
 import React from 'react';
-import {View, Alert, SafeAreaView} from 'react-native';
+import {Alert, SafeAreaView} from 'react-native';
 import {connect} from 'react-redux';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import RNPickerSelect from 'react-native-picker-select';
 import {images, colors} from '../../../themes';
-import styles from './styles';
+import styles, {pickerSelectStyles} from './styles';
 import Button from '../../../components/atoms/Button';
 import NavBar from '../../../components/molecules/NavBar';
 import LabelInput from '../../../components/molecules/LabelInput';
@@ -186,29 +186,29 @@ class CreateModem extends React.Component {
             iconWidth={scaleSize(15)}
             iconHeight={scaleSize(15)}
             renderInput={() => (
-              <View style={styles.picker}>
-                <RNPickerSelect
-                  onValueChange={value => {
-                    this.setState({
-                      modemProvider: '',
-                      provider: value,
-                      listModemProviders: providerList
-                        .filter(item => item.provider.toLowerCase() === value)
-                        .map(item => {
-                          return {
-                            label: item.modem_type,
-                            value: item.modem_type,
-                          };
-                        }),
-                    });
-                  }}
-                  items={[
-                    {label: 'FPT', value: 'fpt'},
-                    {label: 'VNPT', value: 'vnpt'},
-                    {label: 'VIETTEL', value: 'viettel'},
-                  ]}
-                />
-              </View>
+              <RNPickerSelect
+                style={pickerSelectStyles}
+                onValueChange={value => {
+                  this.setState({
+                    modemProvider: '',
+                    provider: value,
+                    listModemProviders: providerList
+                      .filter(item => item.provider.toLowerCase() === value)
+                      .map(item => {
+                        return {
+                          label: item.modem_type,
+                          value: item.modem_type,
+                        };
+                      }),
+                  });
+                }}
+                items={[
+                  {label: 'FPT', value: 'fpt'},
+                  {label: 'VNPT', value: 'vnpt'},
+                  {label: 'VIETTEL', value: 'viettel'},
+                ]}
+                useNativeAndroidPickerStyle={false}
+              />
             )}
           />
           <LabelInput
@@ -221,12 +221,12 @@ class CreateModem extends React.Component {
             iconWidth={scaleSize(15)}
             iconHeight={scaleSize(15)}
             renderInput={() => (
-              <View style={styles.picker}>
-                <RNPickerSelect
-                  onValueChange={value => this.setState({modemProvider: value})}
-                  items={listModemProviders}
-                />
-              </View>
+              <RNPickerSelect
+                style={pickerSelectStyles}
+                useNativeAndroidPickerStyle={false}
+                onValueChange={value => this.setState({modemProvider: value})}
+                items={listModemProviders}
+              />
             )}
           />
           <LabelInput
@@ -285,4 +285,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(ModemActions.providerFetch({userId}, onSuccess, onError)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(CreateModem);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(CreateModem);

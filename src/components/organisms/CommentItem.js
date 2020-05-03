@@ -6,22 +6,20 @@ import {colors, images} from '../../themes';
 
 const CommentItem = props => {
   const {data} = props;
-  const avatar = data.avatar
-    ? {uri: data.avatar}
-    : images.imgNotificationAvatarDefault;
-  const username = data.username ? data.username : 'John Smith';
+  const avatar = data.avatar ? {uri: data.avatar} : images.imgAvatarDefault;
+  const username = data.username ? data.username : '';
   const time = data.created_date;
   const comment = data.comment;
 
   return (
     <View style={styles.container}>
       <Image style={styles.avatar} source={avatar} />
-      <View style={styles.commentContainer}>
-        <View style={styles.usernameContainer}>
+      <View style={styles.flex}>
+        <View style={styles.commentContainer}>
           <Text style={styles.username}>{username}</Text>
-          <Text style={styles.time}>{time}</Text>
+          <Text style={styles.comment}>{comment}</Text>
         </View>
-        <Text style={styles.comment}>{comment}</Text>
+        <Text style={styles.time}>{time}</Text>
       </View>
     </View>
   );
@@ -44,16 +42,17 @@ const styles = StyleSheet.create({
   avatar: {
     width: scaleSize(44),
     height: scaleSize(44),
-    borderRadius: scaleSize(5),
+    borderRadius: scaleSize(10),
+  },
+  flex: {
+    flex: 1,
   },
   commentContainer: {
     flex: 1,
     marginLeft: scaleSize(10),
-    borderWidth: 1,
-    borderColor: colors.gray05,
-    borderRadius: scaleSize(5),
+    borderRadius: scaleSize(10),
     padding: scaleSize(10),
-    marginTop: scaleSize(5),
+    backgroundColor: colors.commentBg,
   },
   usernameContainer: {
     flexDirection: 'row',
@@ -68,6 +67,8 @@ const styles = StyleSheet.create({
   time: {
     fontSize: scaleFont(8),
     color: colors.gray03,
+    marginLeft: scaleSize(10),
+    marginTop: scaleSize(10),
   },
   comment: {
     marginTop: scaleSize(6),

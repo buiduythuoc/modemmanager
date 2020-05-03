@@ -57,7 +57,7 @@ class AccountDetail extends React.Component {
 
   handleOnClickUpdateProfile = () => {
     const {username, expiredAt, userId} = this.state;
-    const {updateProfile, fetchAccounts, user} = this.props;
+    const {updateProfile, fetchAccounts, user, navigation} = this.props;
     this.setState({isFetching: true});
     const params = {
       userId,
@@ -73,7 +73,14 @@ class AccountDetail extends React.Component {
         Alert.alert(
           'Success',
           'User profile has been updated',
-          [{text: 'OK', onPress: () => {}}],
+          [
+            {
+              text: 'OK',
+              onPress: () => {
+                navigation.goBack();
+              },
+            },
+          ],
           {cancelable: false},
         );
       },
@@ -211,4 +218,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(AccountActions.accountDelete(params, onSuccess, onError)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(AccountDetail);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(AccountDetail);

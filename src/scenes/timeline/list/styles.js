@@ -35,4 +35,13 @@ const styles = StyleSheet.create({
   },
 });
 
+export const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    height: scaleSize(47),
+  },
+  inputAndroid: {
+    height: scaleSize(47),
+  },
+});
+
 export default styles;

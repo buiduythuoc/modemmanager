@@ -136,7 +136,7 @@ const create = () => {
   const getListTimelines = (userId, listIp) =>
     api.post(
       'getlistpost.php',
-      qs.stringify({user_id: userId, public_ip: listIp}),
+      qs.stringify({user_id: userId, public_ip: listIp.join()}),
     );
 
   const getListTimelinesByModemId = (userId, modemId) =>

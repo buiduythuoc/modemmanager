@@ -43,8 +43,7 @@ class DeviceList extends React.Component {
     const {user} = this.props;
     const adminId =
       this.state.adminId === 0 ? user.user_id : this.state.adminId;
-    // const ref = 'admins/' + adminId + '/modems/' + modemData.id + '/devices';
-    const ref = 'admins/' + adminId + '/modems/' + '18' + '/devices';
+    const ref = 'admins/' + adminId + '/modems/' + modemData.id + '/devices';
 
     Firebase.database()
       .ref(ref)

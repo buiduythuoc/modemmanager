@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {colors} from '../../../themes';
+import {colors, metrics} from '../../../themes';
 import {scaleSize, scaleFont} from '../../../themes/mixins';
 
 const styles = StyleSheet.create({
@@ -44,13 +44,6 @@ const styles = StyleSheet.create({
     borderRadius: scaleSize(5),
     color: colors.black,
   },
-  modemPicker: {
-    height: scaleSize(40),
-    borderColor: colors.gray04,
-    borderWidth: 1,
-    borderRadius: scaleSize(5),
-    justifyContent: 'center',
-  },
   contentInput: {
     height: scaleSize(194),
     borderRadius: scaleSize(5),
@@ -59,6 +52,27 @@ const styles = StyleSheet.create({
   postButton: {
     marginTop: scaleSize(54),
     width: '100%',
+  },
+});
+
+export const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    height: scaleSize(47),
+    borderColor: colors.gray04,
+    borderWidth: 1,
+    borderRadius: scaleSize(5),
+    justifyContent: 'center',
+    color: colors.black,
+    paddingHorizontal: scaleSize(4),
+  },
+  inputAndroid: {
+    height: scaleSize(47),
+    borderColor: colors.gray04,
+    borderWidth: 1,
+    borderRadius: scaleSize(5),
+    justifyContent: 'center',
+    color: colors.black,
+    paddingHorizontal: scaleSize(4),
   },
 });
 

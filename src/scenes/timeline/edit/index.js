@@ -14,6 +14,7 @@ import {scaleSize} from '../../../themes/mixins';
 import TimelineActions from '../../../stores/timelineRedux';
 import ModemActions from '../../../stores/modemRedux';
 import Loading from '../../../components/organisms/Loading';
+import ImagePickerHelper from '../../../helpers/ImagePickerHelper';
 
 class EditTimeline extends React.Component {
   static navigationOptions = {
@@ -24,15 +25,15 @@ class EditTimeline extends React.Component {
     super(props);
     const {navigation, listTimeline} = props;
     const postId = navigation.getParam('postId', 0);
-    const timelineData = listTimeline.find((item) => item.id === postId);
+    const timelineData = listTimeline.find(item => item.id === postId);
 
     this.state = {
       modemItems: [],
       isLoading: false,
       timelineData,
-      imageSource1: {uri: timelineData.img_main, base64: ''},
-      imageSource2: {uri: timelineData.img_sub1, base64: ''},
-      imageSource3: {uri: timelineData.img_sub2, base64: ''},
+      imageSource1: {uri: timelineData.img_main, image: ''},
+      imageSource2: {uri: timelineData.img_sub1, image: ''},
+      imageSource3: {uri: timelineData.img_sub2, image: ''},
     };
   }
 
@@ -41,7 +42,7 @@ class EditTimeline extends React.Component {
     if (listModems.length === 0) {
       this.fetchModems();
     } else {
-      const modemItems = listModems.map((item) => {
+      const modemItems = listModems.map(item => {
         return {label: item.modem_name, value: item.id};
       });
       this.setState({modemItems});
@@ -55,7 +56,7 @@ class EditTimeline extends React.Component {
     this.props.fetchModems(
       userId,
       () => {
-        const modemItems = listModems.map((item) => {
+        const modemItems = listModems.map(item => {
           return {label: item.modem_name, value: item.id};
         });
         this.setState({isLoading: false, modemItems});
@@ -71,9 +72,11 @@ class EditTimeline extends React.Component {
     navigation.goBack();
   };
 
-  handleOnClickUpdate = () => {
-    const {editTimeline, fetchTimelines, navigation, user} = this.props;
+  async handleOnClickUpdate() {
+    const {editTimeline, fetchTimelines, navigation, user, ipList} = this.props;
     const {timelineData, imageSource1, imageSource2, imageSource3} = this.state;
+
+    this.setState({isLoading: true});
     const params = {
       timelineId: timelineData.id,
       modemId: 1,
@@ -81,17 +84,16 @@ class EditTimeline extends React.Component {
       subTitle: timelineData.sub_title,
       content: timelineData.content,
       userId: user.user_id,
-      imgMain: imageSource1.base64,
-      img1: imageSource2.base64,
-      img2: imageSource3.base64,
+      imgMain: await ImagePickerHelper.resizeImage(imageSource1.image),
+      img1: await ImagePickerHelper.resizeImage(imageSource2.image),
+      img2: await ImagePickerHelper.resizeImage(imageSource3.image),
     };
-
-    this.setState({isLoading: true});
+    debugger;
     editTimeline(
       params,
       () => {
         this.setState({isLoading: false});
-        fetchTimelines(user.user_id);
+        fetchTimelines(user.user_id, user.type, ipList);
         Alert.alert(
           'Success',
           'Post updated',
@@ -104,9 +106,9 @@ class EditTimeline extends React.Component {
         Alert.alert('Error', 'Some error');
       },
     );
-  };
+  }
 
-  handleOnSelectImage = (setState) => () => {
+  handleOnSelectImage = setState => () => {
     const options = {
       title: 'Select Image',
       storageOptions: {
@@ -115,7 +117,7 @@ class EditTimeline extends React.Component {
       },
     };
 
-    RNImagePicker.showImagePicker(options, (response) => {
+    RNImagePicker.showImagePicker(options, response => {
       console.log('Response = ', response);
       if (response.didCancel) {
         console.log('User cancelled image picker');
@@ -124,7 +126,7 @@ class EditTimeline extends React.Component {
       } else if (response.customButton) {
         console.log('User tapped custom button: ', response.customButton);
       } else {
-        const source = {uri: response.uri, base64: response.data};
+        const source = {uri: response.uri, image: response};
         setState(source);
         console.log(setState);
       }
@@ -155,31 +157,31 @@ class EditTimeline extends React.Component {
               <ImagePicker
                 style={styles.imagePicker}
                 source={imageSource1.uri ? {uri: imageSource1.uri} : null}
-                onSelect={this.handleOnSelectImage((source) =>
+                onSelect={this.handleOnSelectImage(source =>
                   this.setState({imageSource1: source}),
                 )}
                 onClickDelete={() =>
-                  this.setState({imageSource1: {uri: null, base64: 'delete'}})
+                  this.setState({imageSource1: {uri: null, image: 'delete'}})
                 }
               />
               <ImagePicker
                 style={styles.imagePicker}
                 source={imageSource2.uri ? {uri: imageSource2.uri} : null}
-                onSelect={this.handleOnSelectImage((source) =>
+                onSelect={this.handleOnSelectImage(source =>
                   this.setState({imageSource2: source}),
                 )}
                 onClickDelete={() =>
-                  this.setState({imageSource2: {uri: null, base64: 'delete'}})
+                  this.setState({imageSource2: {uri: null, image: 'delete'}})
                 }
               />
               <ImagePicker
                 style={styles.imagePicker}
                 source={imageSource3.uri ? {uri: imageSource3.uri} : null}
-                onSelect={this.handleOnSelectImage((source) =>
+                onSelect={this.handleOnSelectImage(source =>
                   this.setState({imageSource3: source}),
                 )}
                 onClickDelete={() =>
-                  this.setState({imageSource3: {uri: null, base64: 'delete'}})
+                  this.setState({imageSource3: {uri: null, image: 'delete'}})
                 }
               />
             </View>
@@ -194,7 +196,7 @@ class EditTimeline extends React.Component {
               placeholder="Write your own ......."
               placeholderTextColor={colors.gray05}
               value={timelineData.title}
-              onChangeText={(text) =>
+              onChangeText={text =>
                 this.setState({timelineData: {...timelineData, title: text}})
               }
             />
@@ -209,7 +211,7 @@ class EditTimeline extends React.Component {
               placeholderTextColor={colors.gray05}
               value={timelineData.sub_title}
               multiline={true}
-              onChangeText={(text) =>
+              onChangeText={text =>
                 this.setState({
                   timelineData: {...timelineData, sub_title: text},
                 })
@@ -226,7 +228,7 @@ class EditTimeline extends React.Component {
               placeholderTextColor={colors.gray05}
               value={timelineData.content}
               multiline={true}
-              onChangeText={(text) =>
+              onChangeText={text =>
                 this.setState({timelineData: {...timelineData, content: text}})
               }
             />
@@ -234,29 +236,35 @@ class EditTimeline extends React.Component {
               style={styles.postButton}
               height={scaleSize(45)}
               title="UPDATE"
-              onClick={this.handleOnClickUpdate}
+              onClick={() => this.handleOnClickUpdate()}
             />
           </KeyboardAwareScrollView>
         </View>
-        <Loading isLoading={isLoading} />
+        <Loading show={isLoading} />
       </SafeAreaView>
     );
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   listTimeline: state.timeline.list,
   listModems: state.modem.list,
   user: state.auth.user,
+  ipList: state.ip.list,
 });
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = dispatch => ({
   editTimeline: (params, onSuccess, onError) =>
     dispatch(TimelineActions.timelineEdit(params, onSuccess, onError)),
   fetchModems: (userId, onSuccess, onError) =>
     dispatch(ModemActions.modemFetch({userId}, onSuccess, onError)),
-  fetchTimelines: (userId, onSuccess, onError) =>
-    dispatch(TimelineActions.timelineFetch({userId}, onSuccess, onError)),
+  fetchTimelines: (userId, role, listIp, onSuccess, onError) =>
+    dispatch(
+      TimelineActions.timelineFetch({userId, role, listIp}, onSuccess, onError),
+    ),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(EditTimeline);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(EditTimeline);

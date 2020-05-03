@@ -20,11 +20,13 @@ const Input = props => {
         borderColor,
         borderRadius: borderRadius,
         borderWidth: 1,
+        textAlignVertical: attributes.multiline ? 'top' : 'center',
       }
     : {
         ...style,
         borderColor,
         borderBottomWidth: 1,
+        textAlignVertical: attributes.multiline ? 'top' : 'center',
       };
 
   return (

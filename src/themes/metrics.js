@@ -15,6 +15,7 @@ const metrics = {
   navBarHeight: Platform.OS === 'ios' ? 44 : 56,
   tabBarHeight: scaleSize(50),
   buttonRadius: 4,
+  sendButtonMarginBottom: Platform.OS === 'ios' && IS_IPHONE_X ? 24 : 0,
 };
 
 export default metrics;

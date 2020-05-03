@@ -7,19 +7,19 @@ import {
   Alert,
   SafeAreaView,
   Image,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import {connect} from 'react-redux';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import styles from './styles';
 import NavBar from '../../../components/molecules/NavBar';
 import ImageSlider from 'react-native-image-slider';
-import {colors, images} from '../../../themes';
+import {colors, images, metrics} from '../../../themes';
 import TimelineActions from '../../../stores/timelineRedux';
 import Loading from '../../../components/organisms/Loading';
-import {scaleSize} from '../../../themes/mixins';
-import Icon from '../../../components/atoms/Icon';
 import CommentItem from '../../../components/organisms/CommentItem';
 import {AutoGrowingTextInput} from 'react-native-autogrow-textinput';
+import Button from '../../../components/atoms/Button';
 
 class TimelineDetail extends React.Component {
   static navigationOptions = {
@@ -56,7 +56,7 @@ class TimelineDetail extends React.Component {
     const {postId} = this.state;
     const {postComment, user} = this.props;
     const {comment} = this.state;
-    if (postId === 0) {
+    if (postId === 0 || comment.trim() === '') {
       return;
     }
 
@@ -80,7 +80,13 @@ class TimelineDetail extends React.Component {
 
   handleOnClickDelete = () => {
     const {postId} = this.state;
-    const {user, deleteTimeline, fetchTimeline, navigation} = this.props;
+    const {
+      user,
+      deleteTimeline,
+      fetchTimelines,
+      navigation,
+      ipList,
+    } = this.props;
     if (postId === 0) {
       return;
     }
@@ -101,7 +107,7 @@ class TimelineDetail extends React.Component {
               params,
               () => {
                 this.setState({isFetching: false});
-                fetchTimeline({userId: user.user_id});
+                fetchTimelines(user.user_id, user.type, ipList);
                 navigation.goBack();
                 // Alert.alert(
                 //   'Success',
@@ -172,7 +178,7 @@ class TimelineDetail extends React.Component {
     );
   };
 
-  getImages = (timelineData) => {
+  getImages = timelineData => {
     const sliderImages = [];
     if (timelineData.img_main) {
       sliderImages.push(timelineData.img_main);
@@ -208,88 +214,100 @@ class TimelineDetail extends React.Component {
     return null;
   };
 
+  renderHeader = timelineData => {
+    const sliderImages = this.getImages(timelineData);
+    return (
+      <>
+        {sliderImages.length > 0 && (
+          <ImageSlider
+            images={sliderImages}
+            customSlide={({index, item, style, width}) => (
+              <Image
+                source={{uri: item}}
+                style={styles.slider}
+                key={index + ''}
+              />
+            )}
+          />
+        )}
+        <Text style={styles.time}>{timelineData.created_date}</Text>
+        <Text style={styles.title}>{timelineData.title}</Text>
+        <Text style={styles.subTitle}>{timelineData.sub_title}</Text>
+        <Text style={styles.postContent}>{timelineData.content}</Text>
+        {this.renderActionPost()}
+        <View style={styles.line} />
+      </>
+    );
+  };
+
   render() {
     const {isLoading, comment, postId} = this.state;
     const {listTimeline} = this.props;
-    const timelineData = listTimeline.find((item) => item.id === postId);
+    const timelineData = listTimeline.find(item => item.id === postId);
     if (!timelineData) {
       return null;
     }
-    const sliderImages = this.getImages(timelineData);
     const comments = timelineData.comments;
-    const isShowSendButton = comment.trim() !== '' ? true : false;
-    const activeOpacity = comment.trim() !== '' ? 0.4 : 1;
 
     return (
-      <SafeAreaView style={styles.container}>
-        <NavBar
-          style={styles.navBar}
-          title="Post Detail"
-          titleColor={colors.gray01}
-          leftIcon={images.icBackBlack}
-          onLeftClick={this.handleOnClickBack}
-        />
-        <KeyboardAwareScrollView style={styles.content}>
-          {sliderImages.length > 0 && (
-            <ImageSlider
-              images={sliderImages}
-              customSlide={({index, item, style, width}) => (
-                <Image
-                  source={{uri: item}}
-                  style={styles.slider}
-                  key={index + ''}
-                />
-              )}
-            />
-          )}
-          <Text style={styles.time}>{timelineData.created_date}</Text>
-          <Text style={styles.title}>{timelineData.title}</Text>
-          <Text style={styles.subTitle}>{timelineData.sub_title}</Text>
-          <Text style={styles.postContent}>{timelineData.content}</Text>
-          {this.renderActionPost()}
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === 'ios' ? 'padding' : ''}
+        keyboardVerticalOffset={-metrics.sendButtonMarginBottom}>
+        <SafeAreaView style={styles.container}>
+          <NavBar
+            style={styles.navBar}
+            title="Post Detail"
+            titleColor={colors.gray01}
+            leftIcon={images.icBackBlack}
+            onLeftClick={this.handleOnClickBack}
+          />
+          <FlatList
+            style={styles.content}
+            contentContainerStyle={styles.flatListContent}
+            data={comments}
+            ListHeaderComponent={() => this.renderHeader(timelineData)}
+            renderItem={({item, index}) => <CommentItem data={item} />}
+            keyExtractor={item => item.id + ''}
+          />
           <View style={styles.inputContainer}>
             <AutoGrowingTextInput
-              style={styles.input}
               placeholder="Write your own ......."
+              style={styles.input}
               value={comment}
-              onChangeText={(text) => this.setState({comment: text})}
+              onChangeText={text =>
+                this.setState({
+                  comment: text,
+                  isDisableButton: text.trim() === '',
+                })
+              }
             />
-            {isShowSendButton && (
-              <TouchableOpacity
-                activeOpacity={activeOpacity}
-                onPress={this.handleOnClickPostComment}>
-                <Icon
-                  style={styles.sendIcon}
-                  source={images.icSendActive}
-                  width={scaleSize(35)}
-                  height={scaleSize(35)}
-                />
-              </TouchableOpacity>
-            )}
+            <Button
+              title="GỬI"
+              style={styles.send}
+              onClick={this.handleOnClickPostComment}
+            />
           </View>
-          <FlatList
-            style={styles.flatList}
-            data={comments}
-            renderItem={({item, index}) => <CommentItem data={item} />}
-            keyExtractor={(item) => item.id + ''}
-          />
-        </KeyboardAwareScrollView>
-        <Loading isLoading={isLoading} />
-      </SafeAreaView>
+          <Loading show={isLoading} />
+        </SafeAreaView>
+      </KeyboardAvoidingView>
     );
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   listTimeline: state.timeline.list,
   user: state.auth.user,
+  ipList: state.ip.list,
 });
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = dispatch => ({
   fetchTimelineDetail: (params, onSuccess, onError) =>
     dispatch(TimelineActions.timelineDetail(params, onSuccess, onError)),
-  fetchTimeline: (params, onSuccess, onError) =>
-    dispatch(TimelineActions.timelineFetch(params, onSuccess, onError)),
+  fetchTimelines: (userId, role, listIp, onSuccess, onError) =>
+    dispatch(
+      TimelineActions.timelineFetch({userId, role, listIp}, onSuccess, onError),
+    ),
   fetchComments: (params, onSuccess, onError) =>
     dispatch(TimelineActions.timelineFetchComments(params, onSuccess, onError)),
   postComment: (params, onSuccess, onError) =>
@@ -298,4 +316,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(TimelineActions.timelineDelete(params, onSuccess, onError)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(TimelineDetail);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(TimelineDetail);

@@ -15,6 +15,7 @@ import AuthActions from '../../stores/authRedux';
 import Loading from '../../components/organisms/Loading';
 import Icon from '../../components/atoms/Icon';
 import NavigationService from '../../services/navigationService';
+import ImagePickerHelper from '../../helpers/ImagePickerHelper';
 
 class MyPage extends React.Component {
   constructor(props) {
@@ -29,7 +30,7 @@ class MyPage extends React.Component {
         props.user && props.user.image_url
           ? {uri: props.user.image_url}
           : images.imgAvatarDefault,
-      avatarBase64: '',
+      avatar: null,
     };
   }
 
@@ -64,7 +65,7 @@ class MyPage extends React.Component {
 
   handleOnClickLogout = () => {
     const {logout} = this.props;
-    NavigationService.navigate('LoginScreen');
+    NavigationService.navigateAndReset('LoginScreen');
     logout();
   };
 
@@ -90,38 +91,42 @@ class MyPage extends React.Component {
         const source = {uri: response.uri};
         this.setState({
           avatarSource: source,
-          avatarBase64: response.data,
+          avatar: response,
         });
       }
     });
   };
 
   handleOnClickUpdateProfile = () => {
-    const {username, expiredAt, avatarBase64} = this.state;
+    const {username, expiredAt, avatar} = this.state;
     const {updateProfile, user} = this.props;
     this.setState({isFetching: true});
-    const params = {
-      userId: user.user_id,
-      username,
-      status: 1,
-      expiredAt,
-      avatar: avatarBase64,
-    };
-    updateProfile(
-      params,
-      () => {
-        this.setState({isFetching: false});
-        Alert.alert(
-          'Success',
-          'Your profile has been updated',
-          [{text: 'OK', onPress: () => {}}],
-          {cancelable: false},
+    ImagePickerHelper.resizeImage(avatar)
+      .then(base64Image => {
+        const params = {
+          userId: user.user_id,
+          username,
+          status: 1,
+          expiredAt,
+          avatar: base64Image,
+        };
+        updateProfile(
+          params,
+          () => {
+            this.setState({isFetching: false});
+            Alert.alert(
+              'Success',
+              'Your profile has been updated',
+              [{text: 'OK', onPress: () => {}}],
+              {cancelable: false},
+            );
+          },
+          () => {
+            this.setState({isFetching: false});
+          },
         );
-      },
-      () => {
-        this.setState({isFetching: false});
-      },
-    );
+      })
+      .catch(() => this.setState({isFetching: false}));
   };
 
   render() {
@@ -234,4 +239,7 @@ const mapDispatchToProps = dispatch => ({
   logout: () => dispatch(AuthActions.authLogout()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(MyPage);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(MyPage);

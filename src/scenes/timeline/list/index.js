@@ -3,7 +3,7 @@ import {View, FlatList, RefreshControl} from 'react-native';
 import {connect} from 'react-redux';
 import RNPickerSelect from 'react-native-picker-select';
 import {images, colors} from '../../../themes';
-import styles from './styles';
+import styles, {pickerSelectStyles} from './styles';
 import TabHeader from '../../../components/organisms/TabHeader';
 import TimelineItem from '../../../components/organisms/TimelineItem';
 import {scaleSize} from '../../../themes/mixins';
@@ -106,7 +106,7 @@ class Timeline extends React.Component {
 
   renderTabHeader = () => {
     const {user} = this.props;
-    if (user && (user.type === 'admin' || user.type === 'root')) {
+    if (user && user.type === 'admin') {
       return (
         <TabHeader
           source={images.imgMapAccount}
@@ -147,6 +147,8 @@ class Timeline extends React.Component {
           <View style={styles.flatList}>
             <RNPickerSelect
               placeholder={placeholder}
+              style={pickerSelectStyles}
+              useNativeAndroidPickerStyle={false}
               onValueChange={modemId => this.handleOnSelectModem(modemId)}
               items={modemItems}
             />

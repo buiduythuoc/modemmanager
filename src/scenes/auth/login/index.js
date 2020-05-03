@@ -99,11 +99,11 @@ class LoginScreen extends React.Component {
               value={password}
               selectionColor={colors.white}
             />
-            <Text
+            {/* <Text
               style={styles.forgotPasswordLink}
               onPress={this.handleClickForgotPassword}>
               Forgot password
-            </Text>
+            </Text> */}
           </View>
           <Button
             style={[styles.loginButton, loginButtonStyle]}

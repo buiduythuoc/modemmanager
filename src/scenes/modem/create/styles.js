@@ -23,13 +23,6 @@ const styles = StyleSheet.create({
     color: colors.gray01,
     marginTop: scaleSize(20),
   },
-  picker: {
-    height: scaleSize(40),
-    borderColor: colors.gray04,
-    borderBottomWidth: 1,
-    borderRadius: scaleSize(5),
-    justifyContent: 'center',
-  },
   modemNameInput: {
     width: '100%',
     marginTop: scaleSize(20),
@@ -57,6 +50,24 @@ const styles = StyleSheet.create({
     marginTop: scaleSize(29),
     width: '100%',
     marginBottom: scaleSize(20),
+  },
+});
+
+export const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    height: scaleSize(47),
+    borderColor: colors.gray04,
+    borderBottomWidth: 1,
+    borderRadius: scaleSize(5),
+    justifyContent: 'center',
+    color: colors.black,
+  },
+  inputAndroid: {
+    height: scaleSize(47),
+    borderColor: colors.gray04,
+    borderBottomWidth: 1,
+    justifyContent: 'center',
+    color: colors.black,
   },
 });
 

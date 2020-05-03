@@ -19,16 +19,16 @@ const Button = props => {
   } = props;
 
   const containerStyle = {
-    ...styles.container,
+    borderRadius: height / 2,
     borderColor,
     backgroundColor,
     height: height,
-    borderRadius: height / 2,
+    ...styles.container,
   };
 
   const titleStyle = {
-    ...styles.title,
     color: textColor,
+    ...styles.title,
   };
 
   const activeOpacity = disable ? 1 : 0.8;
