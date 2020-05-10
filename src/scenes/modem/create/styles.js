@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {colors} from '../../../themes';
+import {colors, metrics} from '../../../themes';
 import {scaleSize, scaleFont} from '../../../themes/mixins';
 
 const styles = StyleSheet.create({
@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    paddingHorizontal: scaleSize(20),
+    paddingHorizontal: metrics.baseMargin,
     borderTopLeftRadius: scaleSize(25),
     borderTopRightRadius: scaleSize(25),
     backgroundColor: colors.white,
@@ -21,26 +21,26 @@ const styles = StyleSheet.create({
   label: {
     fontSize: scaleFont(14),
     color: colors.gray01,
-    marginTop: scaleSize(20),
+    marginTop: metrics.largeBaseMargin,
   },
   modemNameInput: {
     width: '100%',
-    marginTop: scaleSize(20),
+    marginTop: metrics.largeBaseMargin,
   },
   domainNameInput: {
-    marginTop: scaleSize(20),
+    marginTop: metrics.largeBaseMargin,
     width: '100%',
   },
   portInput: {
-    marginTop: scaleSize(20),
+    marginTop: metrics.largeBaseMargin,
     width: '100%',
   },
   userNameInput: {
-    marginTop: scaleSize(20),
+    marginTop: metrics.largeBaseMargin,
     width: '100%',
   },
   passwordInput: {
-    marginTop: scaleSize(20),
+    marginTop: metrics.largeBaseMargin,
     width: '100%',
   },
   input: {
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
   saveButton: {
     marginTop: scaleSize(29),
     width: '100%',
-    marginBottom: scaleSize(20),
+    marginBottom: metrics.largeBaseMargin,
   },
 });
 

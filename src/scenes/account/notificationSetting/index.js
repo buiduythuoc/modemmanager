@@ -8,9 +8,11 @@ import {
   Alert,
 } from 'react-native';
 import {connect} from 'react-redux';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {images, colors} from '../../../themes';
 import styles from './styles';
 import Button from '../../../components/atoms/Button';
+import LabelInput from '../../../components/molecules/LabelInput';
 import NavBar from '../../../components/molecules/NavBar';
 import {scaleSize} from '../../../themes/mixins';
 import AccountActions from '../../../stores/accountRedux';
@@ -26,8 +28,14 @@ class NotificationSetting extends React.Component {
 
     this.state = {
       isLoading: false,
-      enable: true,
-      minNumberOfDevices: '10',
+      isNotiDevice: false,
+      noOfDevice: '10',
+      notiDeviceTitle: '',
+      notiDeviceContent: '',
+      isNotiData: false,
+      noOfData: '5',
+      notiDataTitle: '',
+      notiDataContent: '',
     };
   }
 
@@ -43,8 +51,14 @@ class NotificationSetting extends React.Component {
       responseData => {
         this.setState({
           isLoading: false,
-          enable: responseData.is_active === 1,
-          minNumberOfDevices: responseData.notify_devices + '',
+          isNotiDevice: responseData.is_noti_device === 1,
+          noOfDevice: responseData.notify_devices || '10',
+          notiDeviceTitle: responseData.noti_device_title || '',
+          notiDeviceContent: responseData.noti_device_content || '',
+          isNotiData: responseData.is_noti_data === 1,
+          noOfData: responseData.notify_data || '5',
+          notiDataTitle: responseData.noti_data_title || '',
+          notiDataContent: responseData.noti_data_content || '',
         });
       },
       () => {
@@ -54,14 +68,29 @@ class NotificationSetting extends React.Component {
   };
 
   handleOnClickUpdate = () => {
-    const {enable, minNumberOfDevices} = this.state;
+    const {
+      isNotiDevice,
+      noOfDevice,
+      notiDeviceTitle,
+      notiDeviceContent,
+      isNotiData,
+      noOfData,
+      notiDataTitle,
+      notiDataContent,
+    } = this.state;
     const {updateNotificationSetting, user, navigation} = this.props;
     this.setState({isLoading: true});
     updateNotificationSetting(
       {
         userId: user.user_id,
-        isActive: enable ? 1 : 0,
-        numberOfDevice: minNumberOfDevices,
+        isNotiDevice: isNotiDevice ? 1 : 0,
+        noOfDevice,
+        notiDeviceTitle,
+        notiDeviceContent,
+        isNotiData: isNotiData ? 1 : 0,
+        noOfData,
+        notiDataTitle,
+        notiDataContent,
       },
       () => {
         this.setState({
@@ -92,12 +121,126 @@ class NotificationSetting extends React.Component {
     navigation.goBack();
   };
 
-  render() {
-    const {enable, minNumberOfDevices, isLoading} = this.state;
-    const status = enable ? 'ON' : 'OFF';
-    const settingButtonStyle = enable
+  handleOnClickPushNotification = () => {
+    const {navigation} = this.props;
+    navigation.navigate('PushNotificationScreen');
+  };
+
+  renderNumberOfDevices() {
+    const {
+      isNotiDevice,
+      noOfDevice,
+      notiDeviceTitle,
+      notiDeviceContent,
+    } = this.state;
+    const status = isNotiDevice ? 'ON' : 'OFF';
+    const settingButtonStyle = isNotiDevice
       ? {backgroundColor: colors.lightGreen}
       : {backgroundColor: colors.gray01};
+    return (
+      <>
+        <View style={styles.notificationContainer}>
+          <Text style={styles.notificationText}>Device Notification</Text>
+          <TouchableOpacity
+            style={[styles.settingButton, settingButtonStyle]}
+            onPress={() => this.setState({isNotiDevice: !isNotiDevice})}>
+            <Text style={styles.settingButtonText}>{status}</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.numberOfDeviceContainer}>
+          <Text style={styles.numberOfDeviceText}>Min Number Of Devices</Text>
+          <TextInput
+            style={styles.input}
+            value={noOfDevice + ''}
+            keyboardType="numeric"
+            onChangeText={text => this.setState({noOfDevice: text})}
+          />
+        </View>
+        <LabelInput
+          style={styles.inputContainer}
+          label="Title"
+          labelStyle={styles.label}
+          borderColor={colors.gray04}
+          inputStyle={styles.titleInput}
+          rounded={true}
+          placeholder="Write your own ......."
+          placeholderTextColor={colors.gray05}
+          value={notiDeviceTitle}
+          onChangeText={text => this.setState({notiDeviceTitle: text})}
+        />
+        <LabelInput
+          style={styles.inputContainer}
+          label="Content"
+          labelStyle={styles.label}
+          borderColor={colors.gray04}
+          inputStyle={styles.contentInput}
+          rounded={true}
+          placeholder="Write your own ......."
+          placeholderTextColor={colors.gray05}
+          value={notiDeviceContent}
+          multiline={true}
+          onChangeText={text => this.setState({notiDeviceContent: text})}
+        />
+      </>
+    );
+  }
+
+  renderNumberOfData() {
+    const {isNotiData, noOfData, notiDataTitle, notiDataContent} = this.state;
+    const status = isNotiData ? 'ON' : 'OFF';
+    const settingButtonStyle = isNotiData
+      ? {backgroundColor: colors.lightGreen}
+      : {backgroundColor: colors.gray01};
+    return (
+      <>
+        <View style={styles.notificationContainer}>
+          <Text style={styles.notificationText}>Data Notification</Text>
+          <TouchableOpacity
+            style={[styles.settingButton, settingButtonStyle]}
+            onPress={() => this.setState({isNotiData: !isNotiData})}>
+            <Text style={styles.settingButtonText}>{status}</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.bandWidthContainer}>
+          <Text style={styles.backgroundColor}>Min MB/s(in 30 minutes)</Text>
+          <TextInput
+            style={styles.input}
+            value={noOfData + ''}
+            keyboardType="numeric"
+            onChangeText={text => this.setState({noOfData: text})}
+          />
+        </View>
+        <LabelInput
+          style={styles.inputContainer}
+          label="Title"
+          labelStyle={styles.label}
+          borderColor={colors.gray04}
+          inputStyle={styles.titleInput}
+          rounded={true}
+          placeholder="Write your own ......."
+          placeholderTextColor={colors.gray05}
+          value={notiDataTitle}
+          onChangeText={text => this.setState({notiDataTitle: text})}
+        />
+        <LabelInput
+          style={styles.inputContainer}
+          label="Content"
+          labelStyle={styles.label}
+          borderColor={colors.gray04}
+          inputStyle={styles.contentInput}
+          rounded={true}
+          placeholder="Write your own ......."
+          placeholderTextColor={colors.gray05}
+          value={notiDataContent}
+          multiline={true}
+          onChangeText={text => this.setState({notiDataContent: text})}
+        />
+      </>
+    );
+  }
+
+  render() {
+    const {isLoading} = this.state;
 
     return (
       <SafeAreaView style={styles.container}>
@@ -106,35 +249,18 @@ class NotificationSetting extends React.Component {
           titleColor={colors.gray01}
           leftIcon={images.icBackBlack}
           onLeftClick={this.handleOnClickBack}
+          rightIcon={images.icTabNotificationInactive}
+          rightIconWidth={15}
+          rightIconHeight={17}
+          rightIconStyle={{tintColor: colors.black}}
+          onRightClick={this.handleOnClickPushNotification}
         />
-        <View style={styles.content}>
-          <View style={styles.notificationContainer}>
-            <Text style={styles.notificationText}>Notification</Text>
-            <TouchableOpacity
-              style={[styles.settingButton, settingButtonStyle]}
-              onPress={() => this.setState({enable: !enable})}>
-              <Text style={styles.settingButtonText}>{status}</Text>
-            </TouchableOpacity>
-          </View>
+        <KeyboardAwareScrollView contentContainerStyle={styles.content}>
+          {this.renderNumberOfDevices()}
           <View style={styles.line} />
-          <View style={styles.numberOfDeviceContainer}>
-            <Text style={styles.numberOfDeviceText}>Min Number Of Devices</Text>
-            <TextInput
-              style={styles.input}
-              value={minNumberOfDevices}
-              keyboardType="numeric"
-              onChangeText={text => this.setState({minNumberOfDevices: text})}
-            />
-          </View>
-          {/* <View style={styles.bandWidthContainer}>
-            <Text style={styles.backgroundColor}>Min MB/s(in 30 minutes)</Text>
-            <TextInput
-              style={styles.input}
-              value={minBandWidth}
-              keyboardType="numeric"
-              onChangeText={(text) => this.setState({minBandWidth: text})}
-            />
-          </View> */}
+          {this.renderNumberOfData()}
+        </KeyboardAwareScrollView>
+        <View style={styles.sendButtonContainer}>
           <Button
             style={styles.sendButton}
             height={scaleSize(45)}

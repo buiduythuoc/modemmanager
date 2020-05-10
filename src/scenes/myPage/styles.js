@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {colors} from '../../themes';
+import {colors, metrics} from '../../themes';
 import {scaleSize} from '../../themes/mixins';
 
 const styles = StyleSheet.create({
@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
   },
   userNameInput: {
     width: '100%',
-    marginTop: scaleSize(20),
+    marginTop: metrics.largeBaseMargin,
   },
   iconEditContainer: {
     position: 'absolute',
@@ -36,11 +36,11 @@ const styles = StyleSheet.create({
   },
   passwordInput: {
     width: '100%',
-    marginTop: scaleSize(20),
+    marginTop: metrics.largeBaseMargin,
   },
   expiredAtInput: {
     width: '100%',
-    marginTop: scaleSize(20),
+    marginTop: metrics.largeBaseMargin,
   },
   updateButton: {
     width: '100%',

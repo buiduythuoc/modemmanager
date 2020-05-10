@@ -114,13 +114,56 @@ export function* fetchNotificationSetting(action) {
 
 export function* updateNotificationSetting(action) {
   const {params, onSuccess, onError} = action;
-  const {userId, numberOfDevice, isActive} = params;
+  const {
+    userId,
+    isNotiDevice,
+    noOfDevice,
+    notiDeviceTitle,
+    notiDeviceContent,
+    isNotiData,
+    noOfData,
+    notiDataTitle,
+    notiDataContent,
+  } = params;
   // make the call to the api
   const response = yield call(
     api.create().updateNotificationSetting,
     userId,
-    numberOfDevice,
-    isActive,
+    isNotiDevice,
+    noOfDevice,
+    notiDeviceTitle,
+    notiDeviceContent,
+    isNotiData,
+    noOfData,
+    notiDataTitle,
+    notiDataContent,
+  );
+
+  if (response.status === 200 && response.data.status === 1) {
+    if (onSuccess) {
+      onSuccess();
+    }
+  } else {
+    const errorMessage = response.data.message
+      ? response.data.message
+      : 'Some error';
+    Alert.alert('Error', errorMessage);
+    if (onError) {
+      onError();
+    }
+  }
+}
+
+export function* pushNotification(action) {
+  const {params, onSuccess, onError} = action;
+  const {userId, title, content, type} = params;
+  // make the call to the api
+  const response = yield call(
+    api.create().pushNotification,
+    userId,
+    title,
+    content,
+    type,
   );
 
   if (response.status === 200 && response.data.status === 1) {

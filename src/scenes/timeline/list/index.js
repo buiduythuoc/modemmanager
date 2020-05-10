@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, FlatList, RefreshControl} from 'react-native';
+import {View, FlatList, RefreshControl, Text} from 'react-native';
 import {connect} from 'react-redux';
 import RNPickerSelect from 'react-native-picker-select';
 import {images, colors} from '../../../themes';
@@ -164,6 +164,14 @@ class Timeline extends React.Component {
     );
   };
 
+  renderNoData = () => {
+    return (
+      <View style={styles.noPostContainer}>
+        <Text style={styles.noPostText}>No posts to show</Text>
+      </View>
+    );
+  };
+
   render() {
     const {isFetching, isRefreshing} = this.state;
     const {listTimeline} = this.props;
@@ -171,25 +179,31 @@ class Timeline extends React.Component {
     return (
       <View style={styles.container}>
         {this.renderTabHeader()}
-        {this.renderModemSelect()}
-        <FlatList
-          style={styles.flatList}
-          contentContainerStyle={styles.flatListContent}
-          data={listTimeline}
-          renderItem={({item, index}) => (
-            <TimelineItem
-              data={item}
-              onClick={() => this.handleOnClickDetail(item.id)}
+        {listTimeline && listTimeline.length > 0 ? (
+          <>
+            {this.renderModemSelect()}
+            <FlatList
+              style={styles.flatList}
+              contentContainerStyle={styles.flatListContent}
+              data={listTimeline}
+              renderItem={({item, index}) => (
+                <TimelineItem
+                  data={item}
+                  onClick={() => this.handleOnClickDetail(item.id)}
+                />
+              )}
+              keyExtractor={item => item.id + ''}
+              refreshControl={
+                <RefreshControl
+                  refreshing={isRefreshing}
+                  onRefresh={this.handleOnRefresh}
+                />
+              }
             />
-          )}
-          keyExtractor={item => item.id + ''}
-          refreshControl={
-            <RefreshControl
-              refreshing={isRefreshing}
-              onRefresh={this.handleOnRefresh}
-            />
-          }
-        />
+          </>
+        ) : (
+          this.renderNoData()
+        )}
         <Loading show={isFetching} />
       </View>
     );

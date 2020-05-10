@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {View, Text, StyleSheet, Image} from 'react-native';
 import {scaleSize, scaleFont} from '../../themes/mixins';
-import {colors, images} from '../../themes';
+import {colors, images, metrics} from '../../themes';
 
 const CommentItem = props => {
   const {data} = props;
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'row',
-    marginBottom: scaleSize(20),
+    marginBottom: metrics.largeBaseMargin,
   },
   avatar: {
     width: scaleSize(44),

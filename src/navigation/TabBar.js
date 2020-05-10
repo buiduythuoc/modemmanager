@@ -22,9 +22,12 @@ import ChangePasswordScreen from '../scenes/myPage/changePassword';
 import AccountListScreen from '../scenes/account/list';
 import AccountDetailDetailScreen from '../scenes/account/detail';
 import NotificationSettingScreen from '../scenes/account/notificationSetting';
+import PushNotificationScreen from '../scenes/account/pushNotification';
 
 import {images, colors} from '../themes';
 import Icon from '../components/atoms/Icon';
+import NotificationIcon from '../components/molecules/NotificationIcon';
+
 import styles from './styles';
 
 const baseNavigationOptions = {
@@ -40,6 +43,7 @@ const ListAccountNav = createStackNavigator(
   {
     AccountListScreen: {screen: AccountListScreen},
     AccountDetailDetailScreen: {screen: AccountDetailDetailScreen},
+    PushNotificationScreen: {screen: PushNotificationScreen},
     NotificationSettingScreen: {screen: NotificationSettingScreen},
     ListModemScreen: {screen: ListModemScreen},
     DeviceListScreen: {screen: DeviceListScreen},
@@ -134,7 +138,7 @@ const NotificationNav = createStackNavigator(
 
 NotificationNav.navigationOptions = ({navigation}) => {
   const {routeName} = navigation.state.routes[navigation.state.index];
-  let tabBarVisible = true;
+  let tabBarVisible = false;
   if (routeName === 'NotificationScreen') {
     tabBarVisible = true;
   }
@@ -223,17 +227,7 @@ const AdminTabBar = createBottomTabNavigator(
       path: '/notification',
       navigationOptions: {
         tabBarLabel: 'Notification',
-        tabBarIcon: ({focused}) => (
-          <Icon
-            source={
-              focused
-                ? images.icTabNotificationActive
-                : images.icTabNotificationInactive
-            }
-            width={15}
-            height={17}
-          />
-        ),
+        tabBarIcon: ({focused}) => <NotificationIcon focused={focused} />,
       },
     },
     MyPageTab: {
@@ -283,17 +277,7 @@ const UserTabBar = createBottomTabNavigator(
       path: '/notification',
       navigationOptions: {
         tabBarLabel: 'Notification',
-        tabBarIcon: ({focused}) => (
-          <Icon
-            source={
-              focused
-                ? images.icTabNotificationActive
-                : images.icTabNotificationInactive
-            }
-            width={15}
-            height={17}
-          />
-        ),
+        tabBarIcon: ({focused}) => <NotificationIcon focused={focused} />,
       },
     },
     MyPageTab: {
@@ -395,4 +379,7 @@ const mapStateToProps = state => ({
   user: state.auth.user,
 });
 
-export default connect(mapStateToProps, null)(TabBar);
+export default connect(
+  mapStateToProps,
+  null,
+)(TabBar);

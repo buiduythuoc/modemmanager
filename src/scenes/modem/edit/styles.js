@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {colors} from '../../../themes';
+import {colors, metrics} from '../../../themes';
 import {scaleSize, scaleFont} from '../../../themes/mixins';
 
 const styles = StyleSheet.create({
@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    padding: scaleSize(20),
+    padding: metrics.baseMargin,
     borderTopLeftRadius: scaleSize(25),
     borderTopRightRadius: scaleSize(25),
     backgroundColor: colors.white,
@@ -25,19 +25,19 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   domainNameInput: {
-    marginTop: scaleSize(20),
+    marginTop: metrics.trip,
     width: '100%',
   },
   portInput: {
-    marginTop: scaleSize(20),
+    marginTop: metrics.largeBaseMargin,
     width: '100%',
   },
   userNameInput: {
-    marginTop: scaleSize(20),
+    marginTop: metrics.largeBaseMargin,
     width: '100%',
   },
   passwordInput: {
-    marginTop: scaleSize(20),
+    marginTop: metrics.largeBaseMargin,
     width: '100%',
   },
   updateButton: {

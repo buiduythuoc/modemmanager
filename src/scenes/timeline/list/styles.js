@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
 import {colors, metrics} from '../../../themes';
-import {scaleSize} from '../../../themes/mixins';
+import {scaleSize, scaleFont} from '../../../themes/mixins';
 
 const styles = StyleSheet.create({
   container: {
@@ -11,13 +11,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   flatListContent: {
-    paddingHorizontal: scaleSize(20),
+    paddingHorizontal: metrics.baseMargin,
     paddingTop: scaleSize(10),
   },
   modemPickerContainer: {
     alignItems: 'flex-end',
     marginTop: scaleSize(10),
-    marginRight: scaleSize(20),
+    marginRight: metrics.baseMargin,
   },
   modemPicker: {
     flexDirection: 'row',
@@ -32,6 +32,13 @@ const styles = StyleSheet.create({
   pickerSelect: {
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  noPostContainer: {
+    padding: metrics.baseMargin,
+    alignItems: 'center',
+  },
+  noPostText: {
+    fontSize: scaleFont(14),
   },
 });
 

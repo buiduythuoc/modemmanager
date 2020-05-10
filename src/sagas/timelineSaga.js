@@ -34,6 +34,10 @@ export function* addTimeline(action) {
       onSuccess();
     }
   } else {
+    const errorMessage = response.data.message
+      ? response.data.message
+      : 'Some error';
+    Alert.alert('Error', errorMessage);
     if (onError) {
       onError();
     }
@@ -49,7 +53,6 @@ export function* fetchTimelines(action) {
     const publicIp = publicIpResponse.data;
     yield put(IPActions.ipAdd(publicIp));
   }
-  console.log(listIp);
   const response = yield call(api.create().getListTimelines, userId, listIp);
 
   if (response.status === 200 && response.data.status === 1) {
@@ -158,6 +161,10 @@ export function* editTimeline(action) {
       onSuccess();
     }
   } else {
+    const errorMessage = response.data.message
+      ? response.data.message
+      : 'Some error';
+    Alert.alert('Error', errorMessage);
     if (onError) {
       onError();
     }
@@ -180,6 +187,10 @@ export function* postComment(action) {
       onSuccess();
     }
   } else {
+    const errorMessage = response.data.message
+      ? response.data.message
+      : 'Some error';
+    Alert.alert('Error', errorMessage);
     if (onError) {
       onError();
     }

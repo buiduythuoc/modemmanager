@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   passwordInput: {
-    marginTop: scaleSize(20),
+    marginTop: metrics.largeBaseMargin,
     width: '100%',
   },
   forgotPasswordLink: {

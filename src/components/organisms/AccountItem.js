@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {TouchableOpacity, View, Text, StyleSheet, Image} from 'react-native';
 import {scaleSize, scaleFont} from '../../themes/mixins';
-import {colors, images} from '../../themes';
+import {colors, images, metrics} from '../../themes';
 
 const AccountItem = props => {
   const {data, onClickModemManagement, onClickAccountDetail} = props;
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
   },
   modemManagementContainer: {
     marginTop: scaleSize(16),
-    borderRadius: scaleSize(20),
+    borderRadius: metrics.largeBaseMargin,
     backgroundColor: colors.primary,
     paddingVertical: scaleSize(5),
     paddingHorizontal: scaleSize(10),

@@ -20,7 +20,7 @@ const persistConfig = {
   /**
    * Blacklist state that we do not need/want to persist
    */
-  blacklist: ['modem', 'timeline', 'myPage', 'account'],
+  blacklist: ['modem', 'timeline', 'myPage', 'account', 'notification'],
 };
 
 export default (rootReducer, rootSaga) => {

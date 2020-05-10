@@ -1,10 +1,12 @@
 import React from 'react';
 import {View, FlatList, RefreshControl} from 'react-native';
 import {connect} from 'react-redux';
+import _ from 'lodash';
 import {images} from '../../../themes';
 import styles from './styles';
 import TabHeader from '../../../components/organisms/TabHeader';
 import NotificationItem from '../../../components/organisms/NotificationItem';
+import NotificationActions from '../../../stores/notificationRedux';
 import {scaleSize} from '../../../themes/mixins';
 import Loading from '../../../components/organisms/Loading';
 import Firebase from '../../../configs/firebase';
@@ -29,7 +31,7 @@ class Notification extends React.Component {
   }
 
   fetchNotifications() {
-    const {user} = this.props;
+    const {user, setIsNew} = this.props;
 
     if (user.type === 'admin') {
       const adminId = user.user_id;
@@ -44,19 +46,34 @@ class Notification extends React.Component {
               listNotifications.push(notifications[key]);
             }
           });
-          listNotifications.sort((a, b) => {
-            const date1 = new Date(a.created_at);
-            const date2 = new Date(b.created_at);
-            return date2 - date1;
-          });
-          this.setState({
-            listNotifications,
-            isFetching: false,
-            isRefreshing: false,
-          });
+          // get notification which is pushed by root
+          Firebase.database()
+            .ref('notifications/admins')
+            .on('value', snap1 => {
+              for (let key1 in snap1.val()) {
+                listNotifications.push(snap1.val()[key1]);
+              }
+              listNotifications.sort((a, b) => {
+                const date1 = new Date(a.created_at);
+                const date2 = new Date(b.created_at);
+                return date2 - date1;
+              });
+              // if (
+              //   listNotifications.length >
+              //     this.state.listNotifications.length &&
+              //   this.state.listNotifications.length !== 0
+              // ) {
+              //   setIsNew(true);
+              // }
+              this.setState({
+                listNotifications,
+                isFetching: false,
+                isRefreshing: false,
+              });
+            });
         });
     } else {
-      const ref = 'user/notifications';
+      const ref = 'notifications/guest';
       Firebase.database()
         .ref(ref)
         .on('value', snap => {
@@ -69,6 +86,9 @@ class Notification extends React.Component {
             const date2 = new Date(b.created_at);
             return date2 - date1;
           });
+          if (!_.isEqual(listNotifications, this.state.listNotifications)) {
+            setIsNew(true);
+          }
           this.setState({
             listNotifications,
             isFetching: false,
@@ -121,11 +141,15 @@ class Notification extends React.Component {
   }
 }
 
+const mapDispatchToProps = dispatch => ({
+  setIsNew: isNew => dispatch(NotificationActions.notificationSetIsNew(isNew)),
+});
+
 const mapStateToProps = state => ({
   user: state.auth.user,
 });
 
 export default connect(
   mapStateToProps,
-  null,
+  mapDispatchToProps,
 )(Notification);

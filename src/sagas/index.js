@@ -4,7 +4,7 @@ import {takeLatest, all} from 'redux-saga/effects';
 
 import {ModemTypes} from '../stores/modemRedux';
 import {AuthTypes} from '../stores/authRedux';
-import {TimelineTypes, fetchTimelineByModemId} from '../stores/timelineRedux';
+import {TimelineTypes} from '../stores/timelineRedux';
 import {MyPageTypes} from '../stores/myPageRedux';
 import {AccountTypes} from '../stores/accountRedux';
 
@@ -38,6 +38,7 @@ import {
   updateProfile,
   fetchNotificationSetting,
   updateNotificationSetting,
+  pushNotification,
 } from './accountSaga';
 
 /* ------------- API ------------- */
@@ -91,5 +92,6 @@ export default function* root() {
       AccountTypes.ACCOUNT_UPDATE_NOTIFICATION_SETTING,
       updateNotificationSetting,
     ),
+    takeLatest(AccountTypes.ACCOUNT_PUSH_NOTIFICATION, pushNotification),
   ]);
 }

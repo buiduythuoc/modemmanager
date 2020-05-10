@@ -1,4 +1,5 @@
 import axios from 'axios';
+import {Alert} from 'react-native';
 import _ from 'lodash';
 import qs from 'querystring';
 import {BASE_API_URL} from '../configs';
@@ -18,10 +19,22 @@ const create = () => {
     return request;
   });
 
-  api.interceptors.response.use(response => {
-    console.log('Response:', response);
-    return response;
-  });
+  api.interceptors.response.use(
+    response => {
+      console.log('Response:', response);
+      return response;
+    },
+    error => {
+      const response = _.get(error, 'response');
+      console.log('Response:', response);
+      if (!response) {
+        Alert.alert('Error', 'Something went wrong. Please try again later.');
+        return Promise.reject(error);
+      }
+
+      return Promise.reject(error);
+    },
+  );
 
   // auth
   const login = (username, password) =>
@@ -269,15 +282,42 @@ const create = () => {
   const getPublicIp = () => api.get('https://api.ipify.org/');
 
   const getNotificationSetting = userId =>
-    api.post('getconfignoti.php', qs.stringify({user_id: userId}));
+    api.post('getconfig.php', qs.stringify({user_id: userId}));
 
-  const updateNotificationSetting = (userId, noOfDevice, isActive) =>
+  const updateNotificationSetting = (
+    userId,
+    isNotiDevice,
+    noOfDevice,
+    notiDeviceTitle,
+    notiDeviceContent,
+    isNotiData,
+    noOfData,
+    notiDataTitle,
+    notiDataContent,
+  ) =>
     api.post(
-      'updateconfignoti.php',
+      'updateconfig.php',
       qs.stringify({
         user_id: userId,
+        is_noti_device: isNotiDevice,
         no_of_device: noOfDevice,
-        is_active: isActive,
+        noti_device_title: notiDeviceTitle,
+        noti_device_content: notiDeviceContent,
+        no_of_data: noOfData,
+        is_noti_data: isNotiData,
+        noti_data_title: notiDataTitle,
+        noti_data_content: notiDataContent,
+      }),
+    );
+
+  const pushNotification = (userId, title, content, type) =>
+    api.post(
+      'sendnoti.php',
+      qs.stringify({
+        user_id: userId,
+        title,
+        content,
+        type,
       }),
     );
 
@@ -312,6 +352,7 @@ const create = () => {
     getPublicIp,
     getNotificationSetting,
     updateNotificationSetting,
+    pushNotification,
   };
 };
 

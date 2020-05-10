@@ -3,6 +3,7 @@ import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
 import PropTypes from 'prop-types';
 import Icon from '../atoms/Icon';
 import {colors, images, metrics} from '../../themes';
+import {ViewPropTypes} from '../config';
 
 const renderLeftIcon = props => {
   const {onLeftClick, leftIcon} = props;
@@ -25,13 +26,20 @@ const renderTitle = props => {
 };
 
 const renderRightIcon = props => {
-  const {rightIcon, rightIconWidth, rightIconHeight, onRightClick} = props;
+  const {
+    rightIcon,
+    rightIconWidth,
+    rightIconHeight,
+    onRightClick,
+    rightIconStyle,
+  } = props;
   if (rightIcon) {
     return (
       <TouchableOpacity
         style={styles.rightIconContainer}
         onPress={() => (onRightClick ? onRightClick() : {})}>
         <Icon
+          style={rightIconStyle}
           source={rightIcon}
           width={rightIconWidth}
           height={rightIconHeight}
@@ -63,6 +71,7 @@ NavBar.propTypes = {
   rightIcon: PropTypes.number,
   rightIconWidth: PropTypes.number,
   rightIconHeight: PropTypes.number,
+  rightIconStyle: ViewPropTypes.style,
   onRightClick: PropTypes.func,
   renderLeft: PropTypes.func,
   leftIcon: PropTypes.number,
@@ -76,6 +85,7 @@ NavBar.defaultProps = {
   rightIcon: null,
   rightIconWidth: 24,
   rightIconHeight: 24,
+  rightIconStyle: {},
   renderLeft: null,
   leftIcon: images.icBackBlack,
   onLeftClick: null,

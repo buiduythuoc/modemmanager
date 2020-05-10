@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {colors} from '../../../themes';
+import {colors, metrics} from '../../../themes';
 import {scaleSize, scaleFont} from '../../../themes/mixins';
 
 const styles = StyleSheet.create({
@@ -16,8 +16,8 @@ const styles = StyleSheet.create({
   },
   flatList: {
     flex: 1,
-    marginTop: scaleSize(14),
-    paddingHorizontal: scaleSize(10),
+    marginTop: metrics.baseMargin,
+    paddingHorizontal: metrics.baseMargin,
   },
 });
 

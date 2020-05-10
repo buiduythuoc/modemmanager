@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {colors} from '../../../themes';
+import {colors, metrics} from '../../../themes';
 import {scaleSize, scaleFont} from '../../../themes/mixins';
 
 const styles = StyleSheet.create({
@@ -24,11 +24,11 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   newPasswordInput: {
-    marginTop: scaleSize(20),
+    marginTop: metrics.largeBaseMargin,
     width: '100%',
   },
   confirmPasswordInput: {
-    marginTop: scaleSize(20),
+    marginTop: metrics.largeBaseMargin,
     width: '100%',
   },
   input: {

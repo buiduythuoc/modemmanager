@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {scaleSize, scaleFont, boxShadow} from '../../themes/mixins';
-import {colors, images} from '../../themes';
+import {colors, images, metrics} from '../../themes';
 import Icon from '../atoms/Icon';
 import Button from '../atoms/Button';
 
@@ -33,7 +33,7 @@ const ModemItem = props => {
           onPress={onClickEdit}>
           <Icon
             source={images.icEdit}
-            width={scaleSize(20)}
+            width={metrics.largeBaseMargin}
             height={scaleSize(15)}
           />
         </TouchableOpacity>
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
   },
   actionContainer: {
     width: '100%',
-    marginTop: scaleSize(20),
+    marginTop: metrics.largeBaseMargin,
     justifyContent: 'space-between',
     flexDirection: 'row',
     alignItems: 'center',
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
   editButtonContainer: {
     paddingTop: scaleSize(3),
     paddingBottom: scaleSize(3),
-    paddingRight: scaleSize(20),
+    paddingRight: metrics.largeBaseMargin,
   },
   detailButton: {
     backgroundColor: colors.addButton,

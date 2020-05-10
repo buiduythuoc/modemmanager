@@ -35,6 +35,10 @@ export function* addModem(action) {
       onSuccess();
     }
   } else {
+    const errorMessage = response.data.message
+      ? response.data.message
+      : 'Some error';
+    Alert.alert('Error', errorMessage);
     if (onError) {
       onError();
     }
@@ -69,6 +73,10 @@ export function* editModem(action) {
       onSuccess();
     }
   } else {
+    const errorMessage = response.data.message
+      ? response.data.message
+      : 'Some error';
+    Alert.alert('Error', errorMessage);
     if (onError) {
       onError();
     }

@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {colors} from '../../../themes';
+import {colors, metrics} from '../../../themes';
 import {scaleSize, scaleFont} from '../../../themes/mixins';
 
 const styles = StyleSheet.create({
@@ -8,10 +8,11 @@ const styles = StyleSheet.create({
     backgroundColor: colors.gray06,
   },
   content: {
-    flex: 1,
-    paddingLeft: scaleSize(30),
-    paddingRight: scaleSize(30),
-    paddingTop: scaleSize(42),
+    paddingLeft: metrics.baseMargin,
+    paddingRight: metrics.baseMargin,
+    paddingTop: metrics.baseMargin,
+    paddingBottom:
+      metrics.unsafeBottomHeight + 2 * metrics.smallMargin + scaleSize(45),
     borderTopLeftRadius: scaleSize(25),
     borderTopRightRadius: scaleSize(25),
     backgroundColor: colors.white,
@@ -27,9 +28,9 @@ const styles = StyleSheet.create({
     color: colors.gray01,
   },
   settingButton: {
-    width: scaleSize(46),
-    height: scaleSize(46),
-    borderRadius: scaleSize(32),
+    width: scaleSize(40),
+    height: scaleSize(40),
+    borderRadius: metrics.largeBaseMargin,
     backgroundColor: colors.lightGreen,
     justifyContent: 'center',
     alignItems: 'center',
@@ -40,12 +41,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   line: {
-    marginTop: scaleSize(24),
+    marginVertical: metrics.baseMargin,
     height: 1,
     backgroundColor: colors.gray05,
   },
   numberOfDeviceContainer: {
-    marginTop: scaleSize(35),
+    marginTop: metrics.baseMargin,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -56,14 +57,15 @@ const styles = StyleSheet.create({
   },
   input: {
     height: scaleSize(30),
+    width: scaleSize(60),
     backgroundColor: colors.addButton,
     paddingVertical: scaleSize(2),
-    paddingHorizontal: scaleSize(20),
+    paddingHorizontal: scaleSize(10),
     borderRadius: scaleSize(15),
     color: colors.white,
   },
   bandWidthContainer: {
-    marginTop: scaleSize(30),
+    marginTop: metrics.baseMargin,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -72,17 +74,38 @@ const styles = StyleSheet.create({
     fontSize: scaleFont(14),
     color: colors.gray01,
   },
-  labelStyle: {
-    fontSize: scaleFont(14),
-    color: colors.gray01,
-  },
-  emailInputContainer: {
-    marginTop: scaleSize(67),
-    width: '100%',
+  sendButtonContainer: {
+    position: 'absolute',
+    bottom: metrics.unsafeBottomHeight,
+    left: 0,
+    right: 0,
+    borderTopColor: colors.gray05,
+    borderTopWidth: 1,
+    paddingHorizontal: metrics.baseMargin,
+    paddingVertical: metrics.smallMargin,
+    backgroundColor: colors.white,
   },
   sendButton: {
-    marginTop: scaleSize(54),
     width: '100%',
+  },
+  label: {
+    fontSize: scaleFont(14),
+    color: colors.gray01,
+    marginBottom: scaleSize(10),
+  },
+  inputContainer: {
+    marginTop: scaleSize(14),
+    width: '100%',
+  },
+  titleInput: {
+    height: scaleSize(47),
+    borderRadius: scaleSize(5),
+    color: colors.black,
+  },
+  contentInput: {
+    height: scaleSize(80),
+    borderRadius: scaleSize(5),
+    color: colors.black,
   },
 });
 

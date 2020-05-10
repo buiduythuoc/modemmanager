@@ -7,6 +7,7 @@ import {reducer as TimelineReducer} from './timelineRedux';
 import {reducer as MyPageReducer} from './myPageRedux';
 import {reducer as AccountReducer} from './accountRedux';
 import {reducer as IPReducer} from './ipRedux';
+import {reducer as NotificationReducer} from './notificationRedux';
 
 export default () => {
   const allReducers = combineReducers({
@@ -16,6 +17,7 @@ export default () => {
     myPage: MyPageReducer,
     account: AccountReducer,
     ip: IPReducer,
+    notification: NotificationReducer,
   });
 
   const rootReducer = (state, action) => {

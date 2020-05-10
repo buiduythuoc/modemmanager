@@ -11,8 +11,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
-    paddingTop: scaleSize(20),
-    paddingHorizontal: scaleSize(20),
+    paddingTop: metrics.baseMargin,
+    paddingHorizontal: metrics.baseMargin,
     flex: 1,
     borderTopLeftRadius: scaleSize(25),
     borderTopRightRadius: scaleSize(25),
@@ -24,12 +24,13 @@ const styles = StyleSheet.create({
   line: {
     backgroundColor: colors.commentBg,
     height: 1,
-    marginTop: scaleSize(20),
-    marginBottom: scaleSize(20),
+    marginTop: metrics.baseMargin,
+    marginBottom: metrics.baseMargin,
   },
   slider: {
-    width: metrics.screenWidth - 2 * scaleSize(20),
-    height: metrics.screenWidth - 2 * scaleSize(20),
+    width: metrics.screenWidth - 2 * metrics.baseMargin,
+    height: metrics.screenWidth - 2 * metrics.baseMargin,
+    backgroundColor: colors.white,
   },
   time: {
     marginTop: scaleSize(10),
@@ -61,7 +62,7 @@ const styles = StyleSheet.create({
     bottom: metrics.sendButtonMarginBottom,
     flexDirection: 'row',
     paddingVertical: scaleSize(12),
-    paddingHorizontal: scaleSize(20),
+    paddingHorizontal: metrics.baseMargin,
     backgroundColor: colors.white,
   },
   input: {

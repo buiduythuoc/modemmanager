@@ -88,7 +88,6 @@ class EditTimeline extends React.Component {
       img1: await ImagePickerHelper.resizeImage(imageSource2.image),
       img2: await ImagePickerHelper.resizeImage(imageSource3.image),
     };
-    debugger;
     editTimeline(
       params,
       () => {

@@ -25,16 +25,20 @@ const TimelineItem = props => {
         style={styles.container}
         source={imageSrc}
         imageStyle={styles.image}>
-        <Text style={styles.title}>{title}</Text>
-        <View style={styles.line} />
-        <View style={styles.timeContainer}>
-          <Icon
-            style={styles.timeIcon}
-            source={images.icTimeWhite}
-            width={scaleSize(10)}
-            height={scaleSize(10)}
-          />
-          <Text style={styles.time}>{time}</Text>
+        <View style={styles.content}>
+          <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">
+            {title}
+          </Text>
+          <View style={styles.line} />
+          <View style={styles.timeContainer}>
+            <Icon
+              style={styles.timeIcon}
+              source={images.icTimeWhite}
+              width={scaleSize(10)}
+              height={scaleSize(10)}
+            />
+            <Text style={styles.time}>{time}</Text>
+          </View>
         </View>
       </ImageBackground>
     </TouchableOpacity>
@@ -58,7 +62,14 @@ const styles = StyleSheet.create({
     borderRadius: scaleSize(15),
     height: scaleSize(164),
     marginBottom: scaleSize(10),
+    justifyContent: 'flex-end',
+  },
+  content: {
+    backgroundColor: colors.windowTint,
     paddingHorizontal: scaleSize(17),
+    paddingVertical: scaleSize(10),
+    borderBottomLeftRadius: scaleSize(15),
+    borderBottomRightRadius: scaleSize(15),
   },
   image: {
     borderRadius: scaleSize(15),
@@ -68,7 +79,6 @@ const styles = StyleSheet.create({
     fontSize: scaleFont(14),
     color: colors.white,
     fontWeight: '600',
-    marginTop: scaleSize(88),
     lineHeight: scaleSize(19),
   },
   line: {

@@ -7,7 +7,7 @@ const IS_IPHONE_X = height === 812 || height === 896;
 const metrics = {
   smallMargin: scaleSize(8),
   baseMargin: scaleSize(16),
-  doubleBaseMargin: scaleSize(20),
+  largeBaseMargin: scaleSize(20),
   screenWidth: width < height ? width : height,
   screenHeight: width < height ? height : width,
   statusBarHeight: Platform.OS === 'ios' ? (IS_IPHONE_X ? 44 : 20) : 0,

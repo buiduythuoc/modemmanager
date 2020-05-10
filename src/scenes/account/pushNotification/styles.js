@@ -7,23 +7,12 @@ const styles = StyleSheet.create({
     backgroundColor: colors.gray06,
     flex: 1,
   },
-  content: {
-    flex: 1,
-  },
   scrollView: {
+    flex: 1,
     padding: metrics.baseMargin,
     borderTopLeftRadius: scaleSize(25),
     borderTopRightRadius: scaleSize(25),
     backgroundColor: colors.white,
-  },
-  imageText: {},
-  imageContainer: {
-    flexDirection: 'row',
-    marginTop: scaleSize(10),
-    marginBottom: scaleSize(14),
-  },
-  imagePicker: {
-    marginRight: scaleSize(8),
   },
   label: {
     fontSize: scaleFont(14),
@@ -36,11 +25,6 @@ const styles = StyleSheet.create({
   },
   titleInput: {
     height: scaleSize(47),
-    borderRadius: scaleSize(5),
-    color: colors.black,
-  },
-  summaryInput: {
-    height: scaleSize(80),
     borderRadius: scaleSize(5),
     color: colors.black,
   },
